@@ -1,0 +1,36 @@
+name 'avalon_simulation'
+version '0.1'
+
+import_types_from 'base'
+using_task_library 'simulation'
+
+using_library 'avalon_plugin'
+
+task_context "Task" do
+	subclasses "simulation::Mars"
+
+        property('scenefile', '/std/string').
+		doc('scenefile of the robot module, which should be loaded')
+
+        #property('with_manipulator_gui', 'bool').
+	#	doc('scenefile of the robot module, which should be loaded')
+
+	output_port('scans', 'base/samples/LaserScan').
+		doc('laser scans of the Hokyo scanner')
+
+	output_port('pose_samples', '/base/samples/RigidBodyState').
+		doc('computed position in m, in the Simulation coordinate system')
+
+end
+
+
+deployment "testAvalonSimulation" do
+	add_default_logger
+	# the name here in task, is the 'exported' name, i.e. 
+        # in orogen.rb you can identify this task using this name 
+	# the 
+	# task( <public-name/alias>, <task-context-type>)
+	mod = task('avalon_simulation', 'avalon_simulation::Task').
+	periodic(0.1)
+end
+
