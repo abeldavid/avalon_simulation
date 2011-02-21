@@ -1,0 +1,8 @@
+/home/goldhoorn/dev-avalon/install/lib/libConsole.so
+/home/goldhoorn/dev-avalon/install/lib/libAddPrimitive.so
+/home/goldhoorn/dev-avalon/install/lib/libEditNode.so
+/home/goldhoorn/dev-avalon/install/lib/libTreeView.so
+/home/goldhoorn/dev-avalon/install/lib/libBlenderExport.so
+/home/goldhoorn/dev-avalon/install/lib/libCameraConfigurator.so
+/home/goldhoorn/dev-avalon/install/lib/libControllerConfig.so
+/home/goldhoorn/dev-avalon/install/lib/libCaptureWindow.so

@@ -1,0 +1,7 @@
+window_id: 3
+node_id: 1
+lock_camera: 1
+lock_rotation: 0
+offset_pos: 0 0 -0.73
+offset_euler: 0 0 0
+offset_rot: 0 0 0 1

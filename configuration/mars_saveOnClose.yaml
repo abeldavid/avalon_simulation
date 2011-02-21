@@ -1,0 +1,43 @@
+---
+Graphics:
+  -
+    name: window1Height
+    type: int
+    saveOnClose: true
+    value: 405
+  -
+    name: window1Left
+    type: int
+    saveOnClose: true
+    value: 700
+  -
+    name: window1Top
+    type: int
+    saveOnClose: true
+    value: 40
+  -
+    name: window1Width
+    type: int
+    saveOnClose: true
+    value: 720
+MainGUI:
+  -
+    name: windowHeight
+    type: int
+    saveOnClose: true
+    value: 480
+  -
+    name: windowLeft
+    type: int
+    saveOnClose: true
+    value: 4
+  -
+    name: windowTop
+    type: int
+    saveOnClose: true
+    value: 19
+  -
+    name: windowWidth
+    type: int
+    saveOnClose: true
+    value: 640
