@@ -10,7 +10,7 @@ task_context "Task" do
 	subclasses "simulation::Mars"
 	
 
-	property('scenefile', '/std/string',File.join(ENV['AUTOPROJ_PROJECT_BASE'], "simulation", "orogen", "avalon_simulation", "configuration", "avalon.scn")).
+	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
 		doc('scenefile of the robot module, which should be loaded')
 
 	property('with_manipulator_gui', 'bool').
