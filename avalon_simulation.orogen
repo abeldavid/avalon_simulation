@@ -21,6 +21,12 @@ task_context "Task" do
 
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
+	
+	output_port('front_camera', ro_ptr('base::samples::frame::Frame')).
+	  doc('front camera recording')
+	  
+	output_port('sonar_scan', 'base/samples/SonarScan').
+	  doc('sonar scan data')
 
 	operation('dispatch').
 		doc('creates an output port with a certain set of Hbridge actuator status').
