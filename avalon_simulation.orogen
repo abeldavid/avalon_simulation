@@ -25,6 +25,9 @@ task_context "Task" do
 	output_port('front_camera', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
 	  
+	output_port('bottom_camera', ro_ptr('base::samples::frame::Frame')).
+	  doc('bottom camera recording')
+	  
 	output_port('sonar_scan', 'base/samples/SonarScan').
 	  doc('sonar scan data')
 
