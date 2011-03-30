@@ -40,6 +40,8 @@ task_context "Task" do
 
 	dynamic_input_port(/cmd_\w+/, "base/actuators/Command").
 		doc "commands for a set of hbridges set up by #dispatch"
+    
+    	dynamic_output_port(/status_\w+/, "base/actuators/Status")
 
 end
 

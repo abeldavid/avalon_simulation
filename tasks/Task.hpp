@@ -20,6 +20,7 @@ namespace avalon_simulation {
 
 
         typedef RTT::InputPort< base::actuators::Command > InputPortType;
+        typedef RTT::OutputPort< base::actuators::Status > OutputPortType;
         std::vector<InputPortType*> _ports;
 	//typedef RTT::OutputPort< hbridge::Error > ErrorPortType;
 	/*

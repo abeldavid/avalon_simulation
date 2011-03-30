@@ -151,6 +151,7 @@ bool Task::dispatch(::std::string const & name, ::std::vector< ::boost::int32_t 
     // Preallocate the data structure to avoid allocations later on (hard
     // realtime)
     //info.status.resize(boards.size());
+    provides()->addPort(* new OutputPortType("status_" + name));
     if (!read_only)
     {
         //info.input_port = new InputPortType("cmd_" + name);
@@ -160,6 +161,10 @@ bool Task::dispatch(::std::string const & name, ::std::vector< ::boost::int32_t 
 	_ports.push_back(p);
 	provides()->addEventPort(*p);
 	printf("Created Port cmd_%s\n",name.c_str());
+   
+   	
+    	//info.output_port = new OutputPortType("status_" + name);
+	//provides()->addPort(*info.output_port);
     }else{
     	printf("Not creating port because its readOnly\n");
     }
