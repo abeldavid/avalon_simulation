@@ -71,25 +71,33 @@ bool Task::startHook()
 }
 void Task::updateHook()
 {
+    printf("Upodate hook\n");
     TaskBase::updateHook();
     base::samples::RigidBodyState pose;
     Eigen::Quaterniond q;
     Eigen::Vector3d p;
     avalon->getPose(p,q);
     pose.position = p;
+    pose.time = base::Time::now();
     pose.orientation = q;
     _pose_samples.write(pose);
 
     for (unsigned int dispatch_idx = 0; dispatch_idx < _ports.size(); dispatch_idx++)
     {
+    	printf("dispatch id\n");
         InputPortType* port = _ports[dispatch_idx];
 	base::actuators::Command cmd;
 	double target[6];
+	if(!port){
+		printf("Invalid port is given\n");
+	}
         if (port && port->readNewest(cmd) == RTT::NewData){
+    		printf("new data\n");
             for (unsigned int j = 0; j < cmd.mode.size(); ++j)
             {
                 base::actuators::DRIVE_MODE mode = cmd.mode[j];
                 target[j] = cmd.target[j] * 10.0; //todo make PWM<-> Newton/Meter configurable
+		printf("Setting forces: %f for %i\n",target[j],j);
             }
             avalon->setForces(target);
 	}
@@ -152,8 +160,8 @@ bool Task::dispatch(::std::string const & name, ::std::vector< ::boost::int32_t 
     // realtime)
     //info.status.resize(boards.size());
     provides()->addPort(* new OutputPortType("status_" + name));
-    if (!read_only)
-    {
+//    if (!read_only)
+//    {
         //info.input_port = new InputPortType("cmd_" + name);
         //provides()->addEventPort(*info.input_port);
         //info.cmd.resize(boards.size());
@@ -165,9 +173,9 @@ bool Task::dispatch(::std::string const & name, ::std::vector< ::boost::int32_t 
    	
     	//info.output_port = new OutputPortType("status_" + name);
 	//provides()->addPort(*info.output_port);
-    }else{
-    	printf("Not creating port because its readOnly\n");
-    }
+//    }else{
+//    	printf("Not creating port because its readOnly\n");
+//    }
 
     //info.output_port = new OutputPortType("status_" + name);
     //provides()->addPort(*info.output_port);

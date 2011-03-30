@@ -3,6 +3,9 @@ version '0.1'
 
 import_types_from 'base'
 using_task_library 'simulation'
+using_task_library 'controldev'
+using_task_library 'avalon_control'
+using_task_library 'raw_control_command_converter'
 
 using_library 'avalon-plugin'
 
@@ -42,17 +45,25 @@ task_context "Task" do
 		doc "commands for a set of hbridges set up by #dispatch"
     
     	dynamic_output_port(/status_\w+/, "base/actuators/Status")
-
+	
+	port_driven
 end
 
 
 deployment "testAvalonSimulation" do
 	add_default_logger
+	joystick = task("joystick","controldev::Local")
 	# the name here in task, is the 'exported' name, i.e. 
         # in orogen.rb you can identify this task using this name 
 	# the 
 	# task( <public-name/alias>, <task-context-type>)
 	mod = task('avalon_simulation', 'avalon_simulation::Task').
-	periodic(0.1)
+	periodic(0.01)
+	control = task('MotionControlTask','avalon_control::MotionControlTask')
+	raw = task('commandvoncerter','raw_control_command_converter::Position').
+		periodic(0.01)
+	raw = task('commandvoncerterpos','raw_control_command_converter::Movement').
+		periodic(0.01)
+
 end
 
