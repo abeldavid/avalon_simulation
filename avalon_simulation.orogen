@@ -6,6 +6,8 @@ using_task_library 'simulation'
 using_task_library 'controldev'
 using_task_library 'avalon_control'
 using_task_library 'raw_control_command_converter'
+using_task_library 'motion_estimation'
+using_task_library 'movement_experiment'
 
 using_library 'avalon-plugin'
 
@@ -63,6 +65,10 @@ deployment "testAvalonSimulation" do
 	raw = task('commandvoncerter','raw_control_command_converter::Position').
 		periodic(0.01)
 	raw = task('commandvoncerterpos','raw_control_command_converter::Movement').
+		periodic(0.01)
+	bla = task('motEst','motion_estimation::Task').
+		periodic(0.01)
+	lala = task('movEx','movement_experiment::Task').
 		periodic(0.01)
 
 end
