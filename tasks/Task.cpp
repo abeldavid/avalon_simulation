@@ -71,7 +71,7 @@ bool Task::startHook()
 }
 void Task::updateHook()
 {
-    printf("Upodate hook\n");
+    //printf("Upodate hook\n");
     TaskBase::updateHook();
     base::samples::RigidBodyState pose;
     Eigen::Quaterniond q;
@@ -84,7 +84,7 @@ void Task::updateHook()
 
     for (unsigned int dispatch_idx = 0; dispatch_idx < _ports.size(); dispatch_idx++)
     {
-    	printf("dispatch id\n");
+    	//printf("dispatch id\n");
         InputPortType* port = _ports[dispatch_idx];
 	base::actuators::Command cmd;
 	double target[6];
