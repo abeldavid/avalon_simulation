@@ -8,10 +8,31 @@
 #define BOARD_COUNT 8
 
 #include <mars/avalon-plugin/AvalonPlugin.h>
-
+    
 class AvalonPlugin;
 
 namespace avalon_simulation {
+    
+    enum SIM_TRUSTER_CHANNELS
+    {
+        MIDDLE_HORIZONTAL = 4,
+        MIDDLE_VERTICAL   = 2,
+        REAR_HORIZONTAL   = 5,
+        REAR_VERTICAL     = 3,
+        RIGHT = 1,
+        LEFT  = 0 
+    };
+
+    enum SIM_TRUSTER_CHANNEL_DIRECTIONS
+    {
+        DIR_MIDDLE_HORIZONTAL = 1,
+        DIR_MIDDLE_VERTICAL   = -1,
+        DIR_REAR_HORIZONTAL   = 1,
+        DIR_REAR_VERTICAL     = -1,
+        DIR_RIGHT = 1,
+        DIR_LEFT  = 1
+    };
+
     class Task : public TaskBase
     {
 	friend class TaskBase;

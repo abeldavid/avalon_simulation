@@ -1,6 +1,7 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Task.hpp"
+#include <avalon_control/types/avalon_control/AvalonControl.hpp>
 
 using namespace avalon_simulation;
 
@@ -93,12 +94,29 @@ void Task::updateHook()
 	}
         if (port && port->readNewest(cmd) == RTT::NewData){
     		printf("new data\n");
+            
+            //todo make PWM<-> Newton/Meter configurable
+            
+            target[LEFT] = cmd.target[avalon_control::LEFT] * 10.0 * DIR_LEFT * avalon_control::DIR_LEFT;
+            printf("Setting forces: %f for %i\n",target[LEFT],LEFT);
+            target[RIGHT] = cmd.target[avalon_control::RIGHT] * 10.0 * DIR_RIGHT * avalon_control::DIR_RIGHT;
+            printf("Setting forces: %f for %i\n",target[RIGHT],RIGHT);
+            target[MIDDLE_VERTICAL] = cmd.target[avalon_control::MIDDLE_VERTICAL] * 10.0 * DIR_MIDDLE_VERTICAL * avalon_control::DIR_MIDDLE_VERTICAL;
+            printf("Setting forces: %f for %i\n",target[MIDDLE_VERTICAL], MIDDLE_VERTICAL);
+            target[REAR_VERTICAL] = cmd.target[avalon_control::REAR_VERTICAL] * 10.0 * DIR_REAR_VERTICAL * avalon_control::DIR_REAR_VERTICAL;
+            printf("Setting forces: %f for %i\n",target[REAR_VERTICAL], REAR_VERTICAL);
+            target[MIDDLE_HORIZONTAL] = cmd.target[avalon_control::MIDDLE_HORIZONTAL] * 10.0 * DIR_MIDDLE_HORIZONTAL * avalon_control::DIR_MIDDLE_HORIZONTAL;
+            printf("Setting forces: %f for %i\n",target[MIDDLE_HORIZONTAL], MIDDLE_HORIZONTAL);
+            target[REAR_HORIZONTAL] = cmd.target[avalon_control::REAR_HORIZONTAL] * 10.0 * DIR_REAR_HORIZONTAL * avalon_control::DIR_REAR_HORIZONTAL;
+            printf("Setting forces: %f for %i\n",target[REAR_HORIZONTAL], REAR_HORIZONTAL);
+            /*
             for (unsigned int j = 0; j < cmd.mode.size(); ++j)
             {
                 base::actuators::DRIVE_MODE mode = cmd.mode[j];
                 target[j] = cmd.target[j] * 10.0; //todo make PWM<-> Newton/Meter configurable
 		printf("Setting forces: %f for %i\n",target[j],j);
             }
+            */
             avalon->setForces(target);
 	}
     }
