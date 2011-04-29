@@ -37,7 +37,14 @@ bool Task::configureHook()
    	printf("Config dir is not set, assuming: %s\n",_config_dir.value().c_str());
    }
 
-   
+    int stat = putenv("LANG=en_EN.UTF-8");
+    stat += putenv("LANGUAGE=en_EN.UTF-8");
+    stat += putenv("LC_ALL=en_EN.UTF-8");
+    stat += putenv("LC_ALL=C");
+    if (stat != 0)
+    {
+        std::cout << "failed to define one or more environment variables" << std::endl; 
+    }
 	
     if (! TaskBase::configureHook())
         return false;
