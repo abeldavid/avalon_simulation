@@ -10,6 +10,7 @@
   <depend package ="simulation/mars-plugins/avalon-plugin" />
   <depend package ="simulation/orogen/mars_core" />
   <depend package ="avalon/orogen/avalonControl" />
+  <depend package ="avalon/orogen/motionEstimation" />
   <versioncontrol type="git" url="" />
   <export>
     <cpp cflags="" lflags="" />
