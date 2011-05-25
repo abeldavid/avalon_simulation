@@ -1,7 +1,6 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Task.hpp"
-#include <avalon_control/types/avalon_control/AvalonControl.hpp>
 
 using namespace avalon_simulation;
 

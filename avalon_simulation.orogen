@@ -3,6 +3,7 @@ version '0.1'
 
 import_types_from 'base'
 import_types_from 'avalon_control'
+import_types_from 'avalon_control/AvalonControl.hpp'
 using_task_library 'simulation'
 using_task_library 'controldev'
 using_task_library 'avalon_control'
