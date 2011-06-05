@@ -1,6 +1,7 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Task.hpp"
+#include <unistd.h>
 
 using namespace avalon_simulation;
 
@@ -19,53 +20,31 @@ Task::Task(std::string const& name)
 
 bool Task::configureHook()
 {
-    if(!_resource_dir.value().empty()){
-    	printf("Current Recource dir: %s\n",_resource_dir.value().c_str());
-    }else{
-    	string s(getenv("AUTOPROJ_PROJECT_BASE"));
-        s.append("/install/share/mars/resources");
-	_resource_dir.value() = s;
-    	printf("Recource dir is not set, assuming: %s\n",_resource_dir.value().c_str());
-   }
-   if(!_config_dir.value().empty()){
-   	printf("Config Path is: %s\n",_config_dir.value().c_str());
-   }else{
-   	string s(getenv("AUTOPROJ_PROJECT_BASE"));
-	s.append("/simulation/orogen/avalon_simulation/configuration/");
-        _config_dir.value() = s;
-   	printf("Config dir is not set, assuming: %s\n",_config_dir.value().c_str());
-   }
-
     int stat = putenv("LANG=en_EN.UTF-8");
     stat += putenv("LANGUAGE=en_EN.UTF-8");
     stat += putenv("LC_ALL=en_EN.UTF-8");
     stat += putenv("LC_ALL=C");
     if (stat != 0)
-    {
         std::cout << "failed to define one or more environment variables" << std::endl; 
-    }
 	
     if (! TaskBase::configureHook())
         return false;
-     printf("Base is configured succsessful\n"); 
-     // What scenefile should be used
-     std::string scenefile = _scenefile.get();
-     bool with_manipulator_gui = _with_manipulator_gui.get();
 
-     // Loading the rimres environment
-     ControlCenter* controlCenter = simulatorInterface->getControlCenter();
-     assert(controlCenter);
-     
-     // Loading the robot itself
-     avalon = new AvalonPlugin(controlCenter, scenefile, with_manipulator_gui);
+    //check if the environment was sourced more than once
+    int pos = _scenefile.get().rfind(":/");
+    if(pos != _scenefile.get().size()-1)
+        _scenefile.set(_scenefile.get().substr(pos+1));
     
-     PluginInterface* avalon_plugin = avalon;
-      
+    //test if the scene file can be accessed
+    if(0!=access(_scenefile.get().c_str(),R_OK))
+        throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
+
+     // Loading the robot itself
+     avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
      pluginStruct avalon_;
      avalon_.name = "AvalonPlugin";
-     avalon_.p_interface = avalon_plugin;
+     avalon_.p_interface = avalon;
      avalon_.p_destroy = NULL;
-
      simulatorInterface->addPlugin(avalon_);
 
     return true;
