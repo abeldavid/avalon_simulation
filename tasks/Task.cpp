@@ -5,7 +5,7 @@
 using namespace avalon_simulation;
 
 Task::Task(std::string const& name)
-    : TaskBase(name)
+    : TaskBase(name),avalon(NULL)
 {
 	for(int i=0;i<8;i++)
 		m_controlled_hbridges[i]=false;
