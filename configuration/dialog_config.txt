@@ -1,8 +1,0 @@
-/home/goldhoorn/dev/install/lib/libConsole.so
-/home/goldhoorn/dev/install/lib/libAddPrimitive.so
-/home/goldhoorn/dev/install/lib/libEditNode.so
-/home/goldhoorn/dev/install/lib/libTreeView.so
-/home/goldhoorn/dev/install/lib/libBlenderExport.so
-/home/goldhoorn/dev/install/lib/libCameraConfigurator.so
-/home/goldhoorn/dev/install/lib/libControllerConfig.so
-/home/goldhoorn/dev/install/lib/libCaptureWindow.so

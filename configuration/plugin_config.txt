@@ -1,2 +1,0 @@
-#/home/goldhoorn/dev-avalon/install/lib/libConnexionPlugin.so
-#/home/goldhoorn/dev-avalon/install/lib/libavalon-plugin.so 
