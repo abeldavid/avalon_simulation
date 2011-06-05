@@ -55,7 +55,6 @@ end
 
 
 deployment "testAvalonSimulation" do
-	add_default_logger
 	joystick = task("joystick","controldev::Local")
 	# the name here in task, is the 'exported' name, i.e. 
         # in orogen.rb you can identify this task using this name 
@@ -72,6 +71,6 @@ deployment "testAvalonSimulation" do
 		periodic(0.01)
 	lala = task('movEx','movement_experiment::Task').
 		periodic(0.01)
-
+	add_default_logger
 end
 
