@@ -13,31 +13,12 @@ using_task_library 'movement_experiment'
 
 using_library 'avalon-plugin'
 
-task_context "Task" do
-	subclasses "simulation::Mars"
-	
-
-	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
-		doc('scenefile of the robot module, which should be loaded')
-
-	property('with_manipulator_gui', 'bool').
-		doc('scenefile of the robot module, which should be loaded')
-
-	output_port('scans', 'base/samples/LaserScan').
-		doc('laser scans of the Hokyo scanner')
-
-	output_port('pose_samples', '/base/samples/RigidBodyState').
-		doc('computed position in m, in the Simulation coordinate system')
-	
+task_context "Camera" do 
 	output_port('front_camera', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
-	  
-	output_port('bottom_camera', ro_ptr('base::samples::frame::Frame')).
-	  doc('bottom camera recording')
-	  
-	output_port('sonar_scan', 'base/samples/SonarScan').
-	  doc('sonar scan data')
+end
 
+task_context "HBridge" do 
 	operation('dispatch').
 		doc('creates an output port with a certain set of Hbridge actuator status').
 		returns("bool").
@@ -49,28 +30,37 @@ task_context "Task" do
 		doc "commands for a set of hbridges set up by #dispatch"
     
     	dynamic_output_port(/status_\w+/, "base/actuators/Status")
-	
 	port_driven
 end
 
+task_context "LaserScaner" do 
+	output_port('scans', 'base/samples/LaserScan').
+		doc('laser scans of the Hokyo scanner')
+end
 
-deployment "testAvalonSimulation" do
-	joystick = task("joystick","controldev::Local")
-	# the name here in task, is the 'exported' name, i.e. 
-        # in orogen.rb you can identify this task using this name 
-	# the 
-	# task( <public-name/alias>, <task-context-type>)
+task_context "PoseEstimator" do 
+	output_port('pose_samples', '/base/samples/RigidBodyState').
+		doc('computed position in m, in the Simulation coordinate system')
+end
+
+task_context "Task" do
+	subclasses "simulation::Mars"
+	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
+		doc('scenefile of the robot module, which should be loaded')
+
+	property('with_manipulator_gui', 'bool').
+		doc('scenefile of the robot module, which should be loaded')
+end
+
+
+deployment "AvalonSimulation" do
 	mod = task('avalon_simulation', 'avalon_simulation::Task').
-	periodic(0.01)
-	control = task('MotionControlTask','avalon_control::MotionControlTask')
-	raw = task('commandvoncerter','raw_control_command_converter::Position').
-		periodic(0.01)
-	raw = task('commandvoncerterpos','raw_control_command_converter::Movement').
-		periodic(0.01)
-	bla = task('motEst','motion_estimation::Task').
-		periodic(0.01)
-	lala = task('movEx','movement_experiment::Task').
-		periodic(0.01)
+	    periodic(0.01)
+        camera = task("camera","Camera").
+            periodic 0.01
+        pose_estimator = task("pose_estimator","PoseEstimator").
+            periodic 0.01
+        hbridge = task("hbridge","HBridge")
 	add_default_logger
 end
 

@@ -1,23 +1,25 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef AVALON_SIMULATION_TASK_TASK_HPP
-#define AVALON_SIMULATION_TASK_TASK_HPP
+#ifndef AVALON_SIMULATION_CAMERA_TASK_HPP
+#define AVALON_SIMULATION_CAMERA_TASK_HPP
 
-#include "avalon_simulation/TaskBase.hpp"
-#include <mars/avalon-plugin/AvalonPlugin.h>
-    
-class AvalonPlugin;
+#include "avalon_simulation/CameraBase.hpp"
+#include <mars/SimulatorInterface.h>
+
 
 namespace avalon_simulation {
-    class Task : public TaskBase
+    class Camera : public CameraBase
     {
-	friend class TaskBase;
+	friend class CameraBase;
     protected:
-	AvalonPlugin *avalon;
+        SimulatorInterface *simulator_interface;
+
 
     public:
-        Task(std::string const& name = "avalon_simulation::Task");
-        ~Task();
+        Camera(std::string const& name = "avalon_simulation::Camera", TaskCore::TaskState initial_state = Stopped);
+        Camera(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+
+	~Camera();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -32,7 +34,7 @@ namespace avalon_simulation {
          *     ...
          *   end
          */
-        bool configureHook();
+        // bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will

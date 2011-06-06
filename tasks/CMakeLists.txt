@@ -2,7 +2,7 @@
 
 include(avalon_simulationTaskLib)
 ADD_LIBRARY(${AVALON_SIMULATION_TASKLIB_NAME} SHARED 
-    ${AVALON_SIMULATION_TASKLIB_SOURCES})
+    ${AVALON_SIMULATION_TASKLIB_SOURCES} Simulation.cpp)
 
 add_dependencies(${AVALON_SIMULATION_TASKLIB_NAME}
     regen-typekit)
