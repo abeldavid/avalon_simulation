@@ -13,8 +13,8 @@ using_task_library 'movement_experiment'
 
 using_library 'avalon-plugin'
 
-task_context "Camera" do 
-	output_port('front_camera', ro_ptr('base::samples::frame::Frame')).
+task_context "BottomCamera" do 
+	output_port('frame', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
 end
 
@@ -56,8 +56,8 @@ end
 deployment "AvalonSimulation" do
 	mod = task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.01)
-        camera = task("camera","Camera").
-            periodic 0.01
+        camera = task("bottom_camera","BottomCamera").
+            periodic 0.1
         pose_estimator = task("pose_estimator","PoseEstimator").
             periodic 0.01
         hbridge = task("hbridge","HBridge")

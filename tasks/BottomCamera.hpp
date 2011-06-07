@@ -1,25 +1,22 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef AVALON_SIMULATION_CAMERA_TASK_HPP
-#define AVALON_SIMULATION_CAMERA_TASK_HPP
+#ifndef AVALON_SIMULATION_BOTTOMCAMERA_TASK_HPP
+#define AVALON_SIMULATION_BOTTOMCAMERA_TASK_HPP
 
-#include "avalon_simulation/CameraBase.hpp"
-#include <mars/SimulatorInterface.h>
-
+#include "avalon_simulation/BottomCameraBase.hpp"
 
 namespace avalon_simulation {
-    class Camera : public CameraBase
+    class BottomCamera : public BottomCameraBase
     {
-	friend class CameraBase;
+	friend class BottomCameraBase;
     protected:
-        SimulatorInterface *simulator_interface;
-
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame;
 
     public:
-        Camera(std::string const& name = "avalon_simulation::Camera", TaskCore::TaskState initial_state = Stopped);
-        Camera(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+        BottomCamera(std::string const& name = "avalon_simulation::BottomCamera", TaskCore::TaskState initial_state = Stopped);
+        BottomCamera(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
 
-	~Camera();
+	~BottomCamera();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -41,7 +38,7 @@ namespace avalon_simulation {
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-        bool startHook();
+         bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -57,7 +54,7 @@ namespace avalon_simulation {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-        void updateHook();
+         void updateHook();
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
