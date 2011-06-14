@@ -2,16 +2,18 @@ name 'avalon_simulation'
 version '0.1'
 
 import_types_from 'base'
-import_types_from 'avalon_control'
-import_types_from 'avalon_control/AvalonControl.hpp'
-using_task_library 'simulation'
-using_task_library 'controldev'
-using_task_library 'avalon_control'
-using_task_library 'raw_control_command_converter'
-using_task_library 'motion_estimation'
-using_task_library 'movement_experiment'
-
+import_types_from 'hbridge'
 using_library 'avalon-plugin'
+using_task_library 'simulation'
+
+task_context "Task" do
+	subclasses "simulation::Mars"
+	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
+		doc('scenefile of the robot module, which should be loaded')
+
+	property('with_manipulator_gui', 'bool').
+		doc('scenefile of the robot module, which should be loaded')
+end
 
 task_context "BottomCamera" do 
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
@@ -25,12 +27,25 @@ task_context "HBridge" do
 		argument('name', 'std::string', "the name of the board set. Ports called status_name and cmd_name (if read_only == false) will be created").
 		argument('actuators', '/std/vector</int>', "the set of boards, as a vector of indexes from 0 to BOARD_COUNT").
 		argument('read_only', 'bool', 'if true, only an output port is created. If false, a port that allows controlling the boards will be created as well')
-
-	dynamic_input_port(/cmd_\w+/, "base/actuators/Command").
-		doc "commands for a set of hbridges set up by #dispatch"
     
-    	dynamic_output_port(/status_\w+/, "base/actuators/Status")
-	port_driven
+        error_states :OVERHEAT_MOTOR, :OVERHEAT_BOARD,
+            :OVER_CURRENT, :TIMEOUT, :HW_OFF, :DUAL_HB_CONTROL,
+            :BAD_ENCODER_CALIBRATION, :CALIBRATING_ENCODERS,
+            :NO_ZERO_MARK, :EMERGENCY_OFF
+
+        exception_states :PROTOCOL_ERROR, :CONFIGURATION_FAILED, :BAD_INPUT, :IO_ERROR
+
+        output_port("errors", "hbridge/Error").
+            doc("when the error state of an hbridge changes, the new state is written on that port")
+
+        dynamic_input_port(/cmd_\w+/, "base/actuators/Command").
+            doc "commands for a set of hbridges set up by #dispatch"
+        dynamic_output_port(/status_\w+/, "base/actuators/Status").
+            doc "status of a set of hbridges set up by #dispatch"
+        dynamic_output_port(/errors_\w+/, "hbridge/Error").
+            doc "errors that appear on some of the hbridges"
+
+        port_driven
 end
 
 task_context "LaserScaner" do 
@@ -38,29 +53,19 @@ task_context "LaserScaner" do
 		doc('laser scans of the Hokyo scanner')
 end
 
-task_context "PoseEstimator" do 
+task_context "StateEstimator" do 
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
 end
 
-task_context "Task" do
-	subclasses "simulation::Mars"
-	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
-		doc('scenefile of the robot module, which should be loaded')
-
-	property('with_manipulator_gui', 'bool').
-		doc('scenefile of the robot module, which should be loaded')
-end
-
-
 deployment "AvalonSimulation" do
 	mod = task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.01)
-        camera = task("bottom_camera","BottomCamera").
+        camera = task("bottom_camera_simulation","BottomCamera").
             periodic 0.1
-        pose_estimator = task("pose_estimator","PoseEstimator").
+        state_estimator = task("state_estimator_simulation","StateEstimator").
             periodic 0.01
-        hbridge = task("hbridge","HBridge")
+        hbridge = task("hbridge_simulation","HBridge")
 	add_default_logger
 end
 
