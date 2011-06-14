@@ -1,54 +1,23 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef AVALON_SIMULATION_HBRIDGE_TASK_HPP
-#define AVALON_SIMULATION_HBRIDGE_TASK_HPP
+#ifndef AVALON_SIMULATION_STATEESTIMATOR_TASK_HPP
+#define AVALON_SIMULATION_STATEESTIMATOR_TASK_HPP
 
-#include "avalon_simulation/HBridgeBase.hpp"
-#define BOARD_COUNT 8
+#include "avalon_simulation/StateEstimatorBase.hpp"
 
 namespace avalon_simulation {
-    class HBridge : public HBridgeBase
+    class StateEstimator : public StateEstimatorBase
     {
-	friend class HBridgeBase;
+	friend class StateEstimatorBase;
     protected:
 
-        typedef RTT::InputPort< base::actuators::Command > InputPortType;
-        typedef RTT::OutputPort< base::actuators::Status > OutputPortType;
-        std::vector<InputPortType*> _ports;
-        /* Handler for the dispatch operation
-         */
-        virtual bool dispatch(::std::string const & name, ::std::vector< boost::int32_t > const & actuators, bool read_only);
 
-        /** m_used_hbridges[i] is true if there is at least one dispatch that
-         * involves board 'i' and false otherwise
-         */
-	bool m_used_hbridges[BOARD_COUNT];
-        /** m_controlled_hbridges[i] is true if there is at least one read-write
-         * dispatch that involves board 'i'
-         */
-	bool m_controlled_hbridges[BOARD_COUNT];
-        /** When reading the data, m_got_status[i] is true when we received one
-         * status message from board 'i'. It gets reset when we push the data to
-         * the output ports
-         */
-	bool m_got_status[BOARD_COUNT];
-        /** If true, we have at least one board used in the 1-4 set */
-        bool m_uses_board14;
-        /** If true, we have at least one board used in the 5-8 set */
-        bool m_uses_board58;
-        /** When the component is running, this attributes contains the
-         * first used board index
-         */
-        int m_master_board;
-        /** The time of the last CAN update for the master board. It is always
-         * used to timestamp the next status message
-         */
-        base::Time m_master_time;
+
     public:
-        HBridge(std::string const& name = "avalon_simulation::HBridge", TaskCore::TaskState initial_state = Stopped);
-        HBridge(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+        StateEstimator(std::string const& name = "avalon_simulation::StateEstimator", TaskCore::TaskState initial_state = Stopped);
+        StateEstimator(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
 
-	~HBridge();
+	~StateEstimator();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -63,14 +32,14 @@ namespace avalon_simulation {
          *     ...
          *   end
          */
-         bool configureHook();
+        // bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-         bool startHook();
+        bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -86,7 +55,7 @@ namespace avalon_simulation {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-         void updateHook();
+        void updateHook();
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
