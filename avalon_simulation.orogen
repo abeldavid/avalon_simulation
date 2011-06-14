@@ -61,6 +61,7 @@ deployment "AvalonSimulation" do
         pose_estimator = task("pose_estimator","PoseEstimator").
             periodic 0.01
         hbridge = task("hbridge","HBridge")
+				control = task("controldev","controldev::Local")
 	add_default_logger
 end
 
