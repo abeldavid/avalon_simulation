@@ -20,32 +20,17 @@ task_context "BottomCamera" do
 	  doc('front camera recording')
 end
 
-task_context "HBridge" do 
-	operation('dispatch').
-		doc('creates an output port with a certain set of Hbridge actuator status').
-		returns("bool").
-		argument('name', 'std::string', "the name of the board set. Ports called status_name and cmd_name (if read_only == false) will be created").
-		argument('actuators', '/std/vector</int>', "the set of boards, as a vector of indexes from 0 to BOARD_COUNT").
-		argument('read_only', 'bool', 'if true, only an output port is created. If false, a port that allows controlling the boards will be created as well')
+task_context "MotionControl" do 
+    input_port('pose_samples', '/base/samples/RigidBodyState').
+        doc("the current pose estimate").
+        needs_buffered_connection
+
+    input_port('motion_commands', '/base/AUVMotionCommand').
+        doc("the input commands").
+        needs_buffered_connection
     
-        error_states :OVERHEAT_MOTOR, :OVERHEAT_BOARD,
-            :OVER_CURRENT, :TIMEOUT, :HW_OFF, :DUAL_HB_CONTROL,
-            :BAD_ENCODER_CALIBRATION, :CALIBRATING_ENCODERS,
-            :NO_ZERO_MARK, :EMERGENCY_OFF
-
-        exception_states :PROTOCOL_ERROR, :CONFIGURATION_FAILED, :BAD_INPUT, :IO_ERROR
-
-        output_port("errors", "hbridge/Error").
-            doc("when the error state of an hbridge changes, the new state is written on that port")
-
-        dynamic_input_port(/cmd_\w+/, "base/actuators/Command").
-            doc "commands for a set of hbridges set up by #dispatch"
-        dynamic_output_port(/status_\w+/, "base/actuators/Status").
-            doc "status of a set of hbridges set up by #dispatch"
-        dynamic_output_port(/errors_\w+/, "hbridge/Error").
-            doc "errors that appear on some of the hbridges"
-
-        port_driven
+    port_driven :pose_samples
+    runtime_states :WAITING_FOR_ORIENTATION, :WAITING_FOR_COMMAND
 end
 
 task_context "LaserScaner" do 
@@ -59,13 +44,13 @@ task_context "StateEstimator" do
 end
 
 deployment "AvalonSimulation" do
-	mod = task('avalon_simulation', 'avalon_simulation::Task').
+	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.01)
-        camera = task("bottom_camera_simulation","BottomCamera").
+        task("bottom_camera_simulation","BottomCamera").
             periodic 0.1
-        state_estimator = task("state_estimator_simulation","StateEstimator").
+        task("state_estimator_simulation","StateEstimator").
             periodic 0.01
-        hbridge = task("hbridge_simulation","HBridge")
+        task("motion_control_simulation","MotionControl")
 	add_default_logger
 end
 
