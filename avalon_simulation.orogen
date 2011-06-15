@@ -5,6 +5,7 @@ import_types_from 'base'
 import_types_from 'hbridge'
 using_library 'avalon-plugin'
 using_task_library 'simulation'
+using_task_library 'controldev'
 
 task_context "Task" do
 	subclasses "simulation::Mars"
@@ -45,7 +46,7 @@ end
 
 deployment "AvalonSimulation" do
 	task('avalon_simulation', 'avalon_simulation::Task').
-	    periodic(0.01)
+	    periodic(0.1)
         task("bottom_camera_simulation","BottomCamera").
             periodic 0.1
         task("state_estimator_simulation","StateEstimator").

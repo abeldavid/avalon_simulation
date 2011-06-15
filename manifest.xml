@@ -11,6 +11,7 @@
   <depend package ="simulation/orogen/mars_core" />
   <depend package ="avalon/orogen/avalonControl" />
   <depend package ="avalon/orogen/motionEstimation" />
+  <depend package ="drivers/orogen/controldev" />
   <versioncontrol type="git" url="" />
   <export>
     <cpp cflags="" lflags="" />
