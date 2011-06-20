@@ -21,6 +21,11 @@ task_context "BottomCamera" do
 	  doc('front camera recording')
 end
 
+task_context "FrontCamera" do 
+	output_port('frame', ro_ptr('base::samples::frame::Frame')).
+	  doc('front camera recording')
+end
+
 task_context "MotionControl" do 
     input_port('pose_samples', '/base/samples/RigidBodyState').
         doc("the current pose estimate").
@@ -39,6 +44,11 @@ task_context "LaserScaner" do
 		doc('laser scans of the Hokyo scanner')
 end
 
+task_context "SonarTop" do 
+	output_port('sonarscan', 'base/samples/SonarScan').
+		doc('top sonar scan')
+end
+
 task_context "StateEstimator" do 
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
@@ -48,6 +58,10 @@ deployment "AvalonSimulation" do
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
         task("bottom_camera_simulation","BottomCamera").
+            periodic 0.1
+        task("front_camera_simulation","FrontCamera").
+            periodic 0.1
+        task("sonar_top_simulation","SonarTop").
             periodic 0.1
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01
