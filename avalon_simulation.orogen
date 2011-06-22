@@ -54,6 +54,11 @@ task_context "SonarTop" do
 		doc('top sonar scan')
 end
 
+task_context "SonarBottom" do 
+	output_port('sonarscan', 'base/samples/SonarScan').
+		doc('top sonar scan')
+end
+
 task_context "StateEstimator" do 
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
