@@ -2,10 +2,8 @@ name 'avalon_simulation'
 version '0.1'
 
 import_types_from 'base'
-import_types_from 'hbridge'
 using_library 'avalon-plugin'
 using_task_library 'simulation'
-using_task_library 'controldev'
 
 task_context "Task" do
 	subclasses "simulation::Mars"
