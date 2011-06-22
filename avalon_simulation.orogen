@@ -37,6 +37,13 @@ task_context "MotionControl" do
     runtime_states :WAITING_FOR_ORIENTATION, :WAITING_FOR_COMMAND
 end
 
+task_context "Actuators" do 
+    input_port("command", "base/actuators/Command").
+        doc("actuator command").
+        needs_buffered_connection
+    port_driven :command
+end
+
 task_context "LaserScaner" do 
 	output_port('scans', 'base/samples/LaserScan').
 		doc('laser scans of the Hokyo scanner')
@@ -63,7 +70,12 @@ deployment "AvalonSimulation" do
             periodic 0.1
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01
-        task("motion_control_simulation","MotionControl")
+        task("actuators_simulation","Actuators")
+
+        #please use Actuators instead 
+        #MotionControl is going to be removes
+        #task("motion_control_simulation","MotionControl")
+
 	add_default_logger
 end
 
