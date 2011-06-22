@@ -39,6 +39,8 @@ bool BottomCamera::startHook()
     if(!Simulation::isInitialized())
         throw std::runtime_error("Cannot start Camera. The simulator is not running in the same process.");
 
+    Simulation::getAvalonPlugin()->activateBottomCamera(true);
+
     return true;
 }
 void BottomCamera::updateHook()
@@ -58,10 +60,13 @@ void BottomCamera::updateHook()
 // {
 //     BottomCameraBase::errorHook();
 // }
-// void BottomCamera::stopHook()
-// {
-//     BottomCameraBase::stopHook();
-// }
+
+void BottomCamera::stopHook()
+{
+    Simulation::getAvalonPlugin()->activateBottomCamera(false);
+    BottomCameraBase::stopHook();
+}
+
 // void BottomCamera::cleanupHook()
 // {
 //     BottomCameraBase::cleanupHook();

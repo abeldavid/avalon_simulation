@@ -29,6 +29,8 @@ bool FrontCamera::startHook()
     if(!Simulation::isInitialized())
         throw std::runtime_error("Cannot start Camera. The simulator is not running in the same process.");
 
+    Simulation::getAvalonPlugin()->activateFrontCamera(true);
+
     return true;
 }
 
@@ -49,30 +51,17 @@ void FrontCamera::updateHook()
 // hooks defined by Orocos::RTT. See FrontCamera.hpp for more detailed
 // documentation about them.
 
-// bool FrontCamera::configureHook()
-// {
-//     if (! FrontCameraBase::configureHook())
-//         return false;
-//     return true;
-// }
-// bool FrontCamera::startHook()
-// {
-//     if (! FrontCameraBase::startHook())
-//         return false;
-//     return true;
-// }
-// void FrontCamera::updateHook()
-// {
-//     FrontCameraBase::updateHook();
-// }
 // void FrontCamera::errorHook()
 // {
 //     FrontCameraBase::errorHook();
 // }
-// void FrontCamera::stopHook()
-// {
-//     FrontCameraBase::stopHook();
-// }
+
+void FrontCamera::stopHook()
+{
+    FrontCameraBase::stopHook();
+    Simulation::getAvalonPlugin()->activateFrontCamera(false);
+}
+
 // void FrontCamera::cleanupHook()
 // {
 //     FrontCameraBase::cleanupHook();
