@@ -4,7 +4,7 @@
 #define AVALON_SIMULATION_TASK_TASK_HPP
 
 #include "avalon_simulation/TaskBase.hpp"
-#include <mars/avalon-plugin/AvalonPlugin.h>
+#include <avalon-plugin/AvalonPlugin.h>
     
 class AvalonPlugin;
 
