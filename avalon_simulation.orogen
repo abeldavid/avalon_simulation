@@ -12,6 +12,13 @@ task_context "Task" do
 
 	property('with_manipulator_gui', 'bool').
 		doc('scenefile of the robot module, which should be loaded')
+        
+        #sets the position of the auv
+        operation('setPosition').
+            returns('bool').
+            argument('x','double','x').
+            argument('y','double','y').
+            argument('z','double','z')
 end
 
 task_context "BottomCamera" do 
@@ -79,7 +86,7 @@ deployment "AvalonSimulation" do
 
         #please use Actuators instead 
         #MotionControl is going to be removes
-        #task("motion_control_simulation","MotionControl")
+        task("motion_control_simulation","MotionControl")
 
 	add_default_logger
 end

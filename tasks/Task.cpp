@@ -15,6 +15,14 @@ Task::~Task()
 {
 }
 
+bool Task::setPosition(double x, double y, double z)
+{
+    avalon->setPosition(x,y,z);
+    simulatorInterface->sceneHasChanged(true);
+
+    return true;
+}
+
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See Task.hpp for more detailed
 // documentation about them.
