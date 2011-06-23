@@ -73,6 +73,8 @@ task_context "StateEstimator" do
 end
 
 deployment "AvalonSimulation" do
+        do_not_install 
+
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
         task("bottom_camera_simulation","BottomCamera").
