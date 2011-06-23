@@ -61,7 +61,13 @@ void MotionControl::updateHook()
         pmw.push_back(commands.x_speed);                              //x
         pmw.push_back(commands.x_speed);                              //x
         pmw.push_back(commands.y_speed);                              //y
-        pmw.push_back(fmod((commands.heading - heading),M_PI)*10);         // heading
+
+        double delta_heading = fmod((commands.heading - heading),2*M_PI);
+        if(delta_heading < M_PI)
+            delta_heading += 2* M_PI;
+        if(delta_heading > M_PI)
+            delta_heading -= 2* M_PI;
+        pmw.push_back(delta_heading*10);         // heading
         pmw.push_back(commands.z-pose.position.z());                  //z
         pmw.push_back(0);                                             //pitch 
         if (!Simulation::getSimulatorInterface()->isRunning()) 
