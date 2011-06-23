@@ -48,6 +48,7 @@ task_context "Actuators" do
     input_port("command", "base/actuators/Command").
         doc("actuator command").
         needs_buffered_connection
+    output_port("status", "base/actuators/Status")
     port_driven :command
 end
 
