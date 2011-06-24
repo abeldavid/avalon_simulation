@@ -68,14 +68,14 @@ void Actuators::updateHook()
         //for now we are copping it because we do not want to change
         //the mapping for the simulation model
         //
-        std::vector<double> pmw;
-        pmw.push_back(command.target[2]);
-        pmw.push_back(command.target[3]);
-        pmw.push_back(command.target[5]);
-        pmw.push_back(command.target[4]);
-        pmw.push_back(command.target[1]);
-        pmw.push_back(command.target[0]);
-        Simulation::getAvalonPlugin()->setTarget(pmw);
+        std::vector<double> pwm;
+        pwm.push_back(-command.target[2]);
+        pwm.push_back(-command.target[3]);
+        pwm.push_back(-command.target[5]);
+        pwm.push_back(-command.target[4]);
+        pwm.push_back(-command.target[1]);
+        pwm.push_back(command.target[0]*5.0);
+        Simulation::getAvalonPlugin()->setTarget(pwm);
     }
 }
 
