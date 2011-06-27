@@ -12,7 +12,15 @@ task_context "Task" do
 
 	property('with_manipulator_gui', 'bool').
 		doc('scenefile of the robot module, which should be loaded')
-        
+
+  property('leftlimit', 'int', 0)
+  property('rightlimit', 'int', 6399) #2PI
+  property('numberofbins', 'int', 299)
+  property('adinterval', 'int', 666) #which standard value?
+  property('cont', 'int', 0).
+    doc('sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+
+
         #sets the position of the auv
         operation('setPosition').
             returns('bool').

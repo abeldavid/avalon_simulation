@@ -49,8 +49,11 @@ bool Task::configureHook()
         throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
 
      // Loading the robot itself
-     if(!avalon)
+     if(!avalon){
         avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
+	avalon->configureTopSonar(_leftlimit.get(),_rightlimit.get(),_numberofbins.get(),_adinterval.get(),_cont.get());
+     }
+     
      pluginStruct avalon_plugin;
      avalon_plugin.name = "AvalonPlugin";
      avalon_plugin.p_interface = avalon;
@@ -59,7 +62,9 @@ bool Task::configureHook()
 
      Simulation::setSimulatorInterface(simulatorInterface);
      Simulation::setAvalonPlugin(avalon);
-
+     
+     
+     
     return true;
 }
 bool Task::startHook()
