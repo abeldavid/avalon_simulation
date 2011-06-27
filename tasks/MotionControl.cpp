@@ -50,7 +50,7 @@ void MotionControl::updateHook()
     if (_pose_samples.read(pose) == RTT::NoData)
         return state(WAITING_FOR_ORIENTATION);
 
-    if (!Simulation::getSimulatorInterface()->isRunning()) 
+    if (!Simulation::getSimulatorInterface()->isRunning())
         return;
 
     base::AUVMotionCommand commands;
@@ -67,10 +67,10 @@ void MotionControl::updateHook()
             delta_heading += 2* M_PI;
         if(delta_heading > M_PI)
             delta_heading -= 2* M_PI;
-        pmw.push_back(delta_heading*10);         // heading
+        pmw.push_back(delta_heading);         // heading
         pmw.push_back(commands.z-pose.position.z());                  //z
-        pmw.push_back(0);                                             //pitch 
-        if (!Simulation::getSimulatorInterface()->isRunning()) 
+        pmw.push_back(0);                                             //pitch
+        if (!Simulation::getSimulatorInterface()->isRunning())
             return;
         Simulation::getAvalonPlugin()->setTarget(pmw);
     }
