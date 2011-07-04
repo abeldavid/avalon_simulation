@@ -27,6 +27,8 @@ bool Task::setOrientation(double x, double y, double z, double w)
 {
   avalon->setOrientation(x,y,z,w);
   simulatorInterface->sceneHasChanged(true);
+
+  return true;
 }
 
 
@@ -41,8 +43,8 @@ bool Task::configureHook()
     stat += putenv("LC_ALL=en_EN.UTF-8");
     stat += putenv("LC_ALL=C");
     if (stat != 0)
-        std::cout << "failed to define one or more environment variables" << std::endl; 
-	
+        std::cout << "failed to define one or more environment variables" << std::endl;
+
     if (! TaskBase::configureHook())
         return false;
 
@@ -50,7 +52,7 @@ bool Task::configureHook()
     int pos = _scenefile.get().rfind(":/");
     if(pos != _scenefile.get().size()-1)
         _scenefile.set(_scenefile.get().substr(pos+1));
-    
+
     //test if the scene file can be accessed
     if(0!=access(_scenefile.get().c_str(),R_OK))
         throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
@@ -60,7 +62,7 @@ bool Task::configureHook()
         avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
 	avalon->configureTopSonar(_topsonar_leftlimit.get(),_topsonar_rightlimit.get(),_topsonar_numberofbins.get(),_topsonar_adinterval.get(),_topsonar_cont.get());
      }
-     
+
      pluginStruct avalon_plugin;
      avalon_plugin.name = "AvalonPlugin";
      avalon_plugin.p_interface = avalon;
@@ -69,9 +71,9 @@ bool Task::configureHook()
 
      Simulation::setSimulatorInterface(simulatorInterface);
      Simulation::setAvalonPlugin(avalon);
-     
-     
-     
+
+
+
     return true;
 }
 bool Task::startHook()
@@ -84,7 +86,7 @@ void Task::updateHook()
 {
     TaskBase::updateHook();
 
-    if (!simulatorInterface->isRunning()) 
+    if (!simulatorInterface->isRunning())
         return;
 
 }
