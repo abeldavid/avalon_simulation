@@ -51,7 +51,7 @@ bool Task::configureHook()
      // Loading the robot itself
      if(!avalon){
         avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
-	avalon->configureTopSonar(_leftlimit.get(),_rightlimit.get(),_numberofbins.get(),_adinterval.get(),_cont.get());
+	avalon->configureTopSonar(_topsonar_leftlimit.get(),_topsonar_rightlimit.get(),_topsonar_numberofbins.get(),_topsonar_adinterval.get(),_topsonar_cont.get());
      }
      
      pluginStruct avalon_plugin;
