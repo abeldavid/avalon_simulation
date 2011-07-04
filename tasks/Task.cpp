@@ -23,6 +23,13 @@ bool Task::setPosition(double x, double y, double z)
     return true;
 }
 
+bool Task::setOrientation(double x, double y, double z, double w)
+{
+  avalon->setOrientation(x,y,z,w);
+  simulatorInterface->sceneHasChanged(true);
+}
+
+
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See Task.hpp for more detailed
 // documentation about them.
