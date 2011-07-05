@@ -35,7 +35,8 @@ void SonarTop::updateHook()
   SonarTopBase::updateHook();
   
     if(Simulation::getAvalonPlugin()->getTopSonarData(&sonarscan)){
-      
+        if (_sonarscan.connected())
+            _sonarscan.write(sonarscan);
     }
     else{
       sonarscan.scanData.clear();
