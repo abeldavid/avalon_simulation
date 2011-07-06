@@ -18,9 +18,17 @@ task_context "Task" do
   property('topsonar_numberofbins', 'int', 299)
   property('topsonar_adinterval', 'int', 666) #which standard value?
   property('topsonar_cont', 'int', 0).
-    doc('sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+    doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 
   output_port('auv_position', '/base/Vector3d')
+
+
+  property('bottomsonar_leftlimit', 'int', 0)
+  property('bottomsonar_rightlimit', 'int', 6399) #2PI
+  property('bottomsonar_numberofbins', 'int', 299)
+  property('bottomsonar_adinterval', 'int', 666) #which standard value?
+  property('bottomsonar_cont', 'int', 0).
+    doc('bottom sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 
         #sets the position of the auv
         operation('setPosition').
@@ -81,7 +89,7 @@ end
 
 task_context "SonarBottom" do
 	output_port('sonarscan', 'base/samples/SonarScan').
-		doc('top sonar scan')
+		doc('bottom sonar scan')
 end
 
 task_context "StateEstimator" do
@@ -99,6 +107,8 @@ deployment "AvalonSimulation" do
         task("front_camera_simulation","FrontCamera").
             periodic 0.1
         task("sonar_top_simulation","SonarTop").
+            periodic 0.1
+        task("sonar_bottom_simulation","SonarBottom").
             periodic 0.1
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01

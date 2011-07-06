@@ -4,7 +4,6 @@
 #define AVALON_SIMULATION_SONARBOTTOM_TASK_HPP
 
 #include "avalon_simulation/SonarBottomBase.hpp"
-#include "Simulation.h"
 
 namespace avalon_simulation {
     class SonarBottom : public SonarBottomBase

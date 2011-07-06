@@ -61,6 +61,7 @@ bool Task::configureHook()
      if(!avalon){
         avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
 	avalon->configureTopSonar(_topsonar_leftlimit.get(),_topsonar_rightlimit.get(),_topsonar_numberofbins.get(),_topsonar_adinterval.get(),_topsonar_cont.get());
+	avalon->configureBottomSonar(_bottomsonar_leftlimit.get(),_bottomsonar_rightlimit.get(),_bottomsonar_numberofbins.get(),_bottomsonar_adinterval.get(),_bottomsonar_cont.get());
      }
 
      pluginStruct avalon_plugin;

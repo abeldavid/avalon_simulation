@@ -1,6 +1,7 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "SonarBottom.hpp"
+#include "Simulation.h"
 
 using namespace avalon_simulation;
 
@@ -34,7 +35,8 @@ void SonarBottom::updateHook()
   SonarBottomBase::updateHook();
   
     if(Simulation::getAvalonPlugin()->getBottomSonarData(&sonarscan)){
-      
+      if (_sonarscan.connected())
+	_sonarscan.write(sonarscan);
     }
     else{
       sonarscan.scanData.clear();
