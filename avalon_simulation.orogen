@@ -20,6 +20,7 @@ task_context "Task" do
   property('topsonar_cont', 'int', 0).
     doc('sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 
+  output_port('auv_position', '/base/Vector3d')
 
         #sets the position of the auv
         operation('setPosition').

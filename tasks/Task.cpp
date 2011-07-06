@@ -89,6 +89,12 @@ void Task::updateHook()
     if (!simulatorInterface->isRunning())
         return;
 
+    Eigen::Vector3d position;
+    Eigen::Quaterniond orientation;
+
+    avalon->getPose(position, orientation);
+
+    _auv_position.write(position);
 }
 // void Task::errorHook()
 // {
