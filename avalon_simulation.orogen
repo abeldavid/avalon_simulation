@@ -14,6 +14,9 @@ task_context "Task" do
 	property('with_manipulator_gui', 'bool',true).
 		doc('scenefile of the robot module, which should be loaded')
 
+        property('initial_position', 'base::Position')
+        property('initial_yaw', 'double')
+
         output_port('auv_position', '/base/Vector3d')
 
         #sets the position of the auv
