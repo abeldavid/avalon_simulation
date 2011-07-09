@@ -32,16 +32,18 @@ bool SonarTop::startHook()
 
 void SonarTop::updateHook()
 {
-  SonarTopBase::updateHook();
-  
+    SonarTopBase::updateHook();
+
+    Simulation::getAvalonPlugin()->configureTopSonar(_leftlimit.get(),_rightlimit.get(),_numberofbins.get(),
+            _adinterval.get(),_cont.get());
+
     if(Simulation::getAvalonPlugin()->getTopSonarData(&sonarscan)){
       
     }
     else{
-      sonarscan.scanData.clear();
+        sonarscan.scanData.clear();
     }
 }
-
 
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See SonarTop.hpp for more detailed

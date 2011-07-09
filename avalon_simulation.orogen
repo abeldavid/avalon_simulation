@@ -10,17 +10,14 @@ task_context "Task" do
 	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
 		doc('scenefile of the robot module, which should be loaded')
 
-	property('with_manipulator_gui', 'bool').
+        #at the moment without gui is not support !!!!       
+	property('with_manipulator_gui', 'bool',true).
 		doc('scenefile of the robot module, which should be loaded')
 
-  property('topsonar_leftlimit', 'int', 0)
-  property('topsonar_rightlimit', 'int', 6399) #2PI
-  property('topsonar_numberofbins', 'int', 299)
-  property('topsonar_adinterval', 'int', 666) #which standard value?
-  property('topsonar_cont', 'int', 0).
-    doc('sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+        property('initial_position', 'base::Position')
+        property('initial_yaw', 'double')
 
-  output_port('auv_position', '/base/Vector3d')
+        output_port('auv_position', '/base/Vector3d')
 
         #sets the position of the auv
         operation('setPosition').
@@ -77,11 +74,25 @@ end
 task_context "SonarTop" do
 	output_port('sonarscan', 'base/samples/SonarScan').
 		doc('top sonar scan')
+
+        property('leftlimit', 'int', 0)
+        property('rightlimit', 'int', 6399) #2PI
+        property('numberofbins', 'int', 299)
+        property('adinterval', 'int', 666) #which standard value?
+        property('cont', 'int', 0).
+          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
 task_context "SonarBottom" do
 	output_port('sonarscan', 'base/samples/SonarScan').
-		doc('top sonar scan')
+		doc('bottom sonar scan')
+
+        property('leftlimit', 'int', 0)
+        property('rightlimit', 'int', 6399) #2PI
+        property('numberofbins', 'int', 299)
+        property('adinterval', 'int', 666) #which standard value?
+        property('cont', 'int', 0).
+          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
 task_context "StateEstimator" do
@@ -90,6 +101,7 @@ task_context "StateEstimator" do
 end
 
 deployment "AvalonSimulation" do
+	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         do_not_install
 
 	task('avalon_simulation', 'avalon_simulation::Task').
@@ -99,6 +111,8 @@ deployment "AvalonSimulation" do
         task("front_camera_simulation","FrontCamera").
             periodic 0.1
         task("sonar_top_simulation","SonarTop").
+            periodic 0.1
+        task("sonar_bottom_simulation","SonarBottom").
             periodic 0.1
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01

@@ -9,6 +9,8 @@ using namespace avalon_simulation;
 Task::Task(std::string const& name)
     : TaskBase(name),avalon(NULL)
 {
+    _initial_position.set(base::Vector3d(0, 0, 0));
+    _initial_yaw.set(0);
 }
 
 Task::~Task()
@@ -57,22 +59,18 @@ bool Task::configureHook()
     if(0!=access(_scenefile.get().c_str(),R_OK))
         throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
 
-     // Loading the robot itself
-     if(!avalon){
-        avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get());
-	avalon->configureTopSonar(_topsonar_leftlimit.get(),_topsonar_rightlimit.get(),_topsonar_numberofbins.get(),_topsonar_adinterval.get(),_topsonar_cont.get());
-     }
+    delete avalon;
+    avalon = new AvalonPlugin(simulatorInterface->getControlCenter(), _scenefile.get(), _with_manipulator_gui.get(),
+            _initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
-     pluginStruct avalon_plugin;
-     avalon_plugin.name = "AvalonPlugin";
-     avalon_plugin.p_interface = avalon;
-     avalon_plugin.p_destroy = NULL;
-     simulatorInterface->addPlugin(avalon_plugin);
+    pluginStruct avalon_plugin;
+    avalon_plugin.name = "AvalonPlugin";
+    avalon_plugin.p_interface = avalon;
+    avalon_plugin.p_destroy = NULL;
+    simulatorInterface->addPlugin(avalon_plugin);
 
-     Simulation::setSimulatorInterface(simulatorInterface);
-     Simulation::setAvalonPlugin(avalon);
-
-
+    Simulation::setSimulatorInterface(simulatorInterface);
+    Simulation::setAvalonPlugin(avalon);
 
     return true;
 }
