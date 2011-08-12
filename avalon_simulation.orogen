@@ -10,28 +10,42 @@ task_context "Task" do
 	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
 		doc('scenefile of the robot module, which should be loaded')
 
-	property('with_manipulator_gui', 'bool').
+        #at the moment without gui is not support !!!!       
+	property('with_manipulator_gui', 'bool',true).
 		doc('scenefile of the robot module, which should be loaded')
-        
+
+        property('initial_position', 'base::Position')
+        property('initial_yaw', 'double')
+
+        output_port('auv_position', '/base/Vector3d')
+
         #sets the position of the auv
         operation('setPosition').
             returns('bool').
             argument('x','double','x').
             argument('y','double','y').
             argument('z','double','z')
+
+        #sets the position of the auv
+        operation('setOrientation').
+            returns('bool').
+            argument('x','double','x').
+            argument('y','double','y').
+            argument('z','double','z').
+            argument('w','double','w')
 end
 
-task_context "BottomCamera" do 
+task_context "BottomCamera" do
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
 end
 
-task_context "FrontCamera" do 
+task_context "FrontCamera" do
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
 end
 
-task_context "MotionControl" do 
+task_context "MotionControl" do
     input_port('pose_samples', '/base/samples/RigidBodyState').
         doc("the current pose estimate").
         needs_buffered_connection
@@ -39,12 +53,12 @@ task_context "MotionControl" do
     input_port('motion_commands', '/base/AUVMotionCommand').
         doc("the input commands").
         needs_buffered_connection
-    
+
     port_driven :pose_samples
     runtime_states :WAITING_FOR_ORIENTATION, :WAITING_FOR_COMMAND
 end
 
-task_context "Actuators" do 
+task_context "Actuators" do
     input_port("command", "base/actuators/Command").
         doc("actuator command").
         needs_buffered_connection
@@ -52,28 +66,43 @@ task_context "Actuators" do
     port_driven :command
 end
 
-task_context "LaserScaner" do 
+task_context "LaserScaner" do
 	output_port('scans', 'base/samples/LaserScan').
 		doc('laser scans of the Hokyo scanner')
 end
 
-task_context "SonarTop" do 
+task_context "SonarTop" do
 	output_port('sonarscan', 'base/samples/SonarScan').
 		doc('top sonar scan')
+
+        property('leftlimit', 'int', 0)
+        property('rightlimit', 'int', 6399) #2PI
+        property('numberofbins', 'int', 299)
+        property('adinterval', 'int', 666) #which standard value?
+        property('cont', 'int', 0).
+          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
-task_context "SonarBottom" do 
+task_context "SonarBottom" do
 	output_port('sonarscan', 'base/samples/SonarScan').
-		doc('top sonar scan')
+		doc('bottom sonar scan')
+
+        property('leftlimit', 'int', 0)
+        property('rightlimit', 'int', 6399) #2PI
+        property('numberofbins', 'int', 299)
+        property('adinterval', 'int', 666) #which standard value?
+        property('cont', 'int', 0).
+          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
-task_context "StateEstimator" do 
+task_context "StateEstimator" do
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
 end
 
 deployment "AvalonSimulation" do
-        do_not_install 
+	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
+        do_not_install
 
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
@@ -83,11 +112,13 @@ deployment "AvalonSimulation" do
             periodic 0.1
         task("sonar_top_simulation","SonarTop").
             periodic 0.1
+        task("sonar_bottom_simulation","SonarBottom").
+            periodic 0.1
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01
         task("actuators_simulation","Actuators")
 
-        #please use Actuators instead 
+        #please use Actuators instead
         #MotionControl is going to be removes
         task("motion_control_simulation","MotionControl")
 

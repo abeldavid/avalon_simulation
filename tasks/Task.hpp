@@ -16,6 +16,7 @@ namespace avalon_simulation {
 	AvalonPlugin *avalon;
 
         virtual bool setPosition(double x, double y, double z);
+	virtual bool setOrientation(double x, double y, double z, double w);
 
     public:
         Task(std::string const& name = "avalon_simulation::Task");
