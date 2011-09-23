@@ -72,7 +72,7 @@ task_context "LaserScaner" do
 end
 
 task_context "SonarTop" do
-	output_port('sonarscan', 'base/samples/SonarScan').
+	output_port('sonarscan', 'base/samples/SonarBeam').
 		doc('top sonar scan')
 
         property('leftlimit', 'int', 0)
@@ -84,7 +84,7 @@ task_context "SonarTop" do
 end
 
 task_context "SonarBottom" do
-	output_port('sonarscan', 'base/samples/SonarScan').
+	output_port('sonarscan', 'base/samples/SonarBeam').
 		doc('bottom sonar scan')
 
         property('leftlimit', 'int', 0)
