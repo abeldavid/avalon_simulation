@@ -42,7 +42,7 @@ void SonarTop::updateHook()
            _sonarscan.write(sonarscan);
     }
     else{
-        sonarscan.scanData.clear();
+        sonarscan.beam.clear();
     }
 }
 
