@@ -1,7 +1,7 @@
 #ifndef __SIMULATION_H__
 #define __SIMULATION_H__
 
-#include <mars/SimulatorInterface.h>
+#include <mars_sim/SimulatorInterface.h>
 #include <avalon-plugin/AvalonPlugin.h>
 
 class Simulation

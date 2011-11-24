@@ -72,27 +72,27 @@ task_context "LaserScaner" do
 end
 
 task_context "SonarTop" do
-	output_port('sonarscan', 'base/samples/SonarScan').
-		doc('top sonar scan')
-
-        property('leftlimit', 'int', 0)
-        property('rightlimit', 'int', 6399) #2PI
-        property('numberofbins', 'int', 299)
-        property('adinterval', 'int', 666) #which standard value?
-        property('cont', 'int', 0).
-          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+        output_port("sonarscan","base::samples::SonarBeam").
+            doc('top sonar scan')
+        
+        property("number_of_scans","int",5)
+        property("start_angle","double",-60/180*Math::PI)
+        property("end_angle","double",60/180*Math::PI)
+        property("resolution","double",3/180*Math::PI)
+        property("mode","int",1).
+            doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
 task_context "SonarBottom" do
-	output_port('sonarscan', 'base/samples/SonarScan').
-		doc('bottom sonar scan')
-
-        property('leftlimit', 'int', 0)
-        property('rightlimit', 'int', 6399) #2PI
-        property('numberofbins', 'int', 299)
-        property('adinterval', 'int', 666) #which standard value?
-        property('cont', 'int', 0).
-          doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+        output_port("sonarscan","base::samples::SonarBeam").
+            doc('bottom sonar scan')
+        
+        property("number_of_scans","int",5)
+        property("start_angle","double",-60/180*Math::PI)
+        property("end_angle","double",60/180*Math::PI)
+        property("resolution","double",3/180*Math::PI)
+        property("mode","int",1).
+            doc('bottom sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
 task_context "StateEstimator" do

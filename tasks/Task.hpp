@@ -6,7 +6,7 @@
 #include "avalon_simulation/TaskBase.hpp"
 #include <avalon-plugin/AvalonPlugin.h>
     
-class AvalonPlugin;
+//class AvalonPlugin;
 
 namespace avalon_simulation {
     class Task : public TaskBase

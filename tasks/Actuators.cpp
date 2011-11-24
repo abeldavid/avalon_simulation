@@ -46,7 +46,7 @@ void Actuators::updateHook()
 {
     ActuatorsBase::updateHook();
 
-    Command command;
+    base::actuators::Command command;
     if (_command.readNewest(command) == RTT::NewData)
     {
         //we have to check it here otherwise the port
