@@ -60,14 +60,9 @@ bool Task::configureHook()
         throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
 
     delete avalon;
-    avalon = new AvalonPlugin(libManager, _scenefile.get(), _with_manipulator_gui.get(),
-            _initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
-
-    pluginStruct avalon_plugin;
-    avalon_plugin.name = "AvalonPlugin";
-    avalon_plugin.p_interface = avalon;
-    avalon_plugin.p_destroy = NULL;
-    simulatorInterface->addPlugin(avalon_plugin);
+    avalon = new AvalonPlugin(libManager, _scenefile.get(), _with_manipulator_gui.get());
+            
+    //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
     Simulation::setSimulatorInterface(simulatorInterface);
     Simulation::setAvalonPlugin(avalon);

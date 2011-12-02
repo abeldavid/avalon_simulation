@@ -51,7 +51,7 @@ void Actuators::updateHook()
     {
         //we have to check it here otherwise the port
         //might be no longer triggeres
-        if (!Simulation::getSimulatorInterface()->isRunning()) 
+        if (!Simulation::getSimulatorInterface()->isSimRunning()) 
             return;
 
         //check we have six actuator commands
