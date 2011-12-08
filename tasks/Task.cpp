@@ -61,6 +61,7 @@ bool Task::configureHook()
 
     delete avalon;
     avalon = new AvalonPlugin(libManager, _scenefile.get(), _with_manipulator_gui.get());
+    avalon->reset();
             
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 

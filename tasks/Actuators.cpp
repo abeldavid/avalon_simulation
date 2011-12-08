@@ -72,9 +72,9 @@ void Actuators::updateHook()
         pwm.push_back(-command.target[2]);
         pwm.push_back(-command.target[3]);
         pwm.push_back(-command.target[5]);
-        pwm.push_back(-command.target[4]);
+        pwm.push_back(-command.target[4]*0.01);
         pwm.push_back(-command.target[1]);
-        pwm.push_back(command.target[0]*5.0);
+        pwm.push_back(command.target[0]);
         Simulation::getAvalonPlugin()->setTarget(pwm);
     }
 }
