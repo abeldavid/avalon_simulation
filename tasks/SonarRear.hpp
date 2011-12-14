@@ -1,23 +1,24 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef AVALON_SIMULATION_LASERSCANER_TASK_HPP
-#define AVALON_SIMULATION_LASERSCANER_TASK_HPP
+#ifndef AVALON_SIMULATION_SONARREAR_TASK_HPP
+#define AVALON_SIMULATION_SONARREAR_TASK_HPP
 
-#include "avalon_simulation/LaserScanerBase.hpp"
+#include "avalon_simulation/SonarRearBase.hpp"
 
 namespace avalon_simulation {
-    class LaserScaner : public LaserScanerBase
+    class SonarRear : public SonarRearBase
     {
-	friend class LaserScanerBase;
+	friend class SonarRearBase;
     protected:
+      base::samples::SonarBeam sonar_beam;
 
 
 
     public:
-        LaserScaner(std::string const& name = "avalon_simulation::LaserScaner", TaskCore::TaskState initial_state = Stopped);
-        LaserScaner(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+        SonarRear(std::string const& name = "avalon_simulation::SonarRear", TaskCore::TaskState initial_state = Stopped);
+        SonarRear(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
 
-	~LaserScaner();
+	~SonarRear();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -39,7 +40,7 @@ namespace avalon_simulation {
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-        // bool startHook();
+         bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -55,13 +56,13 @@ namespace avalon_simulation {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-        // void updateHook();
+         void updateHook();
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
          * updateHook() about triggering options.
          *
-         * Call recovered() to go back in the Runtime state.
+         * Call recover() to go back in the Runtime state.
          */
         // void errorHook();
 

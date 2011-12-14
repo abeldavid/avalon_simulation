@@ -34,14 +34,14 @@ void SonarTop::updateHook()
 {
     SonarTopBase::updateHook();
 
-    Simulation::getAvalonPlugin()->configureTopSonar(_start_angle.get(),_end_angle.get(),_number_of_scans.get(), _mode.get());
+    //Simulation::getAvalonPlugin()->configureTopSonar(_start_angle.get(),_end_angle.get(),_number_of_scans.get(), _mode.get());
 
-    if(Simulation::getAvalonPlugin()->getTopSonarData(&sonarscan)){
-       if (_sonarscan.connected())
-           _sonarscan.write(sonarscan);
+    if(Simulation::getAvalonPlugin()->getTopSonarData(sonar_beam)){
+       if (_sonar_beam.connected())
+           _sonar_beam.write(sonar_beam);
     }
     else{
-        sonarscan.beam.clear();
+        sonar_beam.beam.clear();
     }
 }
 

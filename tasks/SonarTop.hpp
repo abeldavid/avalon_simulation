@@ -10,7 +10,7 @@ namespace avalon_simulation {
     {
 	friend class SonarTopBase;
     protected:
-    base::samples::SonarBeam sonarscan;
+    base::samples::SonarBeam sonar_beam;
 
 
     public:

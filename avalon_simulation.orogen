@@ -16,6 +16,7 @@ task_context "Task" do
 
         property('initial_position', 'base::Position')
         property('initial_yaw', 'double')
+        property('debug_sonar', 'bool',0)
 
         output_port('auv_position', '/base/Vector3d')
 
@@ -45,19 +46,6 @@ task_context "FrontCamera" do
 	  doc('front camera recording')
 end
 
-task_context "MotionControl" do
-    input_port('pose_samples', '/base/samples/RigidBodyState').
-        doc("the current pose estimate").
-        needs_buffered_connection
-
-    input_port('motion_commands', '/base/AUVMotionCommand').
-        doc("the input commands").
-        needs_buffered_connection
-
-    port_driven :pose_samples
-    runtime_states :WAITING_FOR_ORIENTATION, :WAITING_FOR_COMMAND
-end
-
 task_context "Actuators" do
     input_port("command", "base/actuators/Command").
         doc("actuator command").
@@ -66,14 +54,9 @@ task_context "Actuators" do
     port_driven :command
 end
 
-task_context "LaserScaner" do
-	output_port('scans', 'base/samples/LaserScan').
-		doc('laser scans of the Hokyo scanner')
-end
-
 task_context "SonarTop" do
-        output_port("sonarscan","base::samples::SonarBeam").
-            doc('top sonar scan')
+        output_port("sonar_beam","base::samples::SonarBeam").
+            doc('top sonar beam')
         
         property("number_of_scans","int",5)
         property("start_angle","double",-60/180*Math::PI)
@@ -83,9 +66,9 @@ task_context "SonarTop" do
             doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
 end
 
-task_context "SonarBottom" do
-        output_port("sonarscan","base::samples::SonarBeam").
-            doc('bottom sonar scan')
+task_context "SonarRear" do
+        output_port("sonar_beam","base::samples::SonarBeam").
+            doc('rear sonar beam')
         
         property("number_of_scans","int",5)
         property("start_angle","double",-60/180*Math::PI)
@@ -111,16 +94,12 @@ deployment "AvalonSimulation" do
         task("front_camera_simulation","FrontCamera").
             periodic 0.1
         task("sonar_top_simulation","SonarTop").
-            periodic 0.1
-        task("sonar_bottom_simulation","SonarBottom").
-            periodic 0.1
+            periodic 0.066666
+        task("sonar_rear_simulation","SonarRear").
+            periodic 0.066666
         task("state_estimator_simulation","StateEstimator").
             periodic 0.01
         task("actuators_simulation","Actuators")
-
-        #please use Actuators instead
-        #MotionControl is going to be removes
-        task("motion_control_simulation","MotionControl")
 
 	add_default_logger
 end
