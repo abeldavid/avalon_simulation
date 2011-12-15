@@ -11,6 +11,7 @@ Task::Task(std::string const& name)
 {
     _initial_position.set(base::Vector3d(0, 0, 0));
     _initial_yaw.set(0);
+    _enable_gui.set(true);
 }
 
 Task::~Task()
@@ -61,8 +62,6 @@ bool Task::configureHook()
 
     delete avalon;
     avalon = new AvalonPlugin(libManager, _scenefile.get(),_debug_sonar.get());
-    avalon->reset();
-            
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
     Simulation::setSimulatorInterface(simulatorInterface);
