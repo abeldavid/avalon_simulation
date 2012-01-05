@@ -51,6 +51,12 @@ void StateEstimator::updateHook()
     Eigen::Quaterniond q;
     Eigen::Vector3d p;
     Simulation::getAvalonPlugin()->getPose(p,q);
+
+    Eigen::Vector3d lin_vel;
+    Eigen::Vector3d ang_vel;
+
+    Simulation::getAvalonPlugin()->getVelocities(lin_vel, ang_vel);
+
     pose.position = p;
     pose.time = base::Time::now();
     pose.orientation = q;
