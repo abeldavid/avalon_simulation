@@ -57,9 +57,15 @@ void StateEstimator::updateHook()
 
     Simulation::getAvalonPlugin()->getVelocities(lin_vel, ang_vel);
 
+    lin_vel = q.inverse() * lin_vel;
+    ang_vel = q.inverse() * ang_vel;
+
     pose.position = p;
     pose.time = base::Time::now();
     pose.orientation = q;
+    pose.velocity = lin_vel;
+    pose.angular_velocity = ang_vel;
+
     _pose_samples.write(pose);
 }
 
