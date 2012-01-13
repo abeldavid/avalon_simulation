@@ -25,7 +25,15 @@ bool SonarTop::startHook()
         return false;
 
     if(!Simulation::isInitialized())
-        throw std::runtime_error("Cannot start sonar data. The simulator is not running in the same process.");
+        throw std::runtime_error("Cannot get sonar data. The simulator is not running in the same process.");
+    
+    simulation::SonarConfig config;
+    config.start_angle = _start_angle.get();
+    config.end_angle = _end_angle.get();
+    config.max_distance = _maximum_distance.get();
+    config.distance_resolution = _resolution.get();
+    config.ping_pong_mode = _ping_pong_mode.get();
+    Simulation::getAvalonPlugin()->configureTopSonar(config);
     
     return true;
 }
@@ -33,8 +41,6 @@ bool SonarTop::startHook()
 void SonarTop::updateHook()
 {
     SonarTopBase::updateHook();
-
-    //Simulation::getAvalonPlugin()->configureTopSonar(_start_angle.get(),_end_angle.get(),_number_of_scans.get(), _mode.get());
 
     if(Simulation::getAvalonPlugin()->getTopSonarData(sonar_beam)){
        if (_sonar_beam.connected())
