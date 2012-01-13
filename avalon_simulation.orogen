@@ -58,24 +58,24 @@ task_context "SonarTop" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('top sonar beam')
         
-        property("number_of_scans","int",5)
-        property("start_angle","double",-60/180*Math::PI)
-        property("end_angle","double",60/180*Math::PI)
-        property("resolution","double",3/180*Math::PI)
-        property("mode","int",1).
-            doc('top sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+        property("start_angle","double",Math::PI)
+        property("end_angle","double",-Math::PI)
+        property("resolution","double",0.1)
+        property("maximum_distance","double",50.0)
+        property("ping_pong_mode","bool",false).
+            doc('if true ping pong mode is activated')
 end
 
 task_context "SonarRear" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('rear sonar beam')
         
-        property("number_of_scans","int",5)
-        property("start_angle","double",-60/180*Math::PI)
-        property("end_angle","double",60/180*Math::PI)
-        property("resolution","double",3/180*Math::PI)
-        property("mode","int",1).
-            doc('bottom sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area')
+        property("start_angle","double",0.7*Math::PI)
+        property("end_angle","double",0.3*Math::PI)
+        property("resolution","double",0.1)
+        property("maximum_distance","double",50.0)
+        property("ping_pong_mode","bool",true).
+            doc('if true ping pong mode is activated')
 end
 
 task_context "StateEstimator" do
