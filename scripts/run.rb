@@ -3,7 +3,8 @@ include Orocos
 
 Orocos.initialize
 
-widget = Vizkit.load "simulator.ui"
+#widget = Vizkit.load "simulator.ui"
+widget = Vizkit.load File.join(File.dirname(__FILE__),"simulator.ui")
 
 Orocos.run "AvalonSimulation" ,:wait => 9999999 do 
     simulation = TaskContext.get 'avalon_simulation'
@@ -26,9 +27,9 @@ Orocos.run "AvalonSimulation" ,:wait => 9999999 do
     state_estimator = TaskContext.get 'state_estimator_simulation'
     state_estimator.configure
     state_estimator.start
-    Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top
-    Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
-    Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
+    #Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top
+    #Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
+    #Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
 
     widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
         sample = writer.new_sample

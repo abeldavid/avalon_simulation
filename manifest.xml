@@ -8,6 +8,7 @@
   <!-- Dependencies are resolved via osdep file in the autoproj configuration -->
   <depend package ="simulation/mars-plugins/avalon-plugin" />
   <depend package ="simulation/orogen/mars_core" />
+  <depend package ="simulation/mars-plugins/marsusim" />
   <versioncontrol type="git" url="" />
   <export>
     <cpp cflags="" lflags="" />

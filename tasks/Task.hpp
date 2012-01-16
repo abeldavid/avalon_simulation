@@ -5,6 +5,7 @@
 
 #include "avalon_simulation/TaskBase.hpp"
 #include <avalon-plugin/AvalonPlugin.h>
+#include <marsusim/OPlugin.h>
     
 //class AvalonPlugin;
 
@@ -14,7 +15,7 @@ namespace avalon_simulation {
 	friend class TaskBase;
     protected:
 	AvalonPlugin *avalon;
-
+        OPlugin *osg;
         virtual bool setPosition(double x, double y, double z);
 	virtual bool setOrientation(double x, double y, double z, double w);
 

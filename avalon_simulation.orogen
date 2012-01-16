@@ -3,6 +3,7 @@ version '0.1'
 
 import_types_from 'base'
 using_library 'avalon-plugin'
+using_library 'marsusim'
 using_task_library 'simulation'
 
 task_context "Task" do
@@ -17,6 +18,7 @@ task_context "Task" do
         property('initial_position', 'base::Position')
         property('initial_yaw', 'double')
         property('debug_sonar', 'bool',0)
+        property('use_osg_ocean', 'bool',0)
 
         output_port('auv_position', '/base/Vector3d')
 

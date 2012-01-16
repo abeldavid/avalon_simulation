@@ -62,6 +62,8 @@ bool Task::configureHook()
 
     delete avalon;
     avalon = new AvalonPlugin(libManager, _scenefile.get(),_debug_sonar.get());
+    if(_use_osg_ocean.get())
+        osg = new OPlugin(libManager);
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
     Simulation::setSimulatorInterface(simulatorInterface);
