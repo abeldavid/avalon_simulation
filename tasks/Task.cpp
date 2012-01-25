@@ -62,12 +62,27 @@ bool Task::configureHook()
 
     delete avalon;
     avalon = new AvalonPlugin(libManager, _scenefile.get(),_debug_sonar.get(),_use_osg_ocean.get());
-    if(_use_osg_ocean.get())
+    Simulation::setSimulatorInterface(simulatorInterface);
+    libManager->addLibrary(avalon);
+
+    int cnt=0;
+    while(!avalon->isRunning()){
+        usleep(10000);
+        if(cnt++ == 60){
+            std::cerr << "Could not get an runnning instance of avalon" << std::endl;
+            return false;
+        }
+        
+    }
+
+    if(_use_osg_ocean.get()){
         osg = new OPlugin(libManager);
+        libManager->addLibrary(osg);
+    }
+    Simulation::setAvalonPlugin(avalon);
+
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
-    Simulation::setSimulatorInterface(simulatorInterface);
-    Simulation::setAvalonPlugin(avalon);
 
     return true;
 }
