@@ -68,7 +68,7 @@ bool Task::configureHook()
     int cnt=0;
     while(!avalon->isRunning()){
         usleep(10000);
-        if(cnt++ == 60){
+        if(cnt++ == 600){
             std::cerr << "Could not get an runnning instance of avalon" << std::endl;
             return false;
         }
