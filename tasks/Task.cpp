@@ -50,6 +50,7 @@ bool Task::configureHook()
 
     if (! TaskBase::configureHook())
         return false;
+    
 
     //check if the environment was sourced more than once
     int pos = _scenefile.get().rfind(":/");
@@ -61,25 +62,39 @@ bool Task::configureHook()
         throw std::runtime_error(std::string("Can not access scene file: ") + _scenefile.get());
 
     delete avalon;
+
+    //During loading it seems better to stop the viz
+    Mars::graphicsTimer->stop();
+    Mars::graphicsTimer->runOnce();
+
     avalon = new AvalonPlugin(libManager, _scenefile.get(),_debug_sonar.get(),_use_osg_ocean.get());
     Simulation::setSimulatorInterface(simulatorInterface);
     libManager->addLibrary(avalon);
+    
+    Mars::graphicsTimer->runOnce();
 
+    
     int cnt=0;
+    //Try for 10 seconds to get avalon running
     while(!avalon->isRunning()){
         usleep(10000);
-        if(cnt++ == 600){
+        if(cnt++ == 1000){
             std::cerr << "Could not get an runnning instance of avalon" << std::endl;
             return false;
         }
         
     }
 
+    Mars::graphicsTimer->runOnce();
+
     if(_use_osg_ocean.get()){
         osg = new OPlugin(libManager);
         libManager->addLibrary(osg);
     }
     Simulation::setAvalonPlugin(avalon);
+
+    //Starting viz    
+    Mars::graphicsTimer->run();
 
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
