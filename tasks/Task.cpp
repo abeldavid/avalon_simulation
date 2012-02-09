@@ -3,6 +3,7 @@
 #include "Task.hpp"
 #include <unistd.h>
 #include "Simulation.h"
+#include <mars_app/GraphicsTimer.h>
 
 using namespace avalon_simulation;
 
