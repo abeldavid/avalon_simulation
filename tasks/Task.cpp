@@ -3,6 +3,8 @@
 #include "Task.hpp"
 #include <unistd.h>
 #include "Simulation.h"
+#include <avalon-plugin/AvalonPlugin.h>
+#include <marsusim/OPlugin.h>
 
 using namespace avalon_simulation;
 

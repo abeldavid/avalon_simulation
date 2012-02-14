@@ -8,6 +8,7 @@ widget = Vizkit.load "simulator.ui"
 Orocos.run "AvalonSimulation" ,:wait => 9999999 do 
     simulation = TaskContext.get 'avalon_simulation'
     #simulation.debug_sonar = 1
+    simulation.use_osg_ocean = true
     simulation.enable_gui = true
     simulation.configure
     simulation.start

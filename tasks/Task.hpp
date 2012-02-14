@@ -4,10 +4,9 @@
 #define AVALON_SIMULATION_TASK_TASK_HPP
 
 #include "avalon_simulation/TaskBase.hpp"
-#include <avalon-plugin/AvalonPlugin.h>
-#include <marsusim/OPlugin.h>
     
-//class AvalonPlugin;
+class AvalonPlugin;
+class OPlugin;
 
 namespace avalon_simulation {
     class Task : public TaskBase
