@@ -3,11 +3,11 @@ include Orocos
 
 Orocos.initialize
 
-widget = Vizkit.load "simulator.ui"
+#widget = Vizkit.load "simulator.ui"
 
-Orocos.run "AvalonSimulation" ,:wait => 9999999 do 
+Orocos.run "AvalonSimulation" ,:wait => 10 do 
     simulation = TaskContext.get 'avalon_simulation'
-    #simulation.debug_sonar = 1
+    simulation.debug_sonar = 1
     simulation.use_osg_ocean = true
     simulation.enable_gui = true
     simulation.configure
@@ -31,32 +31,32 @@ Orocos.run "AvalonSimulation" ,:wait => 9999999 do
 #    Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
 #    Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
 
-    widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
-        sample = writer.new_sample
-        sample.time = Time.now 
-        0.upto(5) do
-            sample.mode << :DM_PWM
-            sample.target << 0;
-        end
-        sample.target[2] = -x
-        sample.target[3] = -x
-        sample.target[4] = y
-        writer.write sample
-    end
-
-    widget.joystick2.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
-        sample = writer.new_sample
-        sample.time = Time.now 
-        0.upto(5) do
-            sample.mode << :DM_PWM
-            sample.target << 0;
-        end
-        sample.target[1] = -x
-        sample.target[5] = y
-        writer.write sample
-    end
-
-    widget.show 
+#    widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
+#        sample = writer.new_sample
+#        sample.time = Time.now 
+#        0.upto(5) do
+#            sample.mode << :DM_PWM
+#            sample.target << 0;
+#        end
+#        sample.target[2] = -x
+#        sample.target[3] = -x
+#        sample.target[4] = y
+#        writer.write sample
+#    end
+#
+#    widget.joystick2.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
+#        sample = writer.new_sample
+#        sample.time = Time.now 
+#        0.upto(5) do
+#            sample.mode << :DM_PWM
+#            sample.target << 0;
+#        end
+#        sample.target[1] = -x
+#        sample.target[5] = y
+#        writer.write sample
+#    end
+#
+#    widget.show 
     Vizkit.exec
 end
 
