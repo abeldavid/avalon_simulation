@@ -12,8 +12,6 @@ using namespace avalon_simulation;
 Task::Task(std::string const& name)
     : TaskBase(name),avalon(NULL)
 {
-    _initial_position.set(base::Vector3d(0, 0, 0));
-    _initial_yaw.set(0);
     _enable_gui.set(true);
 }
 
@@ -35,6 +33,19 @@ bool Task::setOrientation(double x, double y, double z, double w)
   simulatorInterface->sceneHasChanged(true);
 
   return true;
+}
+
+
+bool Task::setYaw(double yaw)
+{
+    base::Vector3d euler(yaw, 0.0, 0.0);
+    Eigen::Quaternion<double> o;
+    o = Eigen::AngleAxis<double>(euler.x(), base::Vector3d::Unit(2));
+
+    avalon->setOrientation(o.x(), o.y(), o.z(), o.w());
+    simulatorInterface->sceneHasChanged(true);
+
+    return true;
 }
 
 
@@ -100,7 +111,11 @@ bool Task::configureHook()
     Mars::graphicsTimer->run();
 
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
-
+    //
+    setPosition(_initial_x.get(), 
+            _initial_y.get(), 
+            _initial_z.get());
+    setYaw(_initial_yaw.get());
 
     return true;
 }

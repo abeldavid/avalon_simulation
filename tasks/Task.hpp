@@ -17,6 +17,7 @@ namespace avalon_simulation {
         OPlugin *osg;
         virtual bool setPosition(double x, double y, double z);
 	virtual bool setOrientation(double x, double y, double z, double w);
+        virtual bool setYaw(double yaw);
 
     public:
         Task(std::string const& name = "avalon_simulation::Task");
