@@ -18,7 +18,27 @@ task_context "Task" do
         property('initial_position', 'base::Position')
         property('initial_yaw', 'double')
         property('debug_sonar', 'bool',0)
+        
+        #osgOcean Part:
         property('use_osg_ocean', 'bool',0)
+        property('waveScale','double')
+        property('windSpeed','double')
+        property('endlessOcean','bool')
+        property('oceanHeight','double')
+        property('goodRays','bool')
+        property('silt','bool')
+        property('glare','bool')
+        property('glareThreashold','double')
+        property('distortion','bool')
+        property('scattering','bool')
+        property('fogDensity','double')
+        property('fogColor','/base/Vector4d')
+        property('diffuse','/base/Vector4d')
+        property('attenuation','/base/Vector3d')
+        
+
+
+
 
         output_port('auv_position', '/base/Vector3d')
 

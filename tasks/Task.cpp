@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "Simulation.h"
 #include <mars_app/GraphicsTimer.h>
+#include <osgOcean/FFTOceanSurface>
 
 using namespace avalon_simulation;
 
@@ -99,7 +100,66 @@ bool Task::configureHook()
 
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
 
-
+    if(osg){
+        osgOcean::FFTOceanSurface *surface = dynamic_cast<osgOcean::FFTOceanSurface*>(osg->getScene()->getOceanSurface());
+        osgOcean::OceanScene *ocean = osg->getScene()->getOceanScene();
+        if(!surface){
+            std::cerr << "Could not get surface" << std::endl;
+            return false;
+        }
+        
+        waveScale = surface->getWaveScaleFactor();
+        windSpeed = surface->getWindSpeed();
+        endlessOcean = surface->isEndlessOceanEnabled();
+        oceanHeight = ocean->getOceanSurfaceHeight();
+        goodRays = ocean->areGodRaysEnabled();
+        glare = ocean->isGlareEnabled();
+        glareThreashold = ocean->getGlareThreshold();
+        distortion = ocean->isDistortionEnabled();
+        scattering = ocean->isUnderwaterScatteringEnabled();
+        fogDensity = ocean->getUnderwaterFogDensity();
+        osg::Vec4f v = ocean->getUnderwaterFogColor();
+        fogColor = base::Vector4d(v[0],v[1],v[2],v[3]); 
+        v = ocean->getUnderwaterDiffuse();
+        diffuse = base::Vector4d(v[0],v[1],v[2],v[3]); 
+        osg::Vec3f v3 = ocean->getUnderwaterAttenuation();
+        attenuation = base::Vector3d(v3[0],v3[1],v3[2]);
+        silt = ocean->isSiltEnabled(); 
+        
+        _waveScale.set(surface->getWaveScaleFactor());
+        _windSpeed.set(surface->getWindSpeed());
+        _endlessOcean.set(surface->isEndlessOceanEnabled());
+        _oceanHeight.set(ocean->getOceanSurfaceHeight());
+        _goodRays.set(ocean->areGodRaysEnabled());
+        _glare.set(ocean->isGlareEnabled());
+        _glareThreashold.set(ocean->getGlareThreshold());
+        _distortion.set(ocean->isDistortionEnabled());
+        _scattering.set(ocean->isUnderwaterScatteringEnabled());
+        _fogDensity.set(ocean->getUnderwaterFogDensity());
+        v = ocean->getUnderwaterFogColor();
+        _fogColor.set(base::Vector4d(v[0],v[1],v[2],v[3]));
+        v = ocean->getUnderwaterDiffuse();
+        _diffuse.set(base::Vector4d(v[0],v[1],v[2],v[3]));
+        v3 = ocean->getUnderwaterAttenuation();
+        _attenuation.set(base::Vector3d(v3[0],v3[1],v3[2]));
+        _silt.set(ocean->isSiltEnabled());
+    }
+/*
+use_osg_ocean
+waveScale
+windSpeed
+endlessOcean
+oceanHeight
+goodRays
+glare
+glareThreashold
+distortion
+scattering
+fogDensity
+fogColor
+diffuse
+attenuation
+*/
     return true;
 }
 bool Task::startHook()
@@ -114,6 +174,8 @@ void Task::updateHook()
 
     if (!simulatorInterface->isSimRunning())
         return;
+
+    checkAndApplyConfigChange();
 
     Eigen::Vector3d position;
     Eigen::Quaterniond orientation;
@@ -135,3 +197,91 @@ void Task::updateHook()
 //     TaskBase::cleanupHook();
 // }
 
+
+void Task::checkAndApplyConfigChange(){
+    if(osg){
+        osgOcean::FFTOceanSurface *surface = dynamic_cast<osgOcean::FFTOceanSurface*>(osg->getScene()->getOceanSurface());
+        osgOcean::OceanScene *ocean = osg->getScene()->getOceanScene();
+        if(!surface){
+            std::cerr << "Could not get surface" << std::endl;
+        }
+        
+        static const bool dirty = true;
+
+        if(_waveScale.get() != waveScale){
+            waveScale = _waveScale.get();
+            surface->setWaveScaleFactor(waveScale);
+            printf("Wave scale changes\n");
+        }
+        if(_windSpeed.get() != windSpeed){
+            windSpeed = _windSpeed.get();
+            surface->setWindSpeed(windSpeed);
+        }
+        if(_endlessOcean.get() != endlessOcean){
+            endlessOcean = _endlessOcean.get();
+            surface->enableEndlessOcean(endlessOcean,dirty); 
+        }
+        if(_oceanHeight.get() != oceanHeight){
+            oceanHeight = _oceanHeight.get();
+            ocean->setOceanSurfaceHeight(oceanHeight);
+        }
+        if(_goodRays.get() != goodRays){
+            goodRays = _goodRays.get();
+            ocean->enableGodRays(goodRays);
+        }
+        if(_silt.get() != silt){
+            silt = _silt.get();
+            ocean->enableSilt(silt);
+        }
+        if(_glare.get() != glare){
+            glare = _glare.get();
+            ocean->enableGlare(glare);
+        }
+        if(_glareThreashold.get() != glareThreashold){
+            glareThreashold = _glareThreashold.get();
+            ocean->setGlareThreshold(glareThreashold);
+        }
+        if(_distortion.get() != distortion){
+            distortion = _distortion.get();
+            ocean->enableDistortion(distortion);
+        }
+        if(_scattering.get() != scattering){
+            scattering = _scattering.get();
+            ocean->enableUnderwaterScattering(scattering);
+        }
+
+        if(_fogDensity.get() != fogDensity || _fogColor.get() != fogColor){
+            fogDensity = _fogDensity.get();
+            fogColor = _fogColor.get();
+            ocean->setUnderwaterFog(fogDensity,osg::Vec4f(fogColor[0],fogColor[1],fogColor[2],fogColor[3]));
+        }
+        if(_diffuse.get() != diffuse){
+            diffuse = _diffuse.get();
+            ocean->setUnderwaterDiffuse(osg::Vec4f(diffuse[0],diffuse[1],diffuse[2],diffuse[3]));
+        }
+        if(_attenuation.get() != attenuation){
+            attenuation = _attenuation.get();
+            ocean->setUnderwaterAttenuation(osg::Vec3f(attenuation[0],attenuation[1],attenuation[2]));
+        }
+
+
+        
+        //_waveScale.set(surface->getWaveScaleFactor());
+        //_windSpeed.set(surface->getWindSpeed());
+        //_endlessOcean.set(surface->isEndlessOceanEnabled());
+        //_oceanHeight.set(ocean->getOceanSurfaceHeight());
+        //_goodRays.set(ocean->areGodRaysEnabled());
+        //_glare.set(ocean->isGlareEnabled());
+        //_glareThreashold.set(ocean->getGlareThreshold());
+        //_distortion.set(ocean->isDistortionEnabled());
+        //_scattering.set(ocean->isUnderwaterScatteringEnabled());
+        //_fogDensity.set(ocean->getUnderwaterFogDensity());
+        //osg::Vec4f v = ocean->getUnderwaterFogColor();
+        //_fogColor.set(base::Vector4d(v[0],v[1],v[2],v[3]));
+        //v = ocean->getUnderwaterDiffuse();
+        //_diffuse.set(base::Vector4d(v[0],v[1],v[2],v[3]));
+        //osg::Vec3f v3 = ocean->getUnderwaterAttenuation();
+        //_attenuation.set(base::Vector3d(v3[0],v3[1],v3[2]));
+    }
+
+}

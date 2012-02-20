@@ -7,11 +7,14 @@ Orocos.initialize
 
 Orocos.run "AvalonSimulation" ,:wait => 10 do 
     simulation = TaskContext.get 'avalon_simulation'
+    front_cam = TaskContext.get 'front_camera_simulation'
+
     simulation.debug_sonar = 1
     simulation.use_osg_ocean = true
     simulation.enable_gui = true
     simulation.configure
     simulation.start
+    front_cam.start
 
     actuactors = TaskContext.get 'actuators_simulation'
     actuactors.configure

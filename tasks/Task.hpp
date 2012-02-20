@@ -18,6 +18,22 @@ namespace avalon_simulation {
         OPlugin *osg;
         virtual bool setPosition(double x, double y, double z);
 	virtual bool setOrientation(double x, double y, double z, double w);
+        void checkAndApplyConfigChange();
+
+        double waveScale;
+        double windSpeed;
+        bool endlessOcean;
+        double oceanHeight;
+        bool goodRays;
+        bool glare;
+        double glareThreashold;
+        bool distortion;
+        bool scattering;
+        bool silt;
+        double fogDensity;
+        base::Vector4d fogColor;
+        base::Vector4d diffuse;
+        base::Vector3d attenuation;
 
     public:
         Task(std::string const& name = "avalon_simulation::Task");
