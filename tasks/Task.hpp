@@ -4,10 +4,9 @@
 #define AVALON_SIMULATION_TASK_TASK_HPP
 
 #include "avalon_simulation/TaskBase.hpp"
-#include <avalon-plugin/AvalonPlugin.h>
-#include <marsusim/OPlugin.h>
     
-//class AvalonPlugin;
+class AvalonPlugin;
+class OPlugin;
 
 namespace avalon_simulation {
     class Task : public TaskBase
@@ -34,6 +33,7 @@ namespace avalon_simulation {
         base::Vector4d fogColor;
         base::Vector4d diffuse;
         base::Vector3d attenuation;
+        virtual bool setYaw(double yaw);
 
     public:
         Task(std::string const& name = "avalon_simulation::Task");

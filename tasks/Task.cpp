@@ -3,6 +3,8 @@
 #include "Task.hpp"
 #include <unistd.h>
 #include "Simulation.h"
+#include <avalon-plugin/AvalonPlugin.h>
+#include <marsusim/OPlugin.h>
 #include <mars_app/GraphicsTimer.h>
 #include <osgOcean/FFTOceanSurface>
 
@@ -11,8 +13,6 @@ using namespace avalon_simulation;
 Task::Task(std::string const& name)
     : TaskBase(name),avalon(NULL)
 {
-    _initial_position.set(base::Vector3d(0, 0, 0));
-    _initial_yaw.set(0);
     _enable_gui.set(true);
 }
 
@@ -34,6 +34,19 @@ bool Task::setOrientation(double x, double y, double z, double w)
   simulatorInterface->sceneHasChanged(true);
 
   return true;
+}
+
+
+bool Task::setYaw(double yaw)
+{
+    base::Vector3d euler(yaw, 0.0, 0.0);
+    Eigen::Quaternion<double> o;
+    o = Eigen::AngleAxis<double>(euler.x(), base::Vector3d::Unit(2));
+
+    avalon->setOrientation(o.x(), o.y(), o.z(), o.w());
+    simulatorInterface->sceneHasChanged(true);
+
+    return true;
 }
 
 
@@ -144,22 +157,11 @@ bool Task::configureHook()
         _attenuation.set(base::Vector3d(v3[0],v3[1],v3[2]));
         _silt.set(ocean->isSiltEnabled());
     }
-/*
-use_osg_ocean
-waveScale
-windSpeed
-endlessOcean
-oceanHeight
-goodRays
-glare
-glareThreashold
-distortion
-scattering
-fogDensity
-fogColor
-diffuse
-attenuation
-*/
+    setPosition(_initial_x.get(), 
+            _initial_y.get(), 
+            _initial_z.get());
+    setYaw(_initial_yaw.get());
+
     return true;
 }
 bool Task::startHook()
