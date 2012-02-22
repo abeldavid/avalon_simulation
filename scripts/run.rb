@@ -9,8 +9,8 @@ Orocos.run "AvalonSimulation" ,:wait => 10 do
     simulation = TaskContext.get 'avalon_simulation'
     front_cam = TaskContext.get 'front_camera_simulation'
 
-    simulation.debug_sonar = 1
-    simulation.use_osg_ocean = true
+    simulation.debug_sonar = false 
+    simulation.use_osg_ocean = false 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
@@ -58,8 +58,8 @@ Orocos.run "AvalonSimulation" ,:wait => 10 do
         sample.target[5] = y
         writer.write sample
     end
-    #Vizkit.display front_cam
-    widget.show 
+    Vizkit.display sonar
+    #widget.show 
     Vizkit.exec
 end
 
