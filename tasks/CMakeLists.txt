@@ -1,11 +1,16 @@
 # Generated from orogen/lib/orogen/templates/tasks/CMakeLists.txt
 
+find_package(Qt4 COMPONENTS QtXml REQUIRED)
+INCLUDE( ${QT_USE_FILE} )
+INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} ) 
+
 include(avalon_simulationTaskLib)
 ADD_LIBRARY(${AVALON_SIMULATION_TASKLIB_NAME} SHARED 
     ${AVALON_SIMULATION_TASKLIB_SOURCES} Simulation.cpp)
 
 add_dependencies(${AVALON_SIMULATION_TASKLIB_NAME}
     regen-typekit)
+
 
 
 TARGET_LINK_LIBRARIES(${AVALON_SIMULATION_TASKLIB_NAME}
