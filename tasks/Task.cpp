@@ -87,7 +87,7 @@ bool Task::configureHook()
     libManager->addLibrary(avalon);
     
     Mars::graphicsTimer->runOnce();
-
+osg=0;
     
     int cnt=0;
     //Try for 10 seconds to get avalon running
