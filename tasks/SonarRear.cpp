@@ -40,6 +40,13 @@ bool SonarRear::startHook()
     if(!Simulation::isInitialized())
         throw std::runtime_error("Cannot get sonar data. The simulator is not running in the same process.");
     
+    return true;
+}
+
+void SonarRear::updateHook()
+{
+    SonarRearBase::updateHook();
+    
     simulation::SonarConfig config;
     config.start_angle = _start_angle.get();
     config.end_angle = _end_angle.get();
@@ -47,13 +54,6 @@ bool SonarRear::startHook()
     config.distance_resolution = _resolution.get();
     config.ping_pong_mode = _ping_pong_mode.get();
     Simulation::getAvalonPlugin()->configureRearSonar(config);
-    
-    return true;
-}
-
-void SonarRear::updateHook()
-{
-    SonarRearBase::updateHook();
 
     if(Simulation::getAvalonPlugin()->getRearSonarData(sonar_beam)){
       if (_sonar_beam.connected())
