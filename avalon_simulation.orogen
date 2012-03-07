@@ -4,6 +4,7 @@ version '0.1'
 import_types_from 'base'
 using_library 'avalon-plugin'
 using_library 'marsusim'
+using_library 'mars_sim'
 using_task_library 'simulation'
 
 task_context "Task" do
@@ -89,7 +90,7 @@ task_context "SonarTop" do
         property("start_angle","double",Math::PI)
         property("end_angle","double",-Math::PI)
         property("resolution","double",0.1)
-        property("maximum_distance","double",50.0)
+        property("maximum_distance","double",100.0)
         property("ping_pong_mode","bool",false).
             doc('if true ping pong mode is activated')
 end
