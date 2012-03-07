@@ -11,7 +11,7 @@ Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_option
     bottom_cam = TaskContext.get 'bottom_camera_simulation'
 
     simulation.debug_sonar = true 
-    simulation.use_osg_ocean = false 
+    simulation.use_osg_ocean = true 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
