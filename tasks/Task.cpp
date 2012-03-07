@@ -101,7 +101,7 @@ osg=0;
     }
 
     Mars::graphicsTimer->runOnce();
-
+	osg = 0;
     if(_use_osg_ocean.get()){
         osg = new OPlugin(libManager);
         libManager->addLibrary(osg);

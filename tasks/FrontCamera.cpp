@@ -43,8 +43,9 @@ void FrontCamera::updateHook()
         frame.reset(pframe);
        _frame.write(frame);
     }
-    else
+    else{
         frame.reset(pframe);
+    }
 }
 
 /// The following lines are template definitions for the various state machine
