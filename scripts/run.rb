@@ -5,16 +5,18 @@ Orocos.initialize
 
 widget = Vizkit.load "simulator.ui"
 
-Orocos.run "AvalonSimulation" ,:wait => 10 do 
+Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
     simulation = TaskContext.get 'avalon_simulation'
     front_cam = TaskContext.get 'front_camera_simulation'
+    bottom_cam = TaskContext.get 'bottom_camera_simulation'
 
-    simulation.debug_sonar = false 
+    simulation.debug_sonar = true 
     simulation.use_osg_ocean = false 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
     front_cam.start
+    bottom_cam.start
 
     actuactors = TaskContext.get 'actuators_simulation'
     actuactors.configure
@@ -31,7 +33,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10 do
     state_estimator.configure
     state_estimator.start
     Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top
-    #Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
+    Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
     Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
 
     widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
@@ -58,8 +60,12 @@ Orocos.run "AvalonSimulation" ,:wait => 10 do
         sample.target[5] = y
         writer.write sample
     end
+    Vizkit.display simulation
+    Vizkit.display bottom_cam
+    Vizkit.display front_cam
     Vizkit.display sonar
-    #widget.show 
+    Vizkit.display sonar_rear
+    widget.show 
     Vizkit.exec
 end
 
