@@ -114,7 +114,7 @@ end
 
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
-        do_not_install
+        #do_not_install
 
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
