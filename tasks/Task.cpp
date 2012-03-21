@@ -109,6 +109,7 @@ osg=0;
     Simulation::setAvalonPlugin(avalon);
 
     //Starting viz    
+    Mars::graphicsTimer->runOnce();
     Mars::graphicsTimer->run();
 
     //_initial_position.get(), Eigen::Quaterniond(Eigen::AngleAxisd(_initial_yaw.get(), Eigen::Vector3d::UnitZ())));
