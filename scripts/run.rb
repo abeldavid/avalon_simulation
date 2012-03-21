@@ -11,7 +11,8 @@ Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_option
     bottom_cam = TaskContext.get 'bottom_camera_simulation'
 
 
-    simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"
+    #simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"
+    #simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon-depth_images.scn"
 
     simulation.debug_sonar = true 
     simulation.use_osg_ocean = false
