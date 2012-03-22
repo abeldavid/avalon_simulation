@@ -7,33 +7,33 @@ widget = Vizkit.load "simulator.ui"
 
 Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
     simulation = TaskContext.get 'avalon_simulation'
-    front_cam = TaskContext.get 'front_camera_simulation'
-    bottom_cam = TaskContext.get 'bottom_camera_simulation'
+    front_cam = TaskContext.get 'front_camera'
+    bottom_cam = TaskContext.get 'bottom_camera'
 
 
-    #simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"
-    simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon-depth_images.scn"
+    simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"
+    #simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon-depth_images.scn"
 
     simulation.debug_sonar = true 
-    simulation.use_osg_ocean = true 
+    simulation.use_osg_ocean = false 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
     front_cam.start
     bottom_cam.start
 
-    actuactors = TaskContext.get 'actuators_simulation'
+    actuactors = TaskContext.get 'actuators'
     actuactors.configure
     actuactors.start
     writer = actuactors.command.writer
 
-    sonar = TaskContext.get 'sonar_top_simulation'
+    sonar = TaskContext.get 'sonar'
     sonar.configure
     sonar.start
-    sonar_rear = TaskContext.get 'sonar_rear_simulation'
+    sonar_rear = TaskContext.get 'sonar_rear'
     sonar_rear.configure
     sonar_rear.start
-    state_estimator = TaskContext.get 'state_estimator_simulation'
+    state_estimator = TaskContext.get 'state_estimator'
     state_estimator.configure
     state_estimator.start
     Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top

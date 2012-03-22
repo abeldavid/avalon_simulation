@@ -118,17 +118,17 @@ deployment "AvalonSimulation" do
 
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
-        task("bottom_camera_simulation","BottomCamera").
+        task("bottom_camera","BottomCamera").
             periodic 0.1
-        task("front_camera_simulation","FrontCamera").
+        task("front_camera","FrontCamera").
             periodic 0.1
-        task("sonar_top_simulation","SonarTop").
+        task("sonar","SonarTop").
             periodic 0.066666
-        task("sonar_rear_simulation","SonarRear").
+        task("sonar_rear","SonarRear").
             periodic 0.066666
-        task("state_estimator_simulation","StateEstimator").
+        task("state_estimator","StateEstimator").
             periodic 0.01
-        task("actuators_simulation","Actuators")
+        task("actuators","Actuators")
 
 	add_default_logger
 end
