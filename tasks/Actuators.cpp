@@ -76,6 +76,21 @@ void Actuators::updateHook()
         pwm.push_back(-command.target[1]);
         pwm.push_back(command.target[0]);
         Simulation::getAvalonPlugin()->setTarget(pwm);
+        
+        
+        // write actuator status
+        base::actuators::Status status;
+        status.time = base::Time::now();
+        status.index = 0; //TODO: ?
+        status.resize(6);
+        status.states[0].pwm = -command.target[2];
+        status.states[1].pwm = -command.target[3];
+        status.states[2].pwm = -command.target[5];
+        status.states[3].pwm = -command.target[4]*0.2;
+        status.states[4].pwm = -command.target[1];
+        status.states[5].pwm = -command.target[0];
+        // TODO: Motorstate: current,position,positionExtern
+        _status.write(status);
     }
 }
 
