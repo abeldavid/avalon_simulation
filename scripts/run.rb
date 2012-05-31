@@ -12,6 +12,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
     top_cam = TaskContext.get 'top_camera'
     
     pinger_search = TaskContext.get 'pingersearch_simulation'
+    asv_navigation = TaskContext.get 'asv_navigation'
 
  #   simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"    
 simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
@@ -25,6 +26,9 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
     bottom_cam.start
     top_cam.start
     pinger_search.start
+    asv_navigation.start
+
+
 
     actuactors = TaskContext.get 'actuators'
     actuactors.configure
@@ -68,6 +72,13 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
         sample.target[5] = y
         writer.write sample
     end
+
+    asv_navigation.addWaypoint(5.0,2.0)
+    asv_navigation.addWaypoint(3.0,5.0)
+    asv_navigation.addWaypoint(-3.0,3.0)
+
+    asv_navigation.clearWaypoints
+
     Vizkit.display simulation
     Vizkit.display bottom_cam
     Vizkit.display front_cam
@@ -78,5 +89,7 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
     Vizkit.display actuactors
     widget.show 
     Vizkit.exec
+
+
 end
 

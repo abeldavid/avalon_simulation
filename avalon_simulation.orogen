@@ -122,6 +122,14 @@ task_context "PingerSearch" do
 		doc('angle to pinger')
 end
 
+task_context "AsvNavigation" do
+      operation('addWaypoint').
+        argument('x','double','x').
+        argument('y','double','y')
+        
+      operation('clearWaypoints')
+end
+
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         #do_not_install
@@ -140,8 +148,10 @@ deployment "AvalonSimulation" do
             periodic 0.066666
         task("state_estimator","StateEstimator").
             periodic 0.01
-		task("pingersearch_simulation","PingerSearch").
-			periodic 0.1
+        task("pingersearch_simulation","PingerSearch").
+          periodic 0.1
+        task("asv_navigation","AsvNavigation").
+          periodic 0.5
         task("actuators","Actuators")
 
 
