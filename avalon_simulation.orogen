@@ -40,7 +40,7 @@ task_context "Task" do
         property('attenuation','/base/Vector3d')
         
 
-
+		
 
 
         output_port('auv_position', '/base/Vector3d')
@@ -67,12 +67,17 @@ end
 
 task_context "BottomCamera" do
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
-	  doc('front camera recording')
+	  doc('bottom camera recording')
 end
 
 task_context "FrontCamera" do
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
+end
+
+task_context "TopCamera" do
+  output_port('frame', ro_ptr('base::samples::frame::Frame')).
+    doc('top camera recording')
 end
 
 task_context "Actuators" do
@@ -112,6 +117,11 @@ task_context "StateEstimator" do
 		doc('computed position in m, in the Simulation coordinate system')
 end
 
+task_context "PingerSearch" do
+	output_port('angle_to_pinger', 'double').
+		doc('angle to pinger')
+end
+
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         #do_not_install
@@ -122,13 +132,18 @@ deployment "AvalonSimulation" do
             periodic 0.1
         task("front_camera","FrontCamera").
             periodic 0.1
+        task("top_camera","TopCamera").
+            periodic 0.1
         task("sonar","SonarTop").
             periodic 0.066666
         task("sonar_rear","SonarRear").
             periodic 0.066666
         task("state_estimator","StateEstimator").
             periodic 0.01
+		task("pingersearch_simulation","PingerSearch").
+			periodic 0.1
         task("actuators","Actuators")
+
 
 	add_default_logger
 end

@@ -20,7 +20,6 @@ BottomCamera::BottomCamera(std::string const& name, RTT::ExecutionEngine* engine
 BottomCamera::~BottomCamera()
 {
 }
-
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See BottomCamera.hpp for more detailed
 // documentation about them.

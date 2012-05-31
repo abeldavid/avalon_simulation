@@ -5,22 +5,26 @@ Orocos.initialize
 
 widget = Vizkit.load "simulator.ui"
 
-Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
+Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
     simulation = TaskContext.get 'avalon_simulation'
     front_cam = TaskContext.get 'front_camera'
     bottom_cam = TaskContext.get 'bottom_camera'
+    top_cam = TaskContext.get 'top_camera'
+    
+    pinger_search = TaskContext.get 'pingersearch_simulation'
 
+ #   simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"    
+simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
-    simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"
-    #simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon-depth_images.scn"
-
-    simulation.debug_sonar = true 
+    simulation.debug_sonar = false 
     simulation.use_osg_ocean = false 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
     front_cam.start
     bottom_cam.start
+    top_cam.start
+    pinger_search.start
 
     actuactors = TaskContext.get 'actuators'
     actuactors.configure
@@ -67,8 +71,11 @@ Orocos.run "AvalonSimulation" ,:wait => 60, :valgrind => false, :valgrind_option
     Vizkit.display simulation
     Vizkit.display bottom_cam
     Vizkit.display front_cam
+    Vizkit.display top_cam
     Vizkit.display sonar
     Vizkit.display sonar_rear
+    Vizkit.display pinger_search
+    Vizkit.display actuactors
     widget.show 
     Vizkit.exec
 end
