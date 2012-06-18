@@ -80,6 +80,14 @@ task_context "TopCamera" do
     doc('top camera recording')
 end
 
+task_context "ASVActuators" do
+    input_port("command", "base/actuators/Command").
+        doc("actuator command").
+        needs_buffered_connection
+    output_port("status", "base/actuators/Status")
+    port_driven :command
+end
+
 task_context "Actuators" do
     input_port("command", "base/actuators/Command").
         doc("actuator command").
@@ -153,6 +161,7 @@ deployment "AvalonSimulation" do
         task("asv_navigation","AsvNavigation").
           periodic 0.5
         task("actuators","Actuators")
+        task("asv_actuators","ASVActuators")
 
 
 	add_default_logger
