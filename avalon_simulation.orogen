@@ -126,7 +126,7 @@ task_context "StateEstimator" do
 end
 
 task_context "PingerSearch" do
-	output_port('angle_to_pinger', 'double').
+	output_port('angle_to_pinger', '/base/Angle').
 		doc('angle to pinger')
 end
 

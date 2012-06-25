@@ -3,6 +3,8 @@
 #include "PingerSearch.hpp"
 #include "Simulation.h"
 
+#include "base/angle.h"
+
 using namespace avalon_simulation;
 
 PingerSearch::PingerSearch(std::string const& name, TaskCore::TaskState initial_state)
@@ -55,7 +57,7 @@ PingerSearch::~PingerSearch()
 		//sonar_beam.beam.clear();
     //}
      
-     _angle_to_pinger.write(Simulation::getAvalonPlugin()->getAngleToPinger());
+     _angle_to_pinger.write(base::Angle::fromRad(Simulation::getAvalonPlugin()->getAngleToPinger()));
      
      return;
  }
