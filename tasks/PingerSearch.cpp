@@ -40,7 +40,7 @@ PingerSearch::~PingerSearch()
         return false;
 
     if(!Simulation::isInitialized())
-        throw std::runtime_error("Cannot get sonar data. The simulator is not running in the same process.");
+        throw std::runtime_error("Cannot get asv angle. The simulator is not running in the same process.");
     
     return true;
  }
@@ -48,16 +48,8 @@ PingerSearch::~PingerSearch()
  void PingerSearch::updateHook()
  {
     PingerSearchBase::updateHook();
-    
      
-    //if(Simulation::getAvalonPlugin()->getRearSonarData(sonar_beam)){
-		//if (_sonar_beam.connected())
-		//_sonar_beam.write(sonar_beam);
-    //} else {
-		//sonar_beam.beam.clear();
-    //}
-     
-     _angle_to_pinger.write(base::Angle::fromRad(Simulation::getAvalonPlugin()->getAngleToPinger()));
+     _angle_to_pinger.write(Simulation::getAvalonPlugin()->getAngleToPinger());
      
      return;
  }
