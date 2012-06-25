@@ -86,6 +86,9 @@ task_context "ASVActuators" do
         needs_buffered_connection
     output_port("status", "base/actuators/Status")
     port_driven :command
+	
+    output_port('pose_samples', '/base/samples/RigidBodyState').
+        doc('computed position in m, in the Simulation coordinate system')
 end
 
 task_context "Actuators" do
