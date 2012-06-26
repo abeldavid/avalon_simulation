@@ -56,15 +56,14 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
     widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
         sample = writer.new_sample
         sample.time = Time.now 
-        0.upto(3) do
+        0.upto(5) do
             sample.mode << :DM_PWM
             sample.target << 0;
         end
-        sample.target[0] = x
-        sample.target[1] = x
-        sample.target[2] = y
-        sample.target[3] = y
-        asv_writer.write sample
+        sample.target[2] = -x
+        sample.target[3] = -x
+        sample.target[4] = y
+        writer.write sample
     end
 
     widget.joystick2.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
