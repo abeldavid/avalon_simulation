@@ -114,6 +114,9 @@ end
 task_context "SonarRear" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('rear sonar beam')
+
+        output_port("ground_distance", "/base/samples/RigidBodyState").
+            doc('current ground distance simulating echo sounder')
         
         property("start_angle","double",0.7*Math::PI)
         property("end_angle","double",0.3*Math::PI)
