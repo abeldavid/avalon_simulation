@@ -62,6 +62,21 @@ void SonarRear::updateHook()
     else{
       sonar_beam.beam.clear();
     }
+
+//     simulation::SonarConfig config2;
+//     config2.start_angle = 3.13/2.0;
+//     config2.end_angle = 3.141/2.0;
+//     config2.max_distance = 50;
+//     config2.distance_resolution = _resolution.get();
+//     config2.ping_pong_mode = 1; 
+//     Simulation::getAvalonPlugin()->configureGroundDistanceSensor(config2);
+    
+    base::samples::RigidBodyState gdist;
+    double d = Simulation::getAvalonPlugin()->getGroundDistance();
+    Eigen::Vector3d pos = Eigen::Vector3d(0.0,0.0,d);
+    gdist.position = pos;
+    _ground_distance.write(gdist);
+
 }
 // void SonarRear::errorHook()
 // {
