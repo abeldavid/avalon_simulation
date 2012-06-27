@@ -103,8 +103,8 @@ task_context "SonarTop" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('top sonar beam')
         
-        property("start_angle","double",Math::PI)
-        property("end_angle","double",-Math::PI)
+        property("left_limit","double",Math::PI)
+        property("right_limit","double",-Math::PI)
         property("resolution","double",0.1)
         property("maximum_distance","double",100.0)
         property("ping_pong_mode","bool",false).
@@ -115,8 +115,8 @@ task_context "SonarRear" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('rear sonar beam')
         
-        property("start_angle","double",0.7*Math::PI)
-        property("end_angle","double",0.3*Math::PI)
+        property("left_limit","double",0.7*Math::PI)
+        property("right_limit","double",0.3*Math::PI)
         property("resolution","double",0.1)
         property("maximum_distance","double",50.0)
         property("ping_pong_mode","bool",true).
