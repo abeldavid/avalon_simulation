@@ -144,6 +144,17 @@ task_context "AsvNavigation" do
       operation('clearWaypoints')
 end
 
+task_context "Modem" do
+      input_port("light_value", "/bool").
+        doc("indicates current light-value from nurc")
+
+      input_port("position_samples", "/base/samples/RigidBodyState").
+        doc("current position of the vehicle transmitted to Nurc")
+
+      output_port("motion_command", "/base/AUVMotionCommand").
+        doc("motion command submitted by the nurc for buoy heading with zero speed")
+end
+
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         #do_not_install
@@ -168,6 +179,8 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("actuators","Actuators")
         task("asv_actuators","ASVActuators")
+        task("modem", "Modem").
+          periodic 0.5
 
 
 	add_default_logger
