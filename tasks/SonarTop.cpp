@@ -35,8 +35,8 @@ void SonarTop::updateHook()
     SonarTopBase::updateHook();
     
     simulation::SonarConfig config;
-    config.start_angle = _start_angle.get();
-    config.end_angle = _end_angle.get();
+    config.start_angle = _left_limit.get();
+    config.end_angle = _right_limit.get();
     config.max_distance = _maximum_distance.get();
     config.distance_resolution = _resolution.get();
     config.ping_pong_mode = _ping_pong_mode.get();
