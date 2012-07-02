@@ -57,7 +57,6 @@ void WhiteLight::updateHook()
     } else { 
       base::Time diffTime = base::Time::now() - lastUpdate;
       diff_ms += diffTime.toMilliseconds();
-      std::cout <<diff_ms << std::endl;
       
       if(_interval_mode==1) {
         if(diff_ms>=_constantInterval){
