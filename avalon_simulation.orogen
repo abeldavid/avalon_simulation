@@ -192,7 +192,7 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("actuators","Actuators")
         task("asv_actuators","ASVActuators")
-        task("white_light","WhiteLight")
+        task("white_light","WhiteLight").
           periodic 0.5
         task("modem", "Modem").
           periodic 0.5
