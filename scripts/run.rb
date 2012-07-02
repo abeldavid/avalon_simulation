@@ -20,7 +20,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
 #     white_light.interval_mode = 1
 #     white_light.constantInterval = 3000
       white_light.interval_mode = 2
-      white_light.randomInterval_min = 500;
+      white_light.randomInterval_min = 1;
       white_light.randomInterval_max = 5000;
       
     
