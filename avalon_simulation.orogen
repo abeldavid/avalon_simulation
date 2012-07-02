@@ -155,7 +155,7 @@ task_context "WhiteLight" do
     doc('in ms')
   operation('switchLight').
     doc('switch light on or off. Only works in interval_mode=0.')
-ends    
+end
 
 task_context "Modem" do
       input_port("light_value", "/bool").
