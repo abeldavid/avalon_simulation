@@ -155,6 +155,17 @@ task_context "WhiteLight" do
     doc('in ms')
   operation('switchLight').
     doc('switch light on or off. Only works in interval_mode=0.')
+ends    
+
+task_context "Modem" do
+      input_port("light_value", "/bool").
+        doc("indicates current light-value from nurc")
+
+      input_port("position_samples", "/base/samples/RigidBodyState").
+        doc("current position of the vehicle transmitted to Nurc")
+
+      output_port("motion_command", "/base/AUVMotionCommand").
+        doc("motion command submitted by the nurc for buoy heading with zero speed")
 end
 
 deployment "AvalonSimulation" do
@@ -181,7 +192,9 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("actuators","Actuators")
         task("asv_actuators","ASVActuators")
-        task("white_light","WhiteLight").
+        task("white_light","WhiteLight")
+          periodic 0.5
+        task("modem", "Modem").
           periodic 0.5
 
 
