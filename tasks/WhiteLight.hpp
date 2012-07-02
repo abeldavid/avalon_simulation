@@ -5,6 +5,11 @@
 
 #include "avalon_simulation/WhiteLightBase.hpp"
 
+#include "boost/random.hpp"
+#include <boost/random/linear_congruential.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/variate_generator.hpp>
+
 namespace avalon_simulation {
 
     /*! \class WhiteLight 
@@ -24,6 +29,17 @@ namespace avalon_simulation {
     class WhiteLight : public WhiteLightBase
     {
 	friend class WhiteLightBase;
+    private:
+       base::Time lastUpdate;
+       double diff_ms;
+       
+      double getRandomValue(int min, int max)
+      {
+          static boost::minstd_rand gen((unsigned int)std::time(NULL));
+          boost::uniform_real<>  dist(min, max);
+          boost::variate_generator<boost::minstd_rand&, boost::uniform_real<> > generator(gen, dist);
+          return generator();
+      }
     protected:
 
         /* Handler for the switchLight operation

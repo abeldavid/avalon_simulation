@@ -22,8 +22,11 @@ WhiteLight::~WhiteLight()
 
 void WhiteLight::switchLight()
 {
-  
+    Simulation::getAvalonPlugin()->switchWhiteLight();
 }
+
+
+
 
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See WhiteLight.hpp for more detailed
@@ -39,13 +42,40 @@ bool WhiteLight::startHook()
 {
     if (! WhiteLightBase::startHook())
         return false;
+    
+    lastUpdate = base::Time::now();
+    diff_ms = 0;
+
     return true;
 }
 void WhiteLight::updateHook()
 {
     WhiteLightBase::updateHook();
     
-    Simulation::getAvalonPlugin()->switchWhiteLight();
+    if(_interval_mode == 0){
+      // do nothing
+    } else { 
+      base::Time diffTime = base::Time::now() - lastUpdate;
+      diff_ms += diffTime.toMilliseconds();
+      std::cout <<diff_ms << std::endl;
+      
+      if(_interval_mode==1) {
+        if(diff_ms>=_constantInterval){
+          Simulation::getAvalonPlugin()->switchWhiteLight();
+          diff_ms=0;
+        }
+      } else {
+        double random = getRandomValue(_randomInterval_min,_randomInterval_max);
+        
+        if(diff_ms>=random){
+          Simulation::getAvalonPlugin()->switchWhiteLight();
+          diff_ms=0;
+        }
+      }
+      
+      lastUpdate = base::Time::now();
+    }
+    
 }
 // void WhiteLight::errorHook()
 // {

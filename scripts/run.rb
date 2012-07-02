@@ -15,6 +15,14 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
     pinger_search = TaskContext.get 'pingersearch_simulation'
     asv_navigation = TaskContext.get 'asv_navigation'
     white_light = TaskContext.get 'white_light'
+
+
+#     white_light.interval_mode = 1
+#     white_light.constantInterval = 3000
+      white_light.interval_mode = 2
+      white_light.randomInterval_min = 500;
+      white_light.randomInterval_max = 5000;
+      
     
  #   simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"    
 simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
