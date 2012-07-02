@@ -144,6 +144,19 @@ task_context "AsvNavigation" do
       operation('clearWaypoints')
 end
 
+task_context "WhiteLight" do
+  property('interval_mode','int').
+    doc('0=no interval (manually switching), 1=constant interval, 2=random interval')
+  property('constantInterval','int').
+    doc('in ms')
+  property('randomInterval_min','int').
+    doc('in ms')
+  property('randomInterval_max','int').
+    doc('in ms')
+  operation('switchLight').
+    doc('switch light on or off. Only works in interval_mode=0.')
+end
+
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         #do_not_install
@@ -168,6 +181,8 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("actuators","Actuators")
         task("asv_actuators","ASVActuators")
+        task("white_light","WhiteLight").
+          periodic 0.5
 
 
 	add_default_logger
