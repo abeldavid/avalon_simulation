@@ -14,7 +14,8 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
     
     pinger_search = TaskContext.get 'pingersearch_simulation'
     asv_navigation = TaskContext.get 'asv_navigation'
-
+    white_light = TaskContext.get 'white_light'
+    
  #   simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/demo.scn"    
 simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
@@ -28,7 +29,7 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
     top_cam.start
     pinger_search.start
     asv_navigation.start
-
+    white_light.start
 
 
     actuactors = TaskContext.get 'actuators'
