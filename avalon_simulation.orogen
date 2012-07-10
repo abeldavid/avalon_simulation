@@ -187,7 +187,7 @@ deployment "AvalonSimulation" do
         task("state_estimator","StateEstimator").
             periodic 0.01
         task("pingersearch_simulation","PingerSearch").
-          periodic 0.1
+          periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
         task("actuators","Actuators")
