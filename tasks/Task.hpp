@@ -34,6 +34,8 @@ namespace avalon_simulation {
         base::Vector4d diffuse;
         base::Vector3d attenuation;
         virtual bool setYaw(double yaw);
+        
+        virtual void setPipelinePosition(double x, double y, double z);
 
     public:
         Task(std::string const& name = "avalon_simulation::Task");

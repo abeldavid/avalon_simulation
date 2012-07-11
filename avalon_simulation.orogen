@@ -39,8 +39,7 @@ task_context "Task" do
         property('diffuse','/base/Vector4d')
         property('attenuation','/base/Vector3d')
         
-
-		
+        property('remove_buoy','bool')
 
 
         output_port('auv_position', '/base/Vector3d')
@@ -63,6 +62,11 @@ task_context "Task" do
         operation('setYaw').
             returns('bool').
             argument('yaw', 'double', 'yaw')
+            
+        operation('setPipelinePosition').
+          argument('x','double','x').
+          argument('y','double','y').
+          argument('z','double','z')
 end
 
 task_context "BottomCamera" do

@@ -36,6 +36,10 @@ bool Task::setOrientation(double x, double y, double z, double w)
   return true;
 }
 
+void Task::setPipelinePosition(double x, double y, double z){
+  avalon->setPipelinePosition(x,y,z);
+}
+
 
 bool Task::setYaw(double yaw)
 {
@@ -163,6 +167,12 @@ osg=0;
             _initial_z.get());
     setYaw(_initial_yaw.get());
 
+    
+    if(_remove_buoy){
+      avalon->removeBuoy();
+      simulatorInterface->sceneHasChanged(true);
+    }
+    
     return true;
 }
 bool Task::startHook()
