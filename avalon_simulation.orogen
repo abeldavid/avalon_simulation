@@ -162,6 +162,8 @@ task_context "WhiteLight" do
 end
 
 task_context "Modem" do
+      property("sendInterval","double",2.0)
+
       input_port("light_value", "/bool").
         doc("indicates current light-value from nurc")
 
