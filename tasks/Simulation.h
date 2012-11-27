@@ -1,22 +1,22 @@
 #ifndef __SIMULATION_H__
 #define __SIMULATION_H__
 
-#include <mars_sim/SimulatorInterface.h>
+#include <mars/interfaces/sim/SimulatorInterface.h>
 #include <avalon-plugin/AvalonPlugin.h>
 
 class Simulation
 {
     private:
-        static SimulatorInterface *simulator_interface;
+        static mars::interfaces::SimulatorInterface *simulator_interface;
         static AvalonPlugin *avalon_plugin;
 
     public:
         Simulation();
         
-        static void setSimulatorInterface(SimulatorInterface* interface)
+        static void setSimulatorInterface(mars::interfaces::SimulatorInterface* interface)
         {simulator_interface = interface;};
 
-        static SimulatorInterface* getSimulatorInterface()
+        static mars::interfaces::SimulatorInterface* getSimulatorInterface()
         {return simulator_interface;};
 
         static void setAvalonPlugin(AvalonPlugin* plugin)

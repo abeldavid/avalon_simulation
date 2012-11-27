@@ -5,7 +5,7 @@
 #include "Simulation.h"
 #include <avalon-plugin/AvalonPlugin.h>
 #include <marsusim/OPlugin.h>
-#include <mars_app/GraphicsTimer.h>
+#include <mars/app/GraphicsTimer.h>
 #include <osgOcean/FFTOceanSurface>
 
 using namespace avalon_simulation;
