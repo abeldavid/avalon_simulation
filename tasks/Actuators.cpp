@@ -9,11 +9,18 @@ using namespace base::actuators;
 Actuators::Actuators(std::string const& name, TaskCore::TaskState initial_state)
     : ActuatorsBase(name, initial_state)
 {
+    std::vector<double> f;
+    for(int i=0;i<6;i++) f.push_back(1.0);
+    _foce_multiplier.set(f);
 }
+
 
 Actuators::Actuators(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
     : ActuatorsBase(name, engine, initial_state)
 {
+    std::vector<double> f;
+    for(int i=0;i<6;i++) f.push_back(1.0);
+    _foce_multiplier.set(f);
 }
 
 Actuators::~Actuators()
@@ -75,6 +82,12 @@ void Actuators::updateHook()
         pwm.push_back(-command.target[4]*0.2);
         pwm.push_back(-command.target[1]);
         pwm.push_back(command.target[0]);
+        
+        assert(_foce_multiplier.get().size() == 6);
+        for(int i=0;i<6;i++){
+            pwm[i] *= _foce_multiplier.get()[i];
+        }
+        
         Simulation::getAvalonPlugin()->setTarget(pwm);
         
         
