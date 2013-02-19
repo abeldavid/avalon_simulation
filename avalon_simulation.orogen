@@ -2,6 +2,7 @@ name 'avalon_simulation'
 version '0.1'
 
 import_types_from 'base'
+import_types_from "avalon_base"
 using_library 'avalon-plugin'
 using_library 'marsusim'
 using_library 'mars_sim'
@@ -76,6 +77,22 @@ task_context "BottomCamera" do
 	  doc('bottom camera recording')
 end
 
+task_context "Microphones" do
+    output_port "stereo_output", "/avalon/AudioSamples"
+    output_port "stereo_output_raw", "/avalon/AudioSamples"
+
+    property("sound_velocity","double",1500).
+        doc("Current Setting of sound_velocity")
+    
+    property("base_line","double",1.5).
+        doc("Distance between the micropones")
+
+    property('node_name', '/std/string', 'unknown').
+	doc('name of the nodein the scene file, which should be handled as a acoustinc target')
+
+    property('angle_offset',"base::Angle")
+
+end
 task_context "FrontCamera" do
 	output_port('frame', ro_ptr('base::samples::frame::Frame')).
 	  doc('front camera recording')
