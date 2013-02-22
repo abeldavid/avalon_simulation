@@ -5,6 +5,7 @@
 
 #include "avalon_simulation/MicrophonesBase.hpp"
 
+
 namespace avalon_simulation {
 
     class MicrophonePlugin;
@@ -26,7 +27,7 @@ namespace avalon_simulation {
     {
 	friend class MicrophonesBase;
     protected:
-
+		avalon::AudioSamples sample;
         MicrophonePlugin *mp;
 
     public:

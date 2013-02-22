@@ -79,7 +79,6 @@ end
 
 task_context "Microphones" do
     output_port "stereo_output", "/avalon/AudioSamples"
-    output_port "stereo_output_raw", "/avalon/AudioSamples"
 
     property("sound_velocity","double",1500).
         doc("Current Setting of sound_velocity")
@@ -87,7 +86,7 @@ task_context "Microphones" do
     property("base_line","double",1.5).
         doc("Distance between the micropones")
 
-    property('node_name', '/std/string', 'unknown').
+    property('node_name', '/std/string', 'avalon').
 	doc('name of the nodein the scene file, which should be handled as a acoustinc target')
 
     property('angle_offset',"base::Angle")
@@ -202,6 +201,8 @@ deployment "AvalonSimulation" do
 
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
+	task('mic', "Microphones").
+	    periodic(1)
         task("bottom_camera","BottomCamera").
             periodic 0.1
         task("front_camera","FrontCamera").
