@@ -6,7 +6,7 @@ Orocos.initialize
 widget = Vizkit.load "simulator.ui"
 
 #Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
-Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
+#Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
     simulation = TaskContext.get 'avalon_simulation'
     front_cam = TaskContext.get 'front_camera'
     bottom_cam = TaskContext.get 'bottom_camera'
@@ -106,5 +106,5 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
     Vizkit.exec
 
 
-end
+#end
 
