@@ -28,6 +28,7 @@ namespace avalon_simulation {
 	friend class MicrophonesBase;
     protected:
 		avalon::AudioSamples sample;
+		avalon::AudioSamples pingSample;
         MicrophonePlugin *mp;
 
     public:
