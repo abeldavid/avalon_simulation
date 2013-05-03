@@ -3,6 +3,8 @@ version '0.1'
 
 import_types_from 'base'
 import_types_from "avalon_base"
+using_library "mars_utils", :typekit => false
+using_library "mars_interfaces", :typekit => false
 using_library 'avalon-plugin'
 using_library 'marsusim'
 using_library 'mars_sim'
@@ -107,33 +109,26 @@ task_context "TopCamera" do
     doc('top camera recording')
 end
 
-task_context "ASVActuators" do
-    input_port("command", "base/actuators/Command").
-        doc("actuator command").
-        needs_buffered_connection
-    output_port("status", "base/actuators/Status")
-    port_driven :command
-	
-
-    output_port('pose_samples', '/base/samples/RigidBodyState').
-        doc('computed position in m, in the Simulation coordinate system')
-end
-
-task_context "TestVehicleActuators" do
-    input_port("command", "base/actuators/Command").
-        doc("actuator command").
-        needs_buffered_connection
-    output_port("status", "base/actuators/Status")
-    port_driven :command
-	
-
-    output_port('pose_samples', '/base/samples/RigidBodyState').
-        doc('computed position in m, in the Simulation coordinate system')
-end
+#task_context "ASVActuators" do
+#    input_port("command", "base/actuators/Command").
+#        doc("actuator command").
+#        needs_buffered_connection
+#    output_port("status", "base/actuators/Status")
+#    port_driven :command
+#	
+#
+#    output_port('pose_samples', '/base/samples/RigidBodyState').
+#        doc('computed position in m, in the Simulation coordinate system')
+#end
 
 task_context "Actuators" do
     property('foce_multiplier','std/vector<double>')
-    
+    property('node_name', 'std/string')
+    property('amount_of_actuators', 'int')
+    property('maximum_thruster_force', 'std/vector<double>')
+    property('thruster_position', 'std/vector</base/Vector3d>')
+    property('thruster_direction', 'std/vector</base/Vector3d>')
+	
     input_port("command", "base/actuators/Command").
         doc("actuator command").
         needs_buffered_connection
@@ -236,12 +231,7 @@ deployment "AvalonSimulation" do
           periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
-        task("actuators","Actuators")
-        task("asv_actuators","ASVActuators")
-        task("test_vehicle_actuators","TestVehicleActuators")
-        task("white_light","WhiteLight").
-          periodic 0.1
-        task("modem", "Modem").
+        task("actuators","Actuators").
           periodic 0.5
 
 

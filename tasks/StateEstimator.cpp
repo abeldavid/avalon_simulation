@@ -50,12 +50,12 @@ void StateEstimator::updateHook()
     base::samples::RigidBodyState pose;
     Eigen::Quaterniond q;
     Eigen::Vector3d p;
-    Simulation::getAvalonPlugin()->getPose(p,q);
+    Simulation::getAvalonPlugin()->getPose("avalon", p,q);
 
     Eigen::Vector3d lin_vel;
     Eigen::Vector3d ang_vel;
 
-    Simulation::getAvalonPlugin()->getVelocities(lin_vel, ang_vel);
+    Simulation::getAvalonPlugin()->getVelocities("avalon", lin_vel, ang_vel);
 
     lin_vel = q.inverse() * lin_vel;
     ang_vel = q.inverse() * ang_vel;

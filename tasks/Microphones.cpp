@@ -38,7 +38,7 @@ struct avalon_simulation::MicrophonePlugin: public simulation::MarsPlugin
     Eigen::Vector3d getPosition(){
         return position;
     }
-    
+
     Eigen::Quaterniond getOrientation(){
         return orientation;
     }
@@ -72,26 +72,26 @@ Microphones::~Microphones()
 
 bool Microphones::configureHook()
 {
-    
+
     if (! RTT::TaskContext::configureHook())
         return false;
-    
 
-    
 
-    
+
+
+
     return true;
-    
+
 }
 
 
 
 bool Microphones::startHook()
 {
-    
+
     if (! RTT::TaskContext::startHook())
         return false;
-    
+
     mp= new MicrophonePlugin();
     mp->setMotorName( _node_name.value() );
 
@@ -100,14 +100,14 @@ bool Microphones::startHook()
     sample.timestamp = base::Time::now();
     sample.left_channel.resize((int) _sample_rate);
     sample.right_channel.resize((int) _sample_rate);
-    
+
     pingSample.sample_frequency = _sample_rate;
     pingSample.timestamp = base::Time::now();
     pingSample.left_channel.resize((int) ((_sample_rate / 100)+50));
     pingSample.right_channel.resize((int) ((_sample_rate / 100)+50) );
 
     return true;
-    
+
 }
 
 
@@ -123,9 +123,8 @@ void Microphones::updateHook()
 	int diff;
 	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd(-(base::getYaw(orient)),Eigen::Vector3d::UnitZ()));
 	Eigen::Vector3d relPos1, relPos2, ASVpos;
-	Eigen::Quaterniond quarter;
 
-	Simulation::getAvalonPlugin()->getASVPose(ASVpos,quarter);
+	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
 
 	relPos1(0) = 0+c;
 	relPos1(1) = 0;
@@ -143,12 +142,12 @@ void Microphones::updateHook()
 //	beta = (M_PI/2) - alpha;
 //	a = c * cos(beta);
 //	b = sqrt(pow(c,2) - pow(a,2));
-	
 
 
 
 
-	
+
+
 	std::cerr << "x1= " << relPos1(0) << " y1= " << relPos1(1) << std::endl;
 	std::cerr << "x2= " << relPos2(0) << " y2= " << relPos2(1) << std::endl << std::endl;
 
@@ -165,7 +164,7 @@ void Microphones::updateHook()
 
 
 	diff = (int)(_sample_rate * ((relPos2.norm() - relPos1.norm())/_sound_velocity));
-	
+
 
 
 	for(int i=0; i<sample.left_channel.size(); i++){
@@ -229,7 +228,7 @@ void Microphones::updateHook()
 
 void Microphones::errorHook()
 {
-    
+
     RTT::TaskContext::errorHook();
 }
 
@@ -245,7 +244,7 @@ void Microphones::stopHook()
 
 void Microphones::cleanupHook()
 {
-    
+
     RTT::TaskContext::cleanupHook();
 }
 

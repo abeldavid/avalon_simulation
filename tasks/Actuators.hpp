@@ -3,14 +3,50 @@
 #ifndef AVALON_SIMULATION_ACTUATORS_TASK_HPP
 #define AVALON_SIMULATION_ACTUATORS_TASK_HPP
 
+#include "simulation/MarsPlugin.hpp"
 #include "avalon_simulation/ActuatorsBase.hpp"
 
+namespace simulation {
+    class ThrusterPlugin : public MarsPlugin {
+	public:
+
+		ThrusterPlugin();
+		ThrusterPlugin(std::string node_name, int amountOfActuators,
+						std::vector <double> max_thruster_force,
+						std::vector <mars::utils::Vector> thruster_pos,
+						std::vector <mars::utils::Vector> thruster_dir);
+
+		bool getPose(Eigen::Vector3d &pos, Eigen::Quaterniond &orientation);
+
+		bool getVelocities(Eigen::Vector3d &lin_vel, Eigen::Vector3d &ang_vel);
+
+		void setTarget(const std::vector<double> &target);
+
+		void update(double time);
+
+
+	private:
+		// Initial
+		unsigned long vehicle_id;
+		const unsigned int amountOfActuators;
+		std::vector <double> max_thruster_force;
+		std::vector <mars::utils::Vector> thruster_pos;
+		std::vector <mars::utils::Vector> thruster_dir;
+		std::vector <mars::interfaces::sReal> thruster_force;
+		pthread_mutex_t* node_update_mutex;
+
+		unsigned int RATE;
+	};
+}
+
 namespace avalon_simulation {
+
     class Actuators : public ActuatorsBase
     {
 	friend class ActuatorsBase;
-    protected:
 
+    protected:
+		simulation::ThrusterPlugin* thruster_plugin;
 
 
     public:
@@ -19,20 +55,6 @@ namespace avalon_simulation {
 
 	~Actuators();
 
-        /** This hook is called by Orocos when the state machine transitions
-         * from PreOperational to Stopped. If it returns false, then the
-         * component will stay in PreOperational. Otherwise, it goes into
-         * Stopped.
-         *
-         * It is meaningful only if the #needs_configuration has been specified
-         * in the task context definition with (for example):
-         *
-         *   task_context "TaskName" do
-         *     needs_configuration
-         *     ...
-         *   end
-         */
-        // bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
@@ -47,7 +69,7 @@ namespace avalon_simulation {
          *
          * The error(), exception() and fatal() calls, when called in this hook,
          * allow to get into the associated RunTimeError, Exception and
-         * FatalError states. 
+         * FatalError states.
          *
          * In the first case, updateHook() is still called, and recover() allows
          * you to go back into the Running state.  In the second case, the
@@ -65,18 +87,8 @@ namespace avalon_simulation {
          */
          void errorHook();
 
-        /** This hook is called by Orocos when the state machine transitions
-         * from Running to Stopped after stop() has been called.
-         */
-        // void stopHook();
-
-        /** This hook is called by Orocos when the state machine transitions
-         * from Stopped to PreOperational, requiring the call to configureHook()
-         * before calling start() again.
-         */
-        // void cleanupHook();
+        private:
     };
 }
 
 #endif
-

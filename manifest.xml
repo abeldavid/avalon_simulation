@@ -7,6 +7,9 @@
   <logo>http://</logo>
   <!-- Dependencies are resolved via osdep file in the autoproj configuration -->
   <depend package ="base/types" />
+  <depend package ="base/orogen/interfaces" />
+  <depend package="simulation/mars/interfaces" />
+  <depend package="simulation/mars/common/utils" />
   <depend package ="avalon/orogen/avalon_base" />
   <depend package ="simulation/mars-plugins/avalon-plugin" />
   <depend package ="simulation/orogen/mars_core" />
