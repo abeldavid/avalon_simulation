@@ -9,130 +9,6 @@ using namespace base::actuators;
 using namespace simulation;
 using namespace mars::utils;
 
-/*
-Avalon
-  maximum_thruster_force[0] = 10.0;
-  maximum_thruster_force[1] = 10.0;
-  maximum_thruster_force[2] = 10.0;
-  maximum_thruster_force[3] = 10.0;
-  maximum_thruster_force[4] = 10.0;
-  maximum_thruster_force[5] = 10.0;
-
-  thruster_pos[0] = Vector(0.0, -0.157, 0.0) - tmp;  // forward right
-  thruster_pos[1] = Vector(0.0, 0.157, 0.0) - tmp; // forward left
-  thruster_pos[2] = Vector(0.0, 0.0, 0.0) - tmp;  // front sidewards
-  thruster_pos[3] = Vector(-0.688, 0.0820,0.0) - tmp;  // back sidewards
-  thruster_pos[4] = Vector(0.0, 0.0, 0.0) - tmp;  // front down
-  thruster_pos[5] = Vector(-0.5955, 0.0, 0.0) - tmp;  // back down
-
-  thruster_dir[0] = Vector(1, 0.0, 0.0);
-  thruster_dir[1] = Vector(1, 0.0, 0.0);
-  thruster_dir[2] = Vector(0.0, 1, 0.0);
-  thruster_dir[3] = Vector(0.0, -1, 0.0);
-  thruster_dir[4] = Vector(0.0, 0.0, 1);
-  thruster_dir[5] = Vector(0.0, 0.0, 1);
-
-
-
-
-
-
-
-
-//Thruster Mapping
-enum THRUSER_MAPPING {
-    RIGHT = 0,
-    LEFT  = 1,
-    MIDDLE_HORIZONTAL = 2,
-    REAR_HORIZONTAL   = 3,
-    MIDDLE_VERTICAL   = 4,
-    REAR_VERTICAL     = 5,
-};
-
-//Thruster Mapping
-enum THRUSER_ASV_ {
-    RIGHT_ASV = 0,
-    LEFT_ASV  = 1,
-    FRONT_ASV = 2,
-    BACK_ASV   = 3,
-};
-
-//Thruster Mapping TestVehicle
-enum THRUSTER_TEST_VEHICLE {
-	FRONT_VERTICAL = 0,
-	LEFT_HORIZONTAL = 1,
-	BACK_VERTICAL = 2,
-	RIGHT_HORIZONTAL = 3,
-	MIDDLE_HORIZONTAL_TOP = 4,
-	MIDDLE_HORIZONTAL_BOTTOM = 5,
-};
-  thruster_pos[LEFT] = Vector(0.0, 0.157, 0.0) - tmp; // forward left
-  thruster_pos[RIGHT] = Vector(0.0, -0.157, 0.0) - tmp;  // forward right
-  thruster_pos[MIDDLE_VERTICAL] = Vector(0.0, 0.0, 0.0) - tmp;  // front down
-  thruster_pos[REAR_VERTICAL] = Vector(-0.5955, 0.0, 0.0) - tmp;  // back down
-  thruster_pos[MIDDLE_HORIZONTAL] = Vector(0.0, 0.0, 0.0) - tmp;  // front sidewards
-  thruster_pos[REAR_HORIZONTAL] = Vector(-0.688, 0.0820,0.0) - tmp;  // back sidewards
-
-  thruster_dir[LEFT] = Vector(1, 0.0, 0.0);
-  thruster_dir[RIGHT] = Vector(1, 0.0, 0.0);
-  thruster_dir[MIDDLE_VERTICAL] = Vector(0.0, 0.0, 1);
-  thruster_dir[REAR_VERTICAL] = Vector(0.0, 0.0, 1);
-  thruster_dir[MIDDLE_HORIZONTAL] = Vector(0.0, 1, 0.0);
-  thruster_dir[REAR_HORIZONTAL] = Vector(0.0, -1, 0.0);
-  for(int i=0; i<6; ++i){
-      thruster_force[i] = 0.0;
-  }
-
-  // ASV
-  Vector asv_tmp(0.00, 0.00, 0.00); // initial asv_pos corresponding to blender scene
-  max_asv_thruster_force[0] =10;
-  max_asv_thruster_force[1] =10;
-  max_asv_thruster_force[2] =2;
-  max_asv_thruster_force[3] =2;
-
-  asv_thruster_pos[LEFT_ASV] = Vector(-0.5, 0.5, 0.0) - asv_tmp; // forward left
-  asv_thruster_pos[RIGHT_ASV] = Vector(-0.5, -0.5, 0.0) - asv_tmp;  // forward right
-  asv_thruster_pos[FRONT_ASV] = Vector(0.5, 0.0, 0.0) - asv_tmp;  // front down
-  asv_thruster_pos[BACK_ASV] = Vector(-0.5, 0.0, 0.0) - asv_tmp;  // back down
-
-  asv_thruster_dir[LEFT_ASV] = Vector(1.0, 0.0, 0.0);
-  asv_thruster_dir[RIGHT_ASV] = Vector(1.0, 0.0, 0.0);
-  asv_thruster_dir[FRONT_ASV] = Vector(0.0, 1.0, 0);
-  asv_thruster_dir[BACK_ASV] = Vector(0.0, 1.0, 0);
-  for (int i=0; i<4; i++) {
-      asv_thruster_force[i] = 0.0;
-  }
-
-  // TestVehicle
-  Vector test_vehicle_tmp(0.00, 0.00, 0.00); // initial test_vehicle_pos corresponding to blender scene
-  max_test_vehicle_thruster_force = 10;
-
-  test_vehicle_thruster_pos[FRONT_VERTICAL] = Vector(0.5, 0.0, 0.0) - test_vehicle_tmp;
-  test_vehicle_thruster_pos[LEFT_HORIZONTAL] = Vector(0.0, 0.5, 0.0) - test_vehicle_tmp;
-  test_vehicle_thruster_pos[BACK_VERTICAL] = Vector(-0.5, 0.0, 0.0) - test_vehicle_tmp;
-  test_vehicle_thruster_pos[RIGHT_HORIZONTAL] = Vector(0.0, -0.5, 0.0) - test_vehicle_tmp;
-  test_vehicle_thruster_pos[MIDDLE_HORIZONTAL_TOP] = Vector(0.0, 0.0, 0.5) - test_vehicle_tmp;
-  test_vehicle_thruster_pos[MIDDLE_HORIZONTAL_BOTTOM] = Vector(0.0, 0.0, -0.5) - test_vehicle_tmp;
-
-  test_vehicle_thruster_dir[FRONT_VERTICAL] = Vector(0.0, 0.0, 1.0);
-  test_vehicle_thruster_dir[LEFT_HORIZONTAL] = Vector(1.0, 0.0, 0.0);
-  test_vehicle_thruster_dir[BACK_VERTICAL] = Vector(0.0, 0.0, 1.0);
-  test_vehicle_thruster_dir[RIGHT_HORIZONTAL] = Vector(1.0, 0.0, 0.0);
-  test_vehicle_thruster_dir[MIDDLE_HORIZONTAL_TOP] = Vector(0.0, 1.0, 0.0);
-  test_vehicle_thruster_dir[MIDDLE_HORIZONTAL_BOTTOM] = Vector(0.0, 1.0, 0.0);
-  for (int i=0;i<6; i++) {
-      test_vehicle_thruster_force[i] = 0.0;
-  }
-
-
-    test_vehicle_pos = Eigen::Vector3d(5,5,5);
-    test_vehicle_rot.setIdentity();
-    asv_pos = Eigen::Vector3d(10,5,0);
-    asv_rot.setIdentity();
-
-
-*/
-
 
 
 namespace simulation {
@@ -150,6 +26,9 @@ namespace simulation {
 		control->nodes->getDataBrokerNames(vehicle_id, &groupName, &dataName);
 		control->dataBroker->registerTimedReceiver(this, groupName, dataName, "mars_sim/simTimer", RATE,vehicle_id);
 		RATE = 10;
+		for (unsigned int i=0; i<amountOfActuators; i++) {
+			thruster_force[i] = 0.0;
+		}
 	}
 
 	bool ThrusterPlugin::getPose(Eigen::Vector3d &pos, Eigen::Quaterniond &orientation){
