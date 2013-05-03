@@ -233,7 +233,7 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("actuators","Actuators").
           periodic 0.5
-
+#	task("white_light", "WhiteLight")
 
 	add_default_logger
 end

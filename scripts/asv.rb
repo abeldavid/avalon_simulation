@@ -14,10 +14,29 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
     simulation.enable_gui = true
     simulation.configure
     simulation.start
-    asv_actuactors = TaskContext.get 'asv_actuators'
-    asv_actuactors.configure
-    asv_actuactors.start
-    asv_writer = asv_actuactors.command.writer
+    
+    
+    asv_actuators = TaskContext.get 'actuators'
+    asv_actuators.node_name = "asv"
+    asv_actuators.amount_of_actuators = 4
+    
+    asv_actuators.maximum_thruster_force.insert 0.0
+    asv_actuators.maximum_thruster_force.insert 0.0
+    asv_actuators.maximum_thruster_force.insert 2.0
+    asv_actuators.maximum_thruster_force.insert 2.0
+    
+    asv_actuators.thruster_position.insert Eigen::Vector3.new(-0.5, -0.5, 0.0)
+    asv_actuators.thruster_position.insert Eigen::Vector3.new(-0.5, 0.5, 0.0)
+    asv_actuators.thruster_position.insert Eigen::Vector3.new(0.5, 0.0, 0.0)
+    asv_actuators.thruster_position.insert Eigen::Vector3.new(-0.5, 0.0, 0.0)
+    
+    asv_actuators.thruster_direction.insert Eigen::Vector3.new(1.0, 0.0, 0.0)
+    asv_actuators.thruster_direction.insert Eigen::Vector3.new(1.0, 0.0, 0.0)
+    asv_actuators.thruster_direction.insert Eigen::Vector3.new(0.0, 1.0, 0.0)
+    asv_actuators.thruster_direction.insert Eigen::Vector3.new(0.0, 1.0, 0.0)
+    asv_actuators.configure
+    asv_actuators.start
+    asv_writer = asv_actuators.command.writer
 
     widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
         sample = asv_writer.new_sample
@@ -33,8 +52,8 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
         asv_writer.write sample
     end
 
-    Vizkit.display simulation
-    Vizkit.display asv_actuactors
+#    Vizkit.display simulation
+#    Vizkit.display asv_actuactors
     widget.show 
     Vizkit.exec
 
