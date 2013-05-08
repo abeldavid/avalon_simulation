@@ -121,20 +121,6 @@ end
 #        doc('computed position in m, in the Simulation coordinate system')
 #end
 
-task_context "Actuators" do
-    property('node_name', 'std/string')
-    property('amount_of_actuators', 'int')
-    property('maximum_thruster_force', 'std/vector<double>')
-    property('thruster_position', 'std/vector</base/Vector3d>')
-    property('thruster_direction', 'std/vector</base/Vector3d>')
-	
-    input_port("command", "base/actuators/Command").
-        doc("actuator command").
-        needs_buffered_connection
-    output_port("status", "base/actuators/Status")
-    port_driven :command
-end
-
 task_context "SonarTop" do
         output_port("sonar_beam","base::samples::SonarBeam").
             doc('top sonar beam')
@@ -230,11 +216,11 @@ deployment "AvalonSimulation" do
           periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
-        task("avalon_actuators","Actuators").
+        task("avalon_actuators","simulation::Actuators").
           periodic 0.5
-        task("asv_actuators","Actuators").
+        task("asv_actuators","simulation::Actuators").
           periodic 0.5
-        task("test_vehicle_actuators","Actuators").
+        task("test_vehicle_actuators","simulation::Actuators").
           periodic 0.5
 #	task("white_light", "WhiteLight")
 
