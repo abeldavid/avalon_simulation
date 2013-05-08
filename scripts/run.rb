@@ -41,75 +41,99 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
 
 # Konfiguration der Aktuatoren für alle Fahrzeuge:    
 
-	# Avalon
-    actuators = TaskContext.get 'actuators'
+# Avalon
+    actuators = TaskContext.get 'avalon_actuators'
     actuators.node_name = "avalon"
     actuators.amount_of_actuators = 6
+    
+    v01 = actuators.maximum_thruster_force    
     0.upto(5) do
-        actuators.maximum_thruster_force << 10.0
-        actuators.thruster_position << Eigen::Vector3.new(0.0, 0.0, 0.0)
-        actuators.thruster_direction << Eigen::Vector3.new(0.0, 0.0, 0.0)
+        v01.push 10.0
     end
-    actuators.thruster_position[0] = Eigen::Vector3.new(0.0, -0.157, 0.0)
-    actuators.thruster_position[1] = Eigen::Vector3.new(0.0, 0.157, 0.0)
-    actuators.thruster_position[2] = Eigen::Vector3.new(0.0, 0.0, 0.0)
-    actuators.thruster_position[3] = Eigen::Vector3.new(-0.688, 0.0820, 0.0)
-    actuators.thruster_position[4] = Eigen::Vector3.new(0.0, 0.0, 0.0)
-    actuators.thruster_position[5] = Eigen::Vector3.new(-0.5955, 0.0, 0.0)
-    actuators.thruster_direction[0] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    actuators.thruster_direction[1] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    actuators.thruster_direction[2] = Eigen::Vector3.new(0.0, 1.0, 0.0)
-    actuators.thruster_direction[3] = Eigen::Vector3.new(0.0, -1.0, 0.0)
-    actuators.thruster_direction[4] = Eigen::Vector3.new(0.0, 0.0, 1.0)
-    actuators.thruster_direction[5] = Eigen::Vector3.new(0.0, 0.0, 1.0)
+    actuators.maximum_thruster_force = v01
+    
+    v02 = actuators.thruster_position
+    v02.push Eigen::Vector3.new(0.0, -0.157, 0.0)
+    v02.push Eigen::Vector3.new(0.0, 0.157, 0.0)
+    v02.push Eigen::Vector3.new(0.0, 0.0, 0.0)
+    v02.push Eigen::Vector3.new(-0.688, 0.0820, 0.0)
+    v02.push Eigen::Vector3.new(0.0, 0.0, 0.0)
+    v02.push Eigen::Vector3.new(-0.5955, 0.0, 0.0)
+    actuators.thruster_position = v02
+    
+    v03 = actuators.thruster_direction
+    v03.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v03.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v03.push Eigen::Vector3.new(0.0, 1.0, 0.0)
+    v03.push Eigen::Vector3.new(0.0, -1.0, 0.0)
+    v03.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+    v03.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+    actuators.thruster_direction = v03
+    
     actuators.configure
     actuators.start
     writer = actuators.command.writer
     
-	# ASV
-    asv_actuators = TaskContext.get 'actuators'
+# ASV
+    asv_actuators = TaskContext.get 'asv_actuators'
     asv_actuators.node_name = "asv"
     asv_actuators.amount_of_actuators = 4
-    0.upto(3) do
-        asv_actuators.maximum_thruster_force << 10.0
-        asv_actuators.thruster_position << Eigen::Vector3.new(0.0, 0.0, 0.0)
-        asv_actuators.thruster_direction << Eigen::Vector3.new(0.0, 0.0, 0.0)
-    end
-    asv_actuators.maximum_thruster_force[2] = 2.0
-    asv_actuators.maximum_thruster_force[3] = 2.0
-    asv_actuators.thruster_position[0] = Eigen::Vector3.new(-0.5, -0.5, 0.0)
-    asv_actuators.thruster_position[1] = Eigen::Vector3.new(-0.5, 0.5, 0.0)
-    asv_actuators.thruster_position[2] = Eigen::Vector3.new(0.5, 0.0, 0.0)
-    asv_actuators.thruster_position[3] = Eigen::Vector3.new(-0.5, 0.0, 0.0)
-    asv_actuators.thruster_direction[0] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    asv_actuators.thruster_direction[1] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    asv_actuators.thruster_direction[2] = Eigen::Vector3.new(0.0, 1.0, 0.0)
+    
+    v11 =  asv_actuators.maximum_thruster_force
+    v11.push 10.0
+    v11.push 10.0
+    v11.push 3.0
+    v11.push 3.0
+    asv_actuators.maximum_thruster_force = v11
+
+    v12 = asv_actuators.thruster_position
+    v12.push Eigen::Vector3.new(-0.5, -0.5, 0.0)
+    v12.push Eigen::Vector3.new(-0.5, 0.5, 0.0)
+    v12.push Eigen::Vector3.new(0.5, 0.0, 0.0)
+    v12.push Eigen::Vector3.new(-0.5, 0.0, 0.0)
+    asv_actuators.thruster_position = v12
+
+    v13 = asv_actuators.thruster_direction
+    v13.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v13.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v13.push Eigen::Vector3.new(0.0, 1.0, 0.0)
+    v13.push Eigen::Vector3.new(0.0, 1.0, 0.0)
+    asv_actuators.thruster_direction = v13
+    
     asv_actuators.thruster_direction[3] = Eigen::Vector3.new(0.0, 1.0, 0.0)
     asv_actuators.configure
     asv_actuators.start
     asv_writer = asv_actuators.command.writer
     
-	#Testfahrzeug
-    test_vehicle_actuators = TaskContext.get 'actuators'
+# Testfahrzeug
+    test_vehicle_actuators = TaskContext.get 'test_vehicle_actuators'
     test_vehicle_actuators.node_name = "test_vehicle"
     test_vehicle_actuators.amount_of_actuators = 6
+    
+    v21 = test_vehicle_actuators.maximum_thruster_force
     0.upto(5) do
-        test_vehicle_actuators.maximum_thruster_force << 10.0
-        test_vehicle_actuators.thruster_position << Eigen::Vector3.new(0.0, 0.0, 0.0)
-        test_vehicle_actuators.thruster_direction << Eigen::Vector3.new(0.0, 0.0, 0.0)
+        v21.push 10.0
     end
-    test_vehicle_actuators.thruster_position[0] = Eigen::Vector3.new(0.5, 0.0, 0.0)
-    test_vehicle_actuators.thruster_position[1] = Eigen::Vector3.new(0.0, 0.5, 0.0)
-    test_vehicle_actuators.thruster_position[2] = Eigen::Vector3.new(-0.5, 0.0, 0.0)
-    test_vehicle_actuators.thruster_position[3] = Eigen::Vector3.new(0.0, -0.5, 0.0)
-    test_vehicle_actuators.thruster_position[4] = Eigen::Vector3.new(0.0, 0.0, 0.5)
-    test_vehicle_actuators.thruster_position[5] = Eigen::Vector3.new(0.0, 0.0, -0.5)
-    test_vehicle_actuators.thruster_direction[0] = Eigen::Vector3.new(0.0, 0.0, 1.0)
-    test_vehicle_actuators.thruster_direction[1] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    test_vehicle_actuators.thruster_direction[2] = Eigen::Vector3.new(0.0, 0.0, 1.0)
-    test_vehicle_actuators.thruster_direction[3] = Eigen::Vector3.new(1.0, 0.0, 0.0)
-    test_vehicle_actuators.thruster_direction[4] = Eigen::Vector3.new(0.0, 1.0, 0.0)
-    test_vehicle_actuators.thruster_direction[5] = Eigen::Vector3.new(0.0, 1.0, 0.0)
+    test_vehicle_actuators.maximum_thruster_force = v21
+    
+    v22 = test_vehicle_actuators.thruster_position
+    v22.push Eigen::Vector3.new(0.5, 0.0, 0.0)
+    v22.push Eigen::Vector3.new(0.0, 0.5, 0.0)
+    v22.push Eigen::Vector3.new(-0.5, 0.0, 0.0)
+    v22.push Eigen::Vector3.new(0.0, -0.5, 0.0)
+    v22.push Eigen::Vector3.new(0.0, 0.0, 0.5)
+    v22.push Eigen::Vector3.new(0.0, 0.0, -0.5)
+    test_vehicle_actuators.thruster_position= v22
+    
+    v23 = test_vehicle_actuators.thruster_direction
+    v23.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+    v23.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v23.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+    v23.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+    v23.push Eigen::Vector3.new(0.0, 1.0, 0.0)
+    v23.push Eigen::Vector3.new(0.0, 1.0, 0.0)
+    test_vehicle_actuators.thruster_direction = v23
+    
     test_vehicle_actuators.configure
     test_vehicle_actuators.start
     test_vehicle_writer = test_vehicle_actuators.command.writer
@@ -137,9 +161,10 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
             sample.mode << :DM_PWM
             sample.target << 0;
         end
-        sample.target[2] = -x
-        sample.target[3] = -x
-        sample.target[4] = y
+        sample.target[0] = x
+        sample.target[1] = x
+        sample.target[2] = -y
+        sample.target[3] = -y
         writer.write sample
     end
 
@@ -150,8 +175,8 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
             sample.mode << :DM_PWM
             sample.target << 0;
         end
-        sample.target[1] = -x
-        sample.target[5] = y
+        sample.target[4] = x
+        sample.target[2] = -y
         writer.write sample
     end
 

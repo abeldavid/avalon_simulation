@@ -11,7 +11,7 @@ namespace simulation {
 	public:
 
 		ThrusterPlugin();
-		ThrusterPlugin(std::string node_name, int amountOfActuators,
+		ThrusterPlugin(std::string node_name, unsigned int amountOfActuators,
 						std::vector <double> max_thruster_force,
 						std::vector <mars::utils::Vector> thruster_pos,
 						std::vector <mars::utils::Vector> thruster_dir);
@@ -88,6 +88,7 @@ namespace avalon_simulation {
          void errorHook();
 
         private:
+		unsigned int amount_of_actuators;
     };
 }
 

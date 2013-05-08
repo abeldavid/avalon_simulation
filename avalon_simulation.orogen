@@ -122,7 +122,6 @@ end
 #end
 
 task_context "Actuators" do
-    property('foce_multiplier','std/vector<double>')
     property('node_name', 'std/string')
     property('amount_of_actuators', 'int')
     property('maximum_thruster_force', 'std/vector<double>')
@@ -231,7 +230,11 @@ deployment "AvalonSimulation" do
           periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
-        task("actuators","Actuators").
+        task("avalon_actuators","Actuators").
+          periodic 0.5
+        task("asv_actuators","Actuators").
+          periodic 0.5
+        task("test_vehicle_actuators","Actuators").
           periodic 0.5
 #	task("white_light", "WhiteLight")
 

@@ -12,11 +12,11 @@ using namespace mars::utils;
 
 
 namespace simulation {
-	ThrusterPlugin::ThrusterPlugin(std::string node_name, int amountOfActuators,
+	ThrusterPlugin::ThrusterPlugin(std::string node_name, unsigned int amountOfActuators,
 					std::vector <double> max_thruster_force,
 					std::vector <mars::utils::Vector> thruster_pos,
 					std::vector <mars::utils::Vector> thruster_dir)
-		: amountOfActuators(amountOfActuators), max_thruster_force(max_thruster_force), thruster_pos(thruster_pos), thruster_dir(thruster_dir)
+		: amountOfActuators(amountOfActuators), max_thruster_force(max_thruster_force), thruster_pos(thruster_pos), thruster_dir(thruster_dir), node_update_mutex(new pthread_mutex_t)
 	{
 		vehicle_id = control->nodes->getID(node_name);
 		if( !vehicle_id )
@@ -26,6 +26,7 @@ namespace simulation {
 		control->nodes->getDataBrokerNames(vehicle_id, &groupName, &dataName);
 		control->dataBroker->registerTimedReceiver(this, groupName, dataName, "mars_sim/simTimer", RATE,vehicle_id);
 		RATE = 10;
+		thruster_force.resize(amountOfActuators);
 		for (unsigned int i=0; i<amountOfActuators; i++) {
 			thruster_force[i] = 0.0;
 		}
@@ -80,25 +81,13 @@ namespace simulation {
 
 
 Actuators::Actuators(std::string const& name, TaskCore::TaskState initial_state)
-    : ActuatorsBase(name, initial_state)
-{
-    std::vector<double> f;
-    for(int i=0;i<6;i++) f.push_back(1.0);
-    _foce_multiplier.set(f);
-}
+    : ActuatorsBase(name, initial_state){}
 
 
 Actuators::Actuators(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
-    : ActuatorsBase(name, engine, initial_state)
-{
-    std::vector<double> f;
-    for(int i=0;i<6;i++) f.push_back(1.0);
-    _foce_multiplier.set(f);
-}
+    : ActuatorsBase(name, engine, initial_state){}
 
-Actuators::~Actuators()
-{
-}
+Actuators::~Actuators(){}
 
 
 /// The following lines are template definitions for the various state machine
@@ -111,22 +100,27 @@ bool Actuators::startHook()
         throw std::runtime_error("Cannot start Actuators. The simulator is not running in the same process.");
 
 	std::string node_name;
-	int amount_of_actuators;
 	std::vector <double> maximum_thruster_force;
 	std::vector <mars::utils::Vector> thruster_position;
 	std::vector <mars::utils::Vector> thruster_direction;
 
 	node_name = _node_name.get();
 	amount_of_actuators = _amount_of_actuators.get();
-	maximum_thruster_force = _maximum_thruster_force.get();
+	maximum_thruster_force.resize(amount_of_actuators);
+	thruster_position.resize(amount_of_actuators);
+	thruster_direction.resize(amount_of_actuators);
 	for (int i=0; i<amount_of_actuators; i++) {
+		maximum_thruster_force[i] = _maximum_thruster_force.get()[i];
+
 		base::Vector3d thruster_pos = _thruster_position.get()[i];
 		thruster_position[i].x() = thruster_pos(0,0);
 		thruster_position[i].y() = thruster_pos(1,0);
 		thruster_position[i].z() = thruster_pos(2,0);
-		thruster_direction[i].x() = _thruster_direction.get()[i](0,0);
-		thruster_direction[i].y() = _thruster_direction.get()[i](1,0);
-		thruster_direction[i].z() = _thruster_direction.get()[i](2,0);
+
+		base::Vector3d thruster_dir = _thruster_direction.get()[i];
+		thruster_direction[i].x() = thruster_dir(0,0);
+		thruster_direction[i].y() = thruster_dir(1,0);
+		thruster_direction[i].z() = thruster_dir(2,0);
 	}
 
 	thruster_plugin = new simulation::ThrusterPlugin(node_name, amount_of_actuators, maximum_thruster_force, thruster_position, thruster_direction);
@@ -146,8 +140,8 @@ void Actuators::updateHook()
         if (!Simulation::getSimulatorInterface()->isSimRunning())
             return;
 
-        //check we have six actuator commands
-        if(command.mode.size() != 6 ||command.target.size() != 6)
+        //check we have n actuator commands
+        if(command.mode.size() != amount_of_actuators ||command.target.size() != amount_of_actuators)
             throw std::runtime_error("Simulation need a target and mode size of 6");
 
         //check that the drive mode is pwm
@@ -165,27 +159,18 @@ void Actuators::updateHook()
 			pwm.push_back(command.target[i]);
         }
 
-        assert(_foce_multiplier.get().size() == 6);
-        for(unsigned int i=0;i<_foce_multiplier.get().size();i++){
-            pwm[i] *= _foce_multiplier.get()[i];
-        }
-
         thruster_plugin->setTarget(pwm);
-        thruster_plugin->update(0.0);
 
 
         // write actuator status
         base::actuators::Status status;
         status.time = base::Time::now();
         status.index = 0; //TODO: ?
-        status.resize(6);
-        status.states[0].pwm = -command.target[2];
-        status.states[1].pwm = -command.target[3];
-        status.states[2].pwm = -command.target[5];
-        status.states[3].pwm = -command.target[4]*0.2;
-        status.states[4].pwm = -command.target[1];
-        status.states[5].pwm = -command.target[0];
-        // TODO: Motorstate: current,position,positionExtern
+        status.resize(amount_of_actuators);
+        for (unsigned int i=0; i<amount_of_actuators; i++) {
+        	status.states[i].pwm = -command.target[i];
+        }
+
         _status.write(status);
     }
 }
