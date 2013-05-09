@@ -5,13 +5,13 @@
 
 using namespace avalon_simulation;
 
-StateEstimator::StateEstimator(std::string const& name, TaskCore::TaskState initial_state)
-    : StateEstimatorBase(name, initial_state)
+StateEstimator::StateEstimator(std::string const& name)
+    : StateEstimatorBase(name)
 {
 }
 
-StateEstimator::StateEstimator(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
-    : StateEstimatorBase(name, engine, initial_state)
+StateEstimator::StateEstimator(std::string const& name, RTT::ExecutionEngine* engine)
+    : StateEstimatorBase(name, engine)
 {
 }
 
@@ -37,6 +37,8 @@ bool StateEstimator::startHook()
     if (! StateEstimatorBase::startHook())
         return false;
 
+	node_name = _node_name.get();
+
     return true;
 }
 
@@ -45,17 +47,17 @@ void StateEstimator::updateHook()
     StateEstimatorBase::updateHook();
 
     if(!Simulation::isInitialized())
-        throw std::runtime_error("Cannot start Camera. The simulator is not running in the same process.");
+        throw std::runtime_error("Cannot start StateEstimator. The simulator is not running in the same process.");
 
     base::samples::RigidBodyState pose;
     Eigen::Quaterniond q;
     Eigen::Vector3d p;
-    Simulation::getAvalonPlugin()->getPose("avalon", p,q);
+    Simulation::getAvalonPlugin()->getPose(node_name, p,q);
 
     Eigen::Vector3d lin_vel;
     Eigen::Vector3d ang_vel;
 
-    Simulation::getAvalonPlugin()->getVelocities("avalon", lin_vel, ang_vel);
+    Simulation::getAvalonPlugin()->getVelocities(node_name, lin_vel, ang_vel);
 
     lin_vel = q.inverse() * lin_vel;
     ang_vel = q.inverse() * ang_vel;

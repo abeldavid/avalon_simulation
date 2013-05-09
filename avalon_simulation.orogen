@@ -74,11 +74,6 @@ task_context "Task" do
           argument('z','double','z')
 end
 
-task_context "BottomCamera" do
-	output_port('frame', ro_ptr('base::samples::frame::Frame')).
-	  doc('bottom camera recording')
-end
-
 task_context "Microphones" do
     output_port "stereo_output", "/avalon/AudioSamples"
     
@@ -98,15 +93,6 @@ task_context "Microphones" do
 
     property('angle_offset',"base::Angle")
 
-end
-task_context "FrontCamera" do
-	output_port('frame', ro_ptr('base::samples::frame::Frame')).
-	  doc('front camera recording')
-end
-
-task_context "TopCamera" do
-  output_port('frame', ro_ptr('base::samples::frame::Frame')).
-    doc('top camera recording')
 end
 
 #task_context "ASVActuators" do
@@ -149,6 +135,9 @@ task_context "SonarRear" do
 end
 
 task_context "StateEstimator" do
+	needs_configuration
+	property('node_name','std/string')
+		doc 'name of the vehicle in the scene file'
 	output_port('pose_samples', '/base/samples/RigidBodyState').
 		doc('computed position in m, in the Simulation coordinate system')
 end
@@ -200,12 +189,6 @@ deployment "AvalonSimulation" do
 	    periodic(0.1)
 	task('mic', "Microphones").
 	    periodic(1)
-        task("bottom_camera","BottomCamera").
-            periodic 0.1
-        task("front_camera","FrontCamera").
-            periodic 0.1
-        task("top_camera","TopCamera").
-            periodic 0.1
         task("sonar","SonarTop").
             periodic 0.066666
         task("sonar_rear","SonarRear").
@@ -222,7 +205,13 @@ deployment "AvalonSimulation" do
           periodic 0.5
         task("test_vehicle_actuators","simulation::Actuators").
           periodic 0.5
-#	task("white_light", "WhiteLight")
+	task("white_light", "WhiteLight")
+        task("bottom_camera","simulation::MarsCamera").
+            periodic 0.1
+        task("front_camera","simulation::MarsCamera").
+            periodic 0.1
+        task("top_camera","simulation::MarsCamera").
+            periodic 0.1
 
 	add_default_logger
 end
