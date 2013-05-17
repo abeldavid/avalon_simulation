@@ -69,7 +69,7 @@ bool Task::configureHook()
 
     if (! TaskBase::configureHook())
         return false;
-    
+
 
     //check if the environment was sourced more than once
     int pos = _scenefile.get().rfind(":/");
@@ -89,10 +89,10 @@ bool Task::configureHook()
     avalon = new AvalonPlugin(libManager, _scenefile.get(),_debug_sonar.get(),_use_osg_ocean.get());
     Simulation::setSimulatorInterface(simulatorInterface);
     libManager->addLibrary(avalon);
-    
+
     Mars::graphicsTimer->runOnce();
 osg=0;
-    
+
     int cnt=0;
     //Try for 10 seconds to get avalon running
     while(!avalon->isRunning()){
@@ -101,7 +101,7 @@ osg=0;
             std::cerr << "Could not get an runnning instance of avalon" << std::endl;
             return false;
         }
-        
+
     }
 
     Mars::graphicsTimer->runOnce();
@@ -112,7 +112,7 @@ osg=0;
     }
     Simulation::setAvalonPlugin(avalon);
 
-    //Starting viz    
+    //Starting viz
     Mars::graphicsTimer->runOnce();
     Mars::graphicsTimer->run();
 
@@ -125,7 +125,7 @@ osg=0;
             std::cerr << "Could not get surface" << std::endl;
             return false;
         }
-        
+
         waveScale = surface->getWaveScaleFactor();
         windSpeed = surface->getWindSpeed();
         endlessOcean = surface->isEndlessOceanEnabled();
@@ -137,13 +137,13 @@ osg=0;
         scattering = ocean->isUnderwaterScatteringEnabled();
         fogDensity = ocean->getUnderwaterFogDensity();
         osg::Vec4f v = ocean->getUnderwaterFogColor();
-        fogColor = base::Vector4d(v[0],v[1],v[2],v[3]); 
+        fogColor = base::Vector4d(v[0],v[1],v[2],v[3]);
         v = ocean->getUnderwaterDiffuse();
-        diffuse = base::Vector4d(v[0],v[1],v[2],v[3]); 
+        diffuse = base::Vector4d(v[0],v[1],v[2],v[3]);
         osg::Vec3f v3 = ocean->getUnderwaterAttenuation();
         attenuation = base::Vector3d(v3[0],v3[1],v3[2]);
-        silt = ocean->isSiltEnabled(); 
-        
+        silt = ocean->isSiltEnabled();
+
         _waveScale.set(surface->getWaveScaleFactor());
         _windSpeed.set(surface->getWindSpeed());
         _endlessOcean.set(surface->isEndlessOceanEnabled());
@@ -162,17 +162,17 @@ osg=0;
         _attenuation.set(base::Vector3d(v3[0],v3[1],v3[2]));
         _silt.set(ocean->isSiltEnabled());
     }
-    setPosition(_initial_x.get(), 
-            _initial_y.get(), 
+    setPosition(_initial_x.get(),
+            _initial_y.get(),
             _initial_z.get());
     setYaw(_initial_yaw.get());
 
-    
+
     if(_remove_buoy){
       avalon->removeBuoy();
       simulatorInterface->sceneHasChanged(true);
     }
-    
+
     return true;
 }
 bool Task::startHook()
@@ -190,12 +190,7 @@ void Task::updateHook()
 
     checkAndApplyConfigChange();
 
-    Eigen::Vector3d position;
-    Eigen::Quaterniond orientation;
-
-    avalon->getPose(position, orientation);
-
-    _auv_position.write(position);
+    _auv_position.write(avalon->getPosition("avalon"));
 }
 // void Task::errorHook()
 // {
@@ -218,7 +213,7 @@ void Task::checkAndApplyConfigChange(){
         if(!surface){
             std::cerr << "Could not get surface" << std::endl;
         }
-        
+
         static const bool dirty = true;
 
         if(_waveScale.get() != waveScale){
@@ -232,7 +227,7 @@ void Task::checkAndApplyConfigChange(){
         }
         if(_endlessOcean.get() != endlessOcean){
             endlessOcean = _endlessOcean.get();
-            surface->enableEndlessOcean(endlessOcean,dirty); 
+            surface->enableEndlessOcean(endlessOcean,dirty);
         }
         if(_oceanHeight.get() != oceanHeight){
             oceanHeight = _oceanHeight.get();
@@ -278,7 +273,7 @@ void Task::checkAndApplyConfigChange(){
         }
 
 
-        
+
         //_waveScale.set(surface->getWaveScaleFactor());
         //_windSpeed.set(surface->getWindSpeed());
         //_endlessOcean.set(surface->isEndlessOceanEnabled());

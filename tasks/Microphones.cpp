@@ -43,7 +43,6 @@ struct avalon_simulation::MicrophonePlugin: public simulation::MarsPlugin
 		return orientation;
 	}
 
-
 };
 
 
@@ -78,8 +77,6 @@ bool Microphones::configureHook()
 
 
 
-
-
 	return true;
 
 }
@@ -88,6 +85,7 @@ bool Microphones::configureHook()
 
 bool Microphones::startHook()
 {
+
 
 	if (! RTT::TaskContext::startHook())
 		return false;
@@ -122,9 +120,8 @@ void Microphones::updateHook()
 	int diff;
 	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd(-(base::getYaw(orient)),Eigen::Vector3d::UnitZ()));
 	Eigen::Vector3d relPos1, relPos2, ASVpos;
-	Eigen::Quaterniond quarter;
 
-	Simulation::getAvalonPlugin()->getASVPose(ASVpos,quarter);
+	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
 
 	relPos1(0) = 0+c;
 	relPos1(1) = 0;
@@ -227,8 +224,9 @@ void Microphones::updateHook()
 void Microphones::errorHook()
 {
 
+
 	RTT::TaskContext::errorHook();
-}
+
 
 
 
@@ -243,6 +241,6 @@ void Microphones::stopHook()
 void Microphones::cleanupHook()
 {
 
-	RTT::TaskContext::cleanupHook();
+    RTT::TaskContext::cleanupHook();
 }
 

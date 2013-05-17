@@ -14,8 +14,8 @@ namespace avalon_simulation {
 
 
     public:
-        StateEstimator(std::string const& name = "avalon_simulation::StateEstimator", TaskCore::TaskState initial_state = Stopped);
-        StateEstimator(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+        StateEstimator(std::string const& name = "avalon_simulation::StateEstimator");
+        StateEstimator(std::string const& name, RTT::ExecutionEngine* engine);
 
 	~StateEstimator();
 
@@ -47,7 +47,7 @@ namespace avalon_simulation {
          *
          * The error(), exception() and fatal() calls, when called in this hook,
          * allow to get into the associated RunTimeError, Exception and
-         * FatalError states. 
+         * FatalError states.
          *
          * In the first case, updateHook() is still called, and recover() allows
          * you to go back into the Running state.  In the second case, the
@@ -75,6 +75,8 @@ namespace avalon_simulation {
          * before calling start() again.
          */
         // void cleanupHook();
+        private:
+        std::string node_name;
     };
 }
 
