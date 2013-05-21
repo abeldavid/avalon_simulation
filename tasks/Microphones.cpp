@@ -226,7 +226,7 @@ void Microphones::errorHook()
 
 
 	RTT::TaskContext::errorHook();
-
+}
 
 
 
