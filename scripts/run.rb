@@ -24,7 +24,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
 simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
     simulation.debug_sonar = false 
-    simulation.use_osg_ocean = false 
+    simulation.use_osg_ocean = true 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
@@ -118,30 +118,31 @@ values = ActuatorsConfig.new()
     Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
     Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
 
+
+    sample = writer.new_sample
+    sample.time = Time.now
+    0.upto(5) do
+        sample.mode << :DM_PWM
+        sample.target << 0;
+    end
+
     widget.joystick1.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
-        sample = writer.new_sample
-        sample.time = Time.now 
-        0.upto(5) do
-            sample.mode << :DM_PWM
-            sample.target << 0;
-        end
         sample.target[0] = x
         sample.target[1] = x
         sample.target[2] = -y
         sample.target[3] = -y
-        writer.write sample
+	writer.write sample
     end
 
     widget.joystick2.connect(SIGNAL('axisChanged(double,double)'))do |x,y|
-        sample = writer.new_sample
-        sample.time = Time.now 
-        0.upto(5) do
-            sample.mode << :DM_PWM
-            sample.target << 0;
-        end
         sample.target[4] = x
         sample.target[2] = -y
-        writer.write sample
+	writer.write sample
+    end
+
+    widget.horizontalSlider_1.connect(SIGNAL('valueChanged(int)'))do |x|
+        sample.target[4] = x/100.0
+	writer.write sample
     end
 
     asv_navigation.addWaypoint(5.0,2.0)
@@ -151,9 +152,9 @@ values = ActuatorsConfig.new()
     asv_navigation.clearWaypoints
 
 #    Vizkit.display simulation
-    Vizkit.display bottom_cam
-    Vizkit.display front_cam
-    Vizkit.display top_cam
+#    Vizkit.display bottom_cam
+#    Vizkit.display front_cam
+#    Vizkit.display top_cam
 #    Vizkit.display sonar
 #    Vizkit.display sonar_rear
 #    Vizkit.display ground_distance
