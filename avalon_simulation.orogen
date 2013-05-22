@@ -76,11 +76,19 @@ end
 
 task_context "Microphones" do
     output_port "stereo_output", "/avalon/AudioSamples"
-    
     output_port "ping_output", "/avalon/AudioSamples"
 
     property("sound_velocity","double",1500).
         doc("Current Setting of sound_velocity")
+    
+    property("pinger_frequency","double",12000).
+        doc("Current Setting of pinger frequency in kHz")
+        
+    property("white_noise","bool", false).
+        doc("insert white noise in pinger signal")
+        
+    property("noise_amplitude","double", 0.4).
+        doc("changes amplitude of the white noise")
     
     property("base_line","double",1.5).
         doc("Distance between the microphones")
