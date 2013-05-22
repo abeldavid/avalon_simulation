@@ -24,7 +24,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
 simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
     simulation.debug_sonar = false 
-    simulation.use_osg_ocean = true 
+    simulation.use_osg_ocean = false 
     simulation.enable_gui = true
     simulation.configure
     simulation.start
