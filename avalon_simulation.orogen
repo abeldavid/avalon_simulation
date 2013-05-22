@@ -207,11 +207,11 @@ deployment "AvalonSimulation" do
           periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
-        task("avalon_actuators","simulation::MarsActuator").
+        task("avalon_actuators","simulation::Actuators").
           periodic 0.5
-        task("asv_actuators","simulation::MarsActuator").
+        task("asv_actuators","simulation::Actuators").
           periodic 0.5
-        task("test_vehicle_actuators","simulation::MarsActuator").
+        task("test_vehicle_actuators","simulation::Actuators").
           periodic 0.5
 	task("white_light", "WhiteLight")
         task("bottom_camera","simulation::MarsCamera").
