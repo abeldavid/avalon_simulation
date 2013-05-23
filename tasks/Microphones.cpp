@@ -148,40 +148,33 @@ void Microphones::updateHook()
 		sample.left_channel[i] =  0;		//(float)rand()/(float)RAND_MAX/2;
 	}
 
+	double zeroCrossing = _sample_rate / _pinger_frequency;
 
 	if (diff >0.0){
 
-		for(unsigned i=0; i<(sample.left_channel.size()/100)-4; i+=4){
-			sample.left_channel[i] = 1;
-			sample.left_channel[i+2] = -1;
-
-
+		for(unsigned i=0; i<(sample.left_channel.size()/100); i++){
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
 		}
 
-		for(unsigned i=diff; i<(sample.right_channel.size()/100)-4+diff; i+=4){
-			sample.right_channel[i] = 1;
-			sample.right_channel[i+2] = -1;
+		for(unsigned i=diff; i<(sample.right_channel.size()/100)+diff; i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
 		}
 	}
 	else if(diff < 0.0){
 
-		for(unsigned i=abs(diff); i<sample.left_channel.size()/100-4+abs(diff); i+=4){
-			sample.left_channel[i] = 1;
-			sample.left_channel[i+2] = -1;
+		for(unsigned i=abs(diff); i<sample.left_channel.size()/100+abs(diff); i++){
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
 		}
 
-		for(unsigned i=0; i<(sample.right_channel.size()/100)-4; i+=4){
-			sample.right_channel[i] = 1;
-			sample.right_channel[i+2] = -1;
+		for(unsigned i=0; i<(sample.right_channel.size()/100); i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
 		}
 	}
 	else{
-		for(unsigned i=0; i<(sample.right_channel.size()/100)-4; i+=4){
-			sample.right_channel[i] = 1;
-			sample.right_channel[i+2] = -1;
+		for(unsigned i=0; i<(sample.right_channel.size()/100); i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
 
-			sample.left_channel[i] = 1;
-			sample.left_channel[i+2] = -1;
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
 		}
 	}
 
@@ -226,7 +219,7 @@ void Microphones::errorHook()
 
 
 	RTT::TaskContext::errorHook();
-
+}
 
 
 
