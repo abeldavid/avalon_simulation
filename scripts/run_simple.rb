@@ -76,11 +76,28 @@ values = ActuatorsConfig.new()
 
 
     sonar = TaskContext.get 'sonar'
+    sonar.node_name = "sonar_top_sensor"
+    sonar.left_limit = Math::PI
+    sonar.right_limit = -Math::PI
+    sonar.resolution = 0.1
+    sonar.maximum_distance = 100.0
+    sonar.ping_pong_mode = false
     sonar.configure
     sonar.start
+    
     sonar_rear = TaskContext.get 'sonar_rear'
+    sonar_rear.node_name = "sonar_rear_sensor"
+    sonar_rear.left_limit = 0.7*Math::PI
+    sonar_rear.right_limit = 0.3*Math::PI
+    sonar_rear.resolution = 0.1
+    sonar_rear.maximum_distance = 50.0
+    sonar_rear.ping_pong_mode = true
     sonar_rear.configure
     sonar_rear.start
+    
+    ground_distance = TaskContext.get 'ground_distance'
+    ground_distance.configure
+    ground_distance.start
     state_estimator = TaskContext.get 'state_estimator'
     state_estimator.configure
     state_estimator.start
@@ -126,6 +143,7 @@ values = ActuatorsConfig.new()
 #    Vizkit.display top_cam
 #    Vizkit.display sonar
 #    Vizkit.display sonar_rear
+#    Vizkit.display ground_distance
 #    Vizkit.display pinger_search
 #    Vizkit.display actuactors
 #    Vizkit.display asv_actuactors
