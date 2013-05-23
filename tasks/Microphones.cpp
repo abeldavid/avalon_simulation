@@ -11,48 +11,15 @@
 
 using namespace avalon_simulation;
 
-struct avalon_simulation::MicrophonePlugin: public simulation::MarsPlugin
-{
-	int node_id;
-	Eigen::Quaterniond orientation;
-	Eigen::Vector3d position;
-
-	MicrophonePlugin()
-	: node_id(0)
-	{}
-
-	void update( double time )
-	{
-		//mars::sim::SimNode *node = control->nodes->getSimNode(node_id);
-		orientation = control->nodes->getRotation(node_id);
-		position = control->nodes->getPosition(node_id);
-	}
-
-	void setMotorName( const std::string& name )
-	{
-		node_id = control->nodes->getID( name );
-		if( !node_id)
-			throw std::runtime_error("There is no Node by the name of " + name + " in the scene");
-	}
-
-	Eigen::Vector3d getPosition(){
-		return position;
-	}
-
-	Eigen::Quaterniond getOrientation(){
-		return orientation;
-	}
-
-};
 
 
-Microphones::Microphones(std::string const& name, TaskCore::TaskState initial_state)
-: MicrophonesBase(name, initial_state)
+Microphones::Microphones(std::string const& name)
+: MicrophonesBase(name)
 {
 }
 
-Microphones::Microphones(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
-: MicrophonesBase(name, engine, initial_state)
+Microphones::Microphones(std::string const& name, RTT::ExecutionEngine* engine)
+: MicrophonesBase(name, engine)
 {
 }
 
@@ -90,10 +57,7 @@ bool Microphones::startHook()
 	if (! RTT::TaskContext::startHook())
 		return false;
 
-	mp= new MicrophonePlugin();
-	mp->setMotorName( _node_name.value() );
-
-
+	node_id = control->nodes->getID(_node_name.value());
 	sample.sample_frequency = _sample_rate;
 	sample.timestamp = base::Time::now();
 	sample.left_channel.resize((int) _sample_rate);
@@ -114,8 +78,8 @@ void Microphones::updateHook()
 {
 
 	MicrophonesBase::updateHook();
-	Eigen::Vector3d wPos = mp->getPosition();
-	Eigen::Quaterniond  orient = mp->getOrientation();
+	Eigen::Vector3d wPos = position;
+	Eigen::Quaterniond  orient = orientation;
 	double c = _base_line/2;
 	int diff;
 	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd(-(base::getYaw(orient)),Eigen::Vector3d::UnitZ()));
@@ -154,6 +118,7 @@ void Microphones::updateHook()
 
 		for(unsigned i=0; i<(sample.left_channel.size()/100); i++){
 			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
+			std::cerr << "Left_channel" << sin(M_PI*i/zeroCrossing) << std::endl;
 		}
 
 		for(unsigned i=diff; i<(sample.right_channel.size()/100)+diff; i++){
@@ -213,6 +178,15 @@ void Microphones::updateHook()
 }
 
 
+void Microphones::update( double time )
+{
+	//mars::sim::SimNode *node = control->nodes->getSimNode(node_id);
+	orientation = control->nodes->getRotation(node_id);
+	position = control->nodes->getPosition(node_id);
+}
+
+
+
 
 void Microphones::errorHook()
 {
@@ -225,7 +199,6 @@ void Microphones::errorHook()
 
 void Microphones::stopHook()
 {
-	delete mp;
 	RTT::TaskContext::stopHook();
 }
 

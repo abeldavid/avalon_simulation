@@ -29,21 +29,24 @@ namespace avalon_simulation {
     protected:
 		avalon::AudioSamples sample;
 		avalon::AudioSamples pingSample;
-        MicrophonePlugin *mp;
+    	int node_id;
+    	Eigen::Quaterniond orientation;
+    	Eigen::Vector3d position;
 
     public:
         /** TaskContext constructor for Microphones
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        Microphones(std::string const& name = "avalon_simulation::Microphones", TaskCore::TaskState initial_state = Stopped);
+        Microphones(std::string const& name = "avalon_simulation::Microphones");
+
 
         /** TaskContext constructor for Microphones 
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 
          * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        Microphones(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
+        Microphones(std::string const& name, RTT::ExecutionEngine* engine);
 
         /** Default deconstructor of Microphones
          */
@@ -64,6 +67,10 @@ namespace avalon_simulation {
          \endverbatim
          */
         bool configureHook();
+
+
+
+        void update( double time );
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
