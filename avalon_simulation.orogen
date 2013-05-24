@@ -75,6 +75,7 @@ task_context "Task" do
 end
 
 task_context "Microphones" do
+	subclasses "simulation::MarsPlugin"
     output_port "stereo_output", "/avalon/AudioSamples"
     output_port "ping_output", "/avalon/AudioSamples"
 
