@@ -76,6 +76,8 @@ end
 
 task_context "Microphones" do
 	subclasses "simulation::MarsPlugin"
+	
+	
     output_port "stereo_output", "/avalon/AudioSamples"
     output_port "ping_output", "/avalon/AudioSamples"
 
@@ -83,9 +85,9 @@ task_context "Microphones" do
         doc("Current Setting of sound_velocity")
     
     property("pinger_frequency","double",12000).
-        doc("Current Setting of pinger frequency in kHz")
+        doc("Current Setting of pinger frequency in Hz")
         
-    property("white_noise","bool", false).
+    property("white_noise","bool", true).
         doc("insert white noise in pinger signal")
         
     property("noise_amplitude","double", 0.4).
@@ -115,6 +117,33 @@ end
 #    output_port('pose_samples', '/base/samples/RigidBodyState').
 #        doc('computed position in m, in the Simulation coordinate system')
 #end
+
+task_context "SonarTop" do
+        output_port("sonar_beam","base::samples::SonarBeam").
+            doc('top sonar beam')
+        
+        property("left_limit","double",Math::PI)
+        property("right_limit","double",-Math::PI)
+        property("resolution","double",0.1)
+        property("maximum_distance","double",100.0)
+        property("ping_pong_mode","bool",false).
+            doc('if true ping pong mode is activated')
+end
+
+task_context "SonarRear" do
+        output_port("sonar_beam","base::samples::SonarBeam").
+            doc('rear sonar beam')
+
+        output_port("ground_distance", "/base/samples/RigidBodyState").
+            doc('current ground distance simulating echo sounder')
+        
+        property("left_limit","double",0.7*Math::PI)
+        property("right_limit","double",0.3*Math::PI)
+        property("resolution","double",0.1)
+        property("maximum_distance","double",50.0)
+        property("ping_pong_mode","bool",true).
+            doc('if true ping pong mode is activated')
+end
 
 task_context "StateEstimator" do
 	needs_configuration
@@ -163,12 +192,6 @@ task_context "Modem" do
         doc("motion command submitted by the nurc for buoy heading with zero speed")
 end
 
-
-task_context "GroundDistance" do
-        output_port("ground_distance", "/base/samples/RigidBodyState").
-            doc('current ground distance simulating echo sounder')
-end
-
 deployment "AvalonSimulation" do
 	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
         #do_not_install
@@ -177,11 +200,9 @@ deployment "AvalonSimulation" do
 	    periodic(0.1)
 	task('mic', "Microphones").
 	    periodic(1)
-        task("sonar","simulation::Sonar").
+        task("sonar","SonarTop").
             periodic 0.066666
-        task("sonar_rear","simulation::Sonar").
-            periodic 0.066666
-        task("ground_distance","avalon_simulation::GroundDistance").
+        task("sonar_rear","SonarRear").
             periodic 0.066666
         task("state_estimator","StateEstimator").
             periodic 0.01

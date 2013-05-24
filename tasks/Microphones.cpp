@@ -1,13 +1,14 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Microphones.hpp"
-#include <simulation/MarsPlugin.hpp>
-#include <mars/sim/SimNode.h>
-#include <mars/sim/NodeManager.h>
+//#include <mars/sim/SimNode.h>
+//#include <mars/sim/NodeManager.h>
+#include <mars/interfaces/sim/NodeManagerInterface.h>
 #include <base/pose.h>
 #include "Simulation.h"
 #include <math.h>
 #include <boost/random.hpp>
+
 
 using namespace avalon_simulation;
 
@@ -57,7 +58,13 @@ bool Microphones::startHook()
 	if (! RTT::TaskContext::startHook())
 		return false;
 
-	node_id = control->nodes->getID(_node_name.value());
+//	std::cerr << "control:  "  << control << std::endl;
+//	std::cerr << "nodes:  "  << control -> nodes << std::endl;
+
+
+
+
+	node_id =  0;  //control->nodes->getID(_node_name);
 	sample.sample_frequency = _sample_rate;
 	sample.timestamp = base::Time::now();
 	sample.left_channel.resize((int) _sample_rate);
@@ -108,17 +115,18 @@ void Microphones::updateHook()
 
 
 	for(unsigned i=0; i<sample.left_channel.size(); i++){
-		sample.right_channel[i] = 0;		//(float)rand()/(float)RAND_MAX/2;
-		sample.left_channel[i] =  0;		//(float)rand()/(float)RAND_MAX/2;
+		sample.right_channel[i] = 0;
+		sample.left_channel[i] =  0;
 	}
 
-	double zeroCrossing = _sample_rate / _pinger_frequency;
+	double zeroCrossing = _sample_rate / _pinger_frequency; // gibt an wie viele indexe für 2 zerocrossings
+															//	(eine Schwingung) benötigt werden
+
 
 	if (diff >0.0){
 
 		for(unsigned i=0; i<(sample.left_channel.size()/100); i++){
 			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
-			std::cerr << "Left_channel" << sin(M_PI*i/zeroCrossing) << std::endl;
 		}
 
 		for(unsigned i=diff; i<(sample.right_channel.size()/100)+diff; i++){
