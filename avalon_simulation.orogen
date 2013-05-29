@@ -106,45 +106,6 @@ task_context "Microphones" do
 
 end
 
-#task_context "ASVActuators" do
-#    input_port("command", "base/actuators/Command").
-#        doc("actuator command").
-#        needs_buffered_connection
-#    output_port("status", "base/actuators/Status")
-#    port_driven :command
-#	
-#
-#    output_port('pose_samples', '/base/samples/RigidBodyState').
-#        doc('computed position in m, in the Simulation coordinate system')
-#end
-
-task_context "SonarTop" do
-        output_port("sonar_beam","base::samples::SonarBeam").
-            doc('top sonar beam')
-        
-        property("left_limit","double",Math::PI)
-        property("right_limit","double",-Math::PI)
-        property("resolution","double",0.1)
-        property("maximum_distance","double",100.0)
-        property("ping_pong_mode","bool",false).
-            doc('if true ping pong mode is activated')
-end
-
-task_context "SonarRear" do
-        output_port("sonar_beam","base::samples::SonarBeam").
-            doc('rear sonar beam')
-
-        output_port("ground_distance", "/base/samples/RigidBodyState").
-            doc('current ground distance simulating echo sounder')
-        
-        property("left_limit","double",0.7*Math::PI)
-        property("right_limit","double",0.3*Math::PI)
-        property("resolution","double",0.1)
-        property("maximum_distance","double",50.0)
-        property("ping_pong_mode","bool",true).
-            doc('if true ping pong mode is activated')
-end
-
 task_context "StateEstimator" do
 	needs_configuration
 	property('node_name','std/string')
@@ -200,10 +161,10 @@ deployment "AvalonSimulation" do
 	    periodic(0.1)
 	task('mic', "Microphones").
 	    periodic(1)
-        task("sonar","SonarTop").
-            periodic 0.066666
-        task("sonar_rear","SonarRear").
-            periodic 0.066666
+	task("sonar","simulation::Sonar").
+		periodic 0.066666
+	task("sonar_rear","simulation::Sonar").
+		periodic 0.066666
         task("state_estimator","StateEstimator").
             periodic 0.01
         task("pingersearch_simulation","PingerSearch").
