@@ -119,10 +119,19 @@ void Microphones::updateHook()
 		sample.left_channel[i] =  0;
 	}
 
-	double zeroCrossing = _sample_rate / _pinger_frequency; // gibt an wie viele indexe für 2 zerocrossings
+	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe für 2 zerocrossings
 															//	(eine Schwingung) benötigt werden
 
 	//Signalerstellung
+
+	sample.left_channel.resize((int) _sample_rate);
+	sample.right_channel.resize((int) _sample_rate);
+
+	pingSample.left_channel.resize((int) ((_sample_rate / length_qoutient)+200));
+	pingSample.right_channel.resize((int) ((_sample_rate / length_qoutient)+200) );
+
+
+
 	if (diff >0.0){
 
 		for(unsigned i=0; i<(sample.left_channel.size()/length_qoutient); i++){
@@ -172,8 +181,7 @@ void Microphones::updateHook()
 
 
 	//Ping-Ausschnitt
-	pingSample.left_channel.resize((int) ((_sample_rate / length_qoutient)+200));
-	pingSample.right_channel.resize((int) ((_sample_rate / length_qoutient)+200) );
+
 
 
 	for(unsigned i=0; i<pingSample.left_channel.size(); i++){
