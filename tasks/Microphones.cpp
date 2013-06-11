@@ -58,13 +58,7 @@ bool Microphones::startHook()
 	if (! RTT::TaskContext::startHook())
 		return false;
 
-//	std::cerr << "control:  "  << control << std::endl;
-//	std::cerr << "nodes:  "  << control -> nodes << std::endl;
-
-
-
-
-	node_id =  0;  //control->nodes->getID(_node_name);
+	node_id =  0; //control->nodes->getID(_node_name); //TODO
 	sample.sample_frequency = _sample_rate;
 	sample.timestamp = base::Time::now();
 	sample.left_channel.resize((int) _sample_rate);
@@ -87,18 +81,22 @@ void Microphones::updateHook()
 	MicrophonesBase::updateHook();
 	Eigen::Vector3d wPos = position;
 	Eigen::Quaterniond  orient = orientation;
-	double c = _base_line/2;
+	double base_line = _base_line/2;
 	int diff;
+	int length_qoutient = 1000 / _ping_length;
 	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd(-(base::getYaw(orient)),Eigen::Vector3d::UnitZ()));
 	Eigen::Vector3d relPos1, relPos2, ASVpos;
 
 	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
 
-	relPos1(0) = 0+c;
+
+
+	//Errechnung der Positionen der Microfone anhand der Rotation
+	relPos1(0) = 0+base_line;
 	relPos1(1) = 0;
 	relPos1(2) = 0;
 
-	relPos2(0) = 0-c;
+	relPos2(0) = 0-base_line;
 	relPos2(1) = 0;
 	relPos2(2) = 0;
 
@@ -106,10 +104,12 @@ void Microphones::updateHook()
 	relPos2 = (rotation.conjugate()*relPos2) + wPos;
 
 
+	//relative Position
 	relPos1 = ASVpos - relPos1;
 	relPos2 = ASVpos - relPos2;
 
 
+	//Errechnung der Indexverschiebung
 	diff = (int)(_sample_rate * ((relPos2.norm() - relPos1.norm())/_sound_velocity));
 
 
@@ -119,41 +119,50 @@ void Microphones::updateHook()
 		sample.left_channel[i] =  0;
 	}
 
-	double zeroCrossing = _sample_rate / _pinger_frequency; // gibt an wie viele indexe für 2 zerocrossings
+	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe für 2 zerocrossings
 															//	(eine Schwingung) benötigt werden
+
+	//Signalerstellung
+
+	sample.left_channel.resize((int) _sample_rate);
+	sample.right_channel.resize((int) _sample_rate);
+
+	pingSample.left_channel.resize((int) ((_sample_rate / length_qoutient)+200));
+	pingSample.right_channel.resize((int) ((_sample_rate / length_qoutient)+200) );
+
 
 
 	if (diff >0.0){
 
-		for(unsigned i=0; i<(sample.left_channel.size()/100); i++){
-			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
+		for(unsigned i=0; i<(sample.left_channel.size()/length_qoutient); i++){
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 
-		for(unsigned i=diff; i<(sample.right_channel.size()/100)+diff; i++){
-			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
+		for(unsigned i=diff; i<(sample.right_channel.size()/length_qoutient)+diff; i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
 	else if(diff < 0.0){
 
-		for(unsigned i=abs(diff); i<sample.left_channel.size()/100+abs(diff); i++){
-			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
+		for(unsigned i=abs(diff); i<sample.left_channel.size()/length_qoutient+abs(diff); i++){
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 
-		for(unsigned i=0; i<(sample.right_channel.size()/100); i++){
-			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
+		for(unsigned i=0; i<(sample.right_channel.size()/length_qoutient); i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
 	else{
-		for(unsigned i=0; i<(sample.right_channel.size()/100); i++){
-			sample.right_channel[i] = sin(M_PI*i/zeroCrossing);
+		for(unsigned i=0; i<(sample.right_channel.size()/length_qoutient); i++){
+			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 
-			sample.left_channel[i] = sin(M_PI*i/zeroCrossing);
+			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
 
 
 
-
+	//white_noise Generator
 	if(_white_noise){
 
 
@@ -163,12 +172,15 @@ void Microphones::updateHook()
 		boost::variate_generator<boost::mt11213b&, boost::normal_distribution<float> > //Generator
 		get_random(mt, normalverteilung);
 
-		for(unsigned i=0; i<pingSample.left_channel.size(); i++){
+		for(unsigned i=0; i<sample.left_channel.size(); i++){
 			sample.left_channel[i] += get_random();
 			sample.right_channel[i] += get_random();
 		}
 	}
 
+
+
+	//Ping-Ausschnitt
 
 
 

@@ -83,8 +83,11 @@ task_context "Microphones" do
 
     property("sound_velocity","double",1500).
         doc("Current Setting of sound_velocity")
+        
+    property("base_line","double",1.5).
+        doc("Distance between the microphones")
     
-    property("pinger_frequency","double",12000).
+    property("pinger_frequency","double",15000).
         doc("Current Setting of pinger frequency in Hz")
         
     property("white_noise","bool", true).
@@ -92,15 +95,18 @@ task_context "Microphones" do
         
     property("noise_amplitude","double", 0.4).
         doc("changes amplitude of the white noise")
-    
-    property("base_line","double",1.5).
-        doc("Distance between the microphones")
-        
+   
+    property("amplitude","double", 1.0).
+        doc("changes amplitude of the Ping") 
+     
     property("sample_rate","double", 44100.0).
         doc("sample rate for signal")           
 
+    property('ping_length', 'int', 10).
+	    doc('ping_length in ms')
+
     property('node_name', '/std/string', 'avalon').
-	    doc('name of the nodein the scene file, which should be handled as a acoustinc target')
+	    doc('name of the nodeid the scene file, which should be handled as a acoustinc target')
 
     property('angle_offset',"base::Angle")
 
