@@ -69,6 +69,7 @@ bool Microphones::startHook()
 	pingSample.left_channel.resize((int) ((_sample_rate / 100)+200));
 	pingSample.right_channel.resize((int) ((_sample_rate / 100)+200) );
 
+
 	return true;
 
 }
@@ -79,19 +80,22 @@ void Microphones::updateHook()
 {
 
 	MicrophonesBase::updateHook();
-	Eigen::Vector3d wPos = position;
-	Eigen::Quaterniond  orient = orientation;
+    base::samples::RigidBodyState pose;
+	Eigen::Vector3d wPos; //position
+	Eigen::Quaterniond  orient; //orientation;
+	Simulation::getAvalonPlugin()->getPose(_node_name, wPos,orient);
+	double avalYaw = base::getYaw(orient);
 	double base_line = _base_line/2;
 	int diff;
 	int length_qoutient = 1000 / _ping_length;
-	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd(-(base::getYaw(orient)),Eigen::Vector3d::UnitZ()));
-	Eigen::Vector3d relPos1, relPos2, ASVpos;
+	Eigen::Quaterniond rotation = base::Quaterniond(Eigen::AngleAxisd((-1)*avalYaw,Eigen::Vector3d::UnitZ()));
+	Eigen::Vector3d relPos, relPos1, relPos2, ASVpos;
+	base::Angle direction_to_asv = Simulation::getAvalonPlugin()-> getAngleToPinger() ;
 
 	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
 
 
-
-	//Errechnung der Positionen der Microfone anhand der Rotation
+	//Errechnung der Positionen der Mikrofone anhand der Rotation
 	relPos1(0) = 0+base_line;
 	relPos1(1) = 0;
 	relPos1(2) = 0;
@@ -193,6 +197,8 @@ void Microphones::updateHook()
 	_ping_output.write(pingSample);
 
 	_stereo_output.write(sample);
+
+	_angle_to_asv_output.write(direction_to_asv);
 
 	RTT::TaskContext::updateHook();
 }

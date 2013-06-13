@@ -80,6 +80,7 @@ task_context "Microphones" do
 	
     output_port "stereo_output", "/avalon/AudioSamples"
     output_port "ping_output", "/avalon/AudioSamples"
+    output_port "angle_to_asv_output", "/base/Angle"
 
     property("sound_velocity","double",1500).
         doc("Current Setting of sound_velocity")
