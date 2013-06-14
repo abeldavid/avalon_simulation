@@ -15,21 +15,25 @@ def initialize()
 	    @avalon_maximum_thruster_force = avalon_maximum_thruster_force
 	    
 	    avalon_thruster_position = []
-	    avalon_thruster_position.push Eigen::Vector3.new(0.0, -0.157, 0.0)
-	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.157, 0.0)
-	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.0, 0.0)
-	    avalon_thruster_position.push Eigen::Vector3.new(-0.688, 0.0820, 0.0)
-	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.0, 0.0)
-	    avalon_thruster_position.push Eigen::Vector3.new(-0.5955, 0.0, 0.0)
+	    avalon_thruster_position.push Eigen::Vector3.new(-0.5955, 0.0, 0.0)	   # z	
+	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.0, 0.0)       # z
+	    avalon_thruster_position.push Eigen::Vector3.new(0.0, -0.157, 0.0)  # x
+	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.157, 0.0)   # x
+	    avalon_thruster_position.push Eigen::Vector3.new(-0.688, 0.0820, 0.0)  # y
+	    avalon_thruster_position.push Eigen::Vector3.new(0.0, 0.0, 0.0)	 # y
+
+
+	
 	    @avalon_thruster_position = avalon_thruster_position
 	    
 	    avalon_thruster_direction = []
-	    avalon_thruster_direction.push Eigen::Vector3.new(1.0, 0.0, 0.0)
-	    avalon_thruster_direction.push Eigen::Vector3.new(1.0, 0.0, 0.0)
+	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+	    avalon_thruster_direction.push Eigen::Vector3.new(-1.0, 0.0, 0.0)
+	    avalon_thruster_direction.push Eigen::Vector3.new(-1.0, 0.0, 0.0)
 	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, 1.0, 0.0)
 	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, -1.0, 0.0)
-	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, 0.0, 1.0)
-	    avalon_thruster_direction.push Eigen::Vector3.new(0.0, 0.0, 1.0)
+
 	    @avalon_thruster_direction = avalon_thruster_direction
 	    
 	# ASV
