@@ -126,6 +126,9 @@ void Microphones::updateHook()
 	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe für 2 zerocrossings
 															//	(eine Schwingung) benötigt werden
 
+	double zC = (_sample_rate / _carrier_frequency)/2;
+
+
 	//Signalerstellung
 
 	sample.left_channel.resize((int) _sample_rate);
@@ -134,35 +137,37 @@ void Microphones::updateHook()
 	pingSample.left_channel.resize((int) ((_sample_rate / length_qoutient)+200));
 	pingSample.right_channel.resize((int) ((_sample_rate / length_qoutient)+200) );
 
-
-
+if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length_qoutient)){
 	if (diff >0.0){
 
-		for(unsigned i=0; i<(sample.left_channel.size()/length_qoutient); i++){
+		for(unsigned i=_startFrame; i<(sample.left_channel.size()/length_qoutient)+_startFrame; i++){
 			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 
-		for(unsigned i=diff; i<(sample.right_channel.size()/length_qoutient)+diff; i++){
+		for(unsigned i=diff + _startFrame; i<(sample.right_channel.size()/length_qoutient)+diff+_startFrame; i++){
 			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
 	else if(diff < 0.0){
 
-		for(unsigned i=abs(diff); i<sample.left_channel.size()/length_qoutient+abs(diff); i++){
+		for(unsigned i=abs(diff) + _startFrame; i<sample.left_channel.size()/length_qoutient+abs(diff)+_startFrame; i++){
 			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 
-		for(unsigned i=0; i<(sample.right_channel.size()/length_qoutient); i++){
+		for(unsigned i=_startFrame; i<(sample.right_channel.size()/length_qoutient)+_startFrame; i++){
 			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
 	else{
-		for(unsigned i=0; i<(sample.right_channel.size()/length_qoutient); i++){
+		for(unsigned i=_startFrame; i<(sample.right_channel.size()/length_qoutient)+_startFrame; i++){
 			sample.right_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 
 			sample.left_channel[i] = sin(M_PI*i/zeroCrossing)*_amplitude;
 		}
 	}
+
+}
+
 
 
 
@@ -180,15 +185,22 @@ void Microphones::updateHook()
 			sample.left_channel[i] += get_random();
 			sample.right_channel[i] += get_random();
 		}
+
 	}
 
 
+	if(_carrier_wave){
+		for(unsigned i=0; i<sample.left_channel.size(); i++){
+					sample.left_channel[i] += sin(M_PI*i/zC)*_carrier_amplitude;
+					sample.right_channel[i] += sin(M_PI*i/zC)*_carrier_amplitude;
+		}
+	}
 
 	//Ping-Ausschnitt
 
 
 
-	for(unsigned i=0; i<pingSample.left_channel.size(); i++){
+	for(unsigned i=_startFrame; i<pingSample.left_channel.size(); i++){
 		pingSample.left_channel[i] = sample.left_channel[i];
 		pingSample.right_channel[i] = sample.right_channel[i];
 	}

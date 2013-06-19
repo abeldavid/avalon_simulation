@@ -88,11 +88,21 @@ task_context "Microphones" do
     property("base_line","double",1.5).
         doc("Distance between the microphones")
     
-    property("pinger_frequency","double",15000).
+    property("pinger_frequency","double",12000).
         doc("Current Setting of pinger frequency in Hz")
+        
+    property("carrier_frequency","double",2000).
+        doc("Current Setting of noise frequency in Hz")        
         
     property("white_noise","bool", true).
         doc("insert white noise in pinger signal")
+        
+    property("carrier_wave","bool", true).
+        doc("insert white noise in pinger signal")
+        
+    property("carrier_amplitude","double", 1.5).
+        doc("changes amplitude of the white noise")    
+        
         
     property("noise_amplitude","double", 0.4).
         doc("changes amplitude of the white noise")
