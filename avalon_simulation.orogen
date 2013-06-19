@@ -103,7 +103,9 @@ task_context "Microphones" do
     property("carrier_amplitude","double", 1.5).
         doc("changes amplitude of the white noise")    
         
-        
+    property("startFrame","unsigned", 1500).
+        doc("frame where ping starts") 
+   
     property("noise_amplitude","double", 0.4).
         doc("changes amplitude of the white noise")
    
