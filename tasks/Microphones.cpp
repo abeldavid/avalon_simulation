@@ -123,8 +123,8 @@ void Microphones::updateHook()
 		sample.left_channel[i] =  0;
 	}
 
-	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe für 2 zerocrossings
-															//	(eine Schwingung) benötigt werden
+	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe fuer 2 zerocrossings
+															//	(eine Schwingung) benoetigt werden
 
 	double zC = (_sample_rate / _carrier_frequency)/2;
 
