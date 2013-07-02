@@ -58,7 +58,7 @@ bool Microphones::startHook()
 	if (! RTT::TaskContext::startHook())
 		return false;
 
-	node_id =  0; //control->nodes->getID(_node_name); //TODO
+	node_id = 0; //control->nodes->getID(_node_name); //TODO
 	sample.sample_frequency = _sample_rate;
 	sample.timestamp = base::Time::now();
 	sample.left_channel.resize((int) _sample_rate);
@@ -200,9 +200,9 @@ if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length
 
 
 
-	for(unsigned i=_startFrame; i<pingSample.left_channel.size(); i++){
-		pingSample.left_channel[i] = sample.left_channel[i];
-		pingSample.right_channel[i] = sample.right_channel[i];
+	for(unsigned i=0; i<pingSample.left_channel.size(); i++){
+		pingSample.left_channel[i] = sample.left_channel[_startFrame + i -100];
+		pingSample.right_channel[i] = sample.right_channel[_startFrame + i -100];
 	}
 
 

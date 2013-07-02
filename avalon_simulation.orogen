@@ -98,7 +98,7 @@ task_context "Microphones" do
         doc("insert white noise in pinger signal")
         
     property("carrier_wave","bool", true).
-        doc("insert white noise in pinger signal")
+        doc("insert carrierWave in pinger signal")
         
     property("carrier_amplitude","double", 1.5).
         doc("changes amplitude of the white noise")    
@@ -119,7 +119,7 @@ task_context "Microphones" do
 	    doc('ping_length in ms')
 
     property('node_name', '/std/string', 'avalon').
-	    doc('name of the nodeid the scene file, which should be handled as a acoustinc target')
+	    doc('name of the nodeid the scene file, which should be handled as a acoustic target')
 
     property('angle_offset',"base::Angle")
 
