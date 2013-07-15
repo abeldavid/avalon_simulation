@@ -69,7 +69,6 @@ bool Microphones::startHook()
 	pingSample.left_channel.resize((int) ((_sample_rate / 100)+200));
 	pingSample.right_channel.resize((int) ((_sample_rate / 100)+200) );
 
-
 	return true;
 
 }
@@ -175,11 +174,12 @@ if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length
 	if(_white_noise){
 
 
-		boost::mt11213b mt; // mersenne twister als zufallszahlgenerator
+		static boost::mt11213b mt(static_cast<unsigned>(std::time(0))); //mersenne twister time(0) as seed
+
 		boost::normal_distribution<float> normalverteilung((-1) *_noise_amplitude, _noise_amplitude); //normalverteilung
 
-		boost::variate_generator<boost::mt11213b&, boost::normal_distribution<float> > //Generator
-		get_random(mt, normalverteilung);
+		boost::variate_generator<boost::mt11213b&, boost::normal_distribution<float> >
+		get_random(mt, normalverteilung); //Generator
 
 		for(unsigned i=0; i<sample.left_channel.size(); i++){
 			sample.left_channel[i] += get_random();

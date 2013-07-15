@@ -97,7 +97,7 @@ task_context "Microphones" do
     property("white_noise","bool", true).
         doc("insert white noise in pinger signal")
         
-    property("carrier_wave","bool", true).
+    property("carrier_wave","bool", false).
         doc("insert carrierWave in pinger signal")
         
     property("carrier_amplitude","double", 1.5).
