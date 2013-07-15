@@ -94,7 +94,7 @@ void Microphones::updateHook()
 	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
 
 
-	//Errechnung der Positionen der Mikrofone anhand der Rotation
+	//calculating global positions of the microphones with the rotation of avalon
 	relPos1(0) = 0+base_line;
 	relPos1(1) = 0;
 	relPos1(2) = 0;
@@ -107,12 +107,12 @@ void Microphones::updateHook()
 	relPos2 = (rotation.conjugate()*relPos2) + wPos;
 
 
-	//relative Position
+	//relativ position of microphones
 	relPos1 = ASVpos - relPos1;
 	relPos2 = ASVpos - relPos2;
 
 
-	//Errechnung der Indexverschiebung
+	//calculating index difference
 	diff = (int)(_sample_rate * ((relPos2.norm() - relPos1.norm())/_sound_velocity));
 
 
@@ -122,13 +122,11 @@ void Microphones::updateHook()
 		sample.left_channel[i] =  0;
 	}
 
-	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // gibt an wie viele indexe fuer 2 zerocrossings
-															//	(eine Schwingung) benoetigt werden
-
+	double zeroCrossing = (_sample_rate / _pinger_frequency)/2; // number of indexes for 1 signalwave
 	double zC = (_sample_rate / _carrier_frequency)/2;
 
 
-	//Signalerstellung
+	//creating signal
 
 	sample.left_channel.resize((int) _sample_rate);
 	sample.right_channel.resize((int) _sample_rate);
@@ -176,10 +174,10 @@ if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length
 
 		static boost::mt11213b mt(static_cast<unsigned>(std::time(0))); //mersenne twister time(0) as seed
 
-		boost::normal_distribution<float> normalverteilung((-1) *_noise_amplitude, _noise_amplitude); //normalverteilung
+		boost::normal_distribution<float> normalverteilung((-1) *_noise_amplitude, _noise_amplitude); //normaldistribution
 
 		boost::variate_generator<boost::mt11213b&, boost::normal_distribution<float> >
-		get_random(mt, normalverteilung); //Generator
+		get_random(mt, normalverteilung); //generator
 
 		for(unsigned i=0; i<sample.left_channel.size(); i++){
 			sample.left_channel[i] += get_random();
@@ -188,7 +186,7 @@ if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length
 
 	}
 
-
+	//carrierWave generator
 	if(_carrier_wave){
 		for(unsigned i=0; i<sample.left_channel.size(); i++){
 					sample.left_channel[i] += sin(M_PI*i/zC)*_carrier_amplitude;
@@ -196,16 +194,14 @@ if(_startFrame < sample.left_channel.size() - (sample.left_channel.size()/length
 		}
 	}
 
-	//Ping-Ausschnitt
-
-
-
+	//creating ping-output
 	for(unsigned i=0; i<pingSample.left_channel.size(); i++){
 		pingSample.left_channel[i] = sample.left_channel[_startFrame + i -100];
 		pingSample.right_channel[i] = sample.right_channel[_startFrame + i -100];
 	}
 
 
+	//output-ports
 	_ping_output.write(pingSample);
 
 	_stereo_output.write(sample);
