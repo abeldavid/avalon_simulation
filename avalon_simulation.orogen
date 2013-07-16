@@ -183,6 +183,8 @@ deployment "AvalonSimulation" do
 
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
+	task('imu', "simulation::MarsIMU").
+	    periodic(0.1)
 	task('mic', "Microphones").
 	    periodic(1)
 	task("sonar","simulation::Sonar").
