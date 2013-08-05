@@ -179,6 +179,9 @@ bool Task::startHook()
 {
     if (! TaskBase::startHook())
         return false;
+
+    simulatorInterface->StartSimulation();
+
     return true;
 }
 void Task::updateHook()
