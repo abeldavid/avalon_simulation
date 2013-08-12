@@ -15,8 +15,6 @@ namespace avalon_simulation {
     protected:
 	AvalonPlugin *avalon;
         OPlugin *osg;
-        virtual bool setPosition(double x, double y, double z);
-	virtual bool setOrientation(double x, double y, double z, double w);
         void checkAndApplyConfigChange();
 
         double waveScale;
@@ -33,7 +31,6 @@ namespace avalon_simulation {
         base::Vector4d fogColor;
         base::Vector4d diffuse;
         base::Vector3d attenuation;
-        virtual bool setYaw(double yaw);
         
         virtual void setPipelinePosition(double x, double y, double z);
 

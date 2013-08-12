@@ -20,39 +20,9 @@ Task::~Task()
 {
 }
 
-bool Task::setPosition(double x, double y, double z)
-{
-    avalon->setPosition(x,y,z);
-    simulatorInterface->sceneHasChanged(true);
-
-    return true;
-}
-
-bool Task::setOrientation(double x, double y, double z, double w)
-{
-  avalon->setOrientation(x,y,z,w);
-  simulatorInterface->sceneHasChanged(true);
-
-  return true;
-}
-
 void Task::setPipelinePosition(double x, double y, double z){
   avalon->setPipelinePosition(x,y,z);
 }
-
-
-bool Task::setYaw(double yaw)
-{
-    base::Vector3d euler(yaw, 0.0, 0.0);
-    Eigen::Quaternion<double> o;
-    o = Eigen::AngleAxis<double>(euler.x(), base::Vector3d::Unit(2));
-
-    avalon->setOrientation(o.x(), o.y(), o.z(), o.w());
-    simulatorInterface->sceneHasChanged(true);
-
-    return true;
-}
-
 
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See Task.hpp for more detailed
@@ -162,11 +132,6 @@ osg=0;
         _attenuation.set(base::Vector3d(v3[0],v3[1],v3[2]));
         _silt.set(ocean->isSiltEnabled());
     }
-    setPosition(_initial_x.get(),
-            _initial_y.get(),
-            _initial_z.get());
-    setYaw(_initial_yaw.get());
-
 
     if(_remove_buoy){
       avalon->removeBuoy();
@@ -192,8 +157,6 @@ void Task::updateHook()
         return;
 
     checkAndApplyConfigChange();
-
-    _auv_position.write(avalon->getPosition("avalon"));
 }
 // void Task::errorHook()
 // {

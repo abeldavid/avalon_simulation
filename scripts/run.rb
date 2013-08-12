@@ -35,6 +35,14 @@ simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon
 require 'actuators'
 values = ActuatorsConfig.new()
 # Avalon
+    avalon = TaskContext.get 'avalon'
+    avalon.node_name = "avalon"
+    avalon.cob = [[0.0, 0.0, 0.08]]
+    avalon.buoyancy_force = 4
+    avalon.configure
+    avalon.start
+
+    
     actuators = TaskContext.get 'avalon_actuators'
     actuators.node_name = "avalon"
     actuators.amount_of_actuators = values.avalon_amount_of_actuators
@@ -107,16 +115,17 @@ values = ActuatorsConfig.new()
     sonar_rear.start
         
     ground_distance = TaskContext.get 'ground_distance'
+    ground_distance.node_name = "ground_distance_sensor"
     ground_distance.configure
     ground_distance.start
     
-    state_estimator = TaskContext.get 'state_estimator'
-    state_estimator.node_name = 'avalon'
-    state_estimator.configure
-    state_estimator.start
-    Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top
-    Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
-    Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
+#    state_estimator = TaskContext.get 'state_estimator'
+#    state_estimator.node_name = 'avalon'
+#    state_estimator.configure
+#    state_estimator.start
+#    Vizkit.display sonar.sonar_beam, :widget => widget.sonar_top
+#    Vizkit.display sonar_rear.sonar_beam, :widget => widget.sonar_rear
+#    Vizkit.display state_estimator.pose_samples, :widget => widget.orientation
 
 
     sample = writer.new_sample
