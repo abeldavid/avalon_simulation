@@ -82,7 +82,9 @@ void Microphones::updateHook()
     base::samples::RigidBodyState pose;
 	Eigen::Vector3d wPos; //position
 	Eigen::Quaterniond  orient; //orientation;
-	Simulation::getAvalonPlugin()->getPose(_node_name, wPos,orient);
+        wPos = control->nodes->getPosition( control->nodes->getID(_node_name) );
+        orient = control->nodes->getRotation( control->nodes->getID(_node_name) );
+	
 	double avalYaw = base::getYaw(orient);
 	double base_line = _base_line/2;
 	int diff;
@@ -91,7 +93,7 @@ void Microphones::updateHook()
 	Eigen::Vector3d relPos, relPos1, relPos2, ASVpos;
 	base::Angle direction_to_asv = Simulation::getAvalonPlugin()-> getAngleToPinger() ;
 
-	ASVpos = Simulation::getAvalonPlugin()->getPosition("asv");
+        ASVpos = control->nodes->getPosition( control->nodes->getID("asv") );
 
 
 	//calculating global positions of the microphones with the rotation of avalon
