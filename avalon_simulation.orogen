@@ -8,7 +8,24 @@ using_library "mars_interfaces", :typekit => false
 using_library 'avalon-plugin'
 using_library 'marsusim'
 using_library 'mars_sim'
+using_task_library "avalon_control"
+using_task_library "raw_control_command_converter"
+using_task_library "buoy"
+using_task_library "offshore_pipeline_detector"
+using_task_library "wall_servoing"
+using_task_library "sonar_feature_estimator"
+# using_task_library "ekf_slam"
+# using_task_library "eras_position_estimator"
+using_task_library "sonar_wall_hough"
+#using_task_library "uwv_dynamic_model"
+using_task_library "uw_particle_localization"
+using_task_library "auv_waypoint_navigator"
+using_task_library "asv_detector"
+using_task_library "pingersearch"
+using_task_library "auv_rel_pos_controller"
+using_task_library "controldev"
 using_task_library 'simulation'
+using_task_library 'task_scheduler'
 
 task_context "Task" do
 	subclasses "simulation::Mars"
@@ -142,9 +159,6 @@ end
 
 
 deployment "AvalonSimulation" do
-	# !!!! Currently these deployments are not being installed! Use avalon/orogen/avalon_simulation_deployment instead !!!!
-        #do_not_install
-
 	task('avalon_simulation', 'avalon_simulation::Task').
 	    periodic(0.1)
 	    
@@ -178,6 +192,76 @@ deployment "AvalonSimulation" do
         task("top_camera","simulation::MarsCamera").
             periodic 0.1
 
-	add_default_logger
+        task("joystick", "controldev::JoystickTask")
+        task("fake_writer", "avalon_control::FakeWriter")
+        task("rel_fake_writer", "avalon_control::RelFakeWriter")
+        
+        task("rel_controller", "auv_rel_pos_controller::Task")
+        
+        task("motion_control", "avalon_control::MotionControlTask")
+
+        task("controlconverter_movement","raw_control_command_converter::Movement")
+
+        task("controlconverter_position","raw_control_command_converter::Position")
+
+        task "pipeline_follower", "offshore_pipeline_detector::Task"
+        task "wall_servoing", "wall_servoing::SingleSonarServoing"
+        task "sonar_feature_estimator", "sonar_feature_estimator::Task"
+        task "sonar_wall_hough", "sonar_wall_hough::Task"
+        task "uw_particle_localization", "uw_particle_localization::Task"
+        task("auv_waypoint_navigator", "auv_waypoint_navigator::Task").
+                periodic(0.01)
+        task "asv_detector", "asv_detector::Task"
+        
+        task('buoy_detector', 'buoy::Detector')
+        task('buoy_servoing', 'buoy::Survey')
+        
+        task("angle_estimation", "pingersearch::AngleEstimation")
+        task("pinger_search", "pingersearch::PingerSearch")
+
+        add_default_logger.
+            periodic(0.01)
+end
+
+deployment "AvalonSimulationScheduled" do
+        createTaskScheduler 
+
+	schedule task('avalon_simulation', 'avalon_simulation::Task')
+        schedule task('trigger','simulation::MarsTrigger')
+	schedule task('imu', "simulation::MarsIMU")
+	schedule task('mic', "Microphones")
+	schedule task("sonar","simulation::Sonar")
+	schedule task("sonar_rear","simulation::Sonar")
+        schedule task("pingersearch_simulation","PingerSearch")
+        schedule task("asv_navigation","AsvNavigation")
+        schedule task("avalon_actuators","simulation::AuvMotion")
+        schedule task("asv_actuators","simulation::Actuators")
+        schedule task("test_vehicle_actuators","simulation::Actuators")
+        schedule task("ground_distance","simulation::MarsAltimeter")
+	schedule task("white_light", "WhiteLight")
+        schedule task("bottom_camera","simulation::MarsCamera")
+        schedule task("front_camera","simulation::MarsCamera")
+        schedule task("top_camera","simulation::MarsCamera")
+        schedule task("joystick", "controldev::JoystickTask")
+        schedule task("fake_writer", "avalon_control::FakeWriter")
+        schedule task("rel_fake_writer", "avalon_control::RelFakeWriter")
+        schedule task("rel_controller", "auv_rel_pos_controller::Task")
+        schedule task("motion_control", "avalon_control::MotionControlTask")
+        schedule task("controlconverter_movement","raw_control_command_converter::Movement")
+        schedule task("controlconverter_position","raw_control_command_converter::Position")
+        schedule task "pipeline_follower", "offshore_pipeline_detector::Task"
+        schedule task "wall_servoing", "wall_servoing::SingleSonarServoing"
+        schedule task "sonar_feature_estimator", "sonar_feature_estimator::Task"
+        schedule task "sonar_wall_hough", "sonar_wall_hough::Task"
+        schedule task "uw_particle_localization", "uw_particle_localization::Task"
+        schedule task("auv_waypoint_navigator", "auv_waypoint_navigator::Task")
+        schedule task "asv_detector", "asv_detector::Task"
+        schedule task('buoy_detector', 'buoy::Detector')
+        schedule task('buoy_servoing', 'buoy::Survey')
+        schedule task("angle_estimation", "pingersearch::AngleEstimation")
+        schedule task("pinger_search", "pingersearch::PingerSearch")
+
+        #add_default_logger.
+        #    periodic(0.01)
 end
 
