@@ -27,45 +27,45 @@ using_task_library "controldev"
 using_task_library 'simulation'
 using_task_library 'task_scheduler'
 
-task_context "Task" do
-	subclasses "simulation::Mars"
-	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
-		doc('scenefile of the robot module, which should be loaded')
-
-        #at the moment without gui is not support !!!!       
-	property('with_manipulator_gui', 'bool',true).
-		doc('scenefile of the robot module, which should be loaded')
-
-        property('initial_x', 'double', 0.0)
-        property('initial_y', 'double', 0.0)
-        property('initial_z', 'double', 0.0)
-        property('initial_yaw', 'double', 0.0)
-        property('debug_sonar', 'bool',0)
-        
-        #osgOcean Part:
-        property('use_osg_ocean', 'bool',0)
-        property('waveScale','double')
-        property('windSpeed','double')
-        property('endlessOcean','bool')
-        property('oceanHeight','double')
-        property('goodRays','bool')
-        property('silt','bool')
-        property('glare','bool')
-        property('glareThreashold','double')
-        property('distortion','bool')
-        property('scattering','bool')
-        property('fogDensity','double')
-        property('fogColor','/base/Vector4d')
-        property('diffuse','/base/Vector4d')
-        property('attenuation','/base/Vector3d')
-        
-        property('remove_buoy','bool')
-
-        operation('setPipelinePosition').
-          argument('x','double','x').
-          argument('y','double','y').
-          argument('z','double','z')
-end
+#task_context "Task" do
+#	subclasses "simulation::Mars"
+#	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
+#		doc('scenefile of the robot module, which should be loaded')
+#
+#        #at the moment without gui is not support !!!!       
+#	property('with_manipulator_gui', 'bool',true).
+#		doc('scenefile of the robot module, which should be loaded')
+#
+#        property('initial_x', 'double', 0.0)
+#        property('initial_y', 'double', 0.0)
+#        property('initial_z', 'double', 0.0)
+#        property('initial_yaw', 'double', 0.0)
+#        property('debug_sonar', 'bool',0)
+#        
+#        #osgOcean Part:
+#        property('use_osg_ocean', 'bool',0)
+#        property('waveScale','double')
+#        property('windSpeed','double')
+#        property('endlessOcean','bool')
+#        property('oceanHeight','double')
+#        property('goodRays','bool')
+#        property('silt','bool')
+#        property('glare','bool')
+#        property('glareThreashold','double')
+#        property('distortion','bool')
+#        property('scattering','bool')
+#        property('fogDensity','double')
+#        property('fogColor','/base/Vector4d')
+#        property('diffuse','/base/Vector4d')
+#        property('attenuation','/base/Vector3d')
+#        
+#        property('remove_buoy','bool')
+#
+#        operation('setPipelinePosition').
+#          argument('x','double','x').
+#          argument('y','double','y').
+#          argument('z','double','z')
+#end
 
 task_context "Microphones" do
 	subclasses "simulation::MarsPlugin"
@@ -159,7 +159,7 @@ end
 
 
 deployment "AvalonSimulation" do
-	task('avalon_simulation', 'avalon_simulation::Task').
+	task('avalon_simulation', 'simulation::Mars').
 	    periodic(0.1)
 	    
 	task('imu', "simulation::MarsIMU").
@@ -226,7 +226,7 @@ end
 deployment "AvalonSimulationScheduled" do
         createTaskScheduler 
 
-	schedule task('avalon_simulation', 'avalon_simulation::Task')
+	schedule task('avalon_simulation', 'simulation::Mars')
         schedule task('trigger','simulation::MarsTrigger')
 	schedule task('imu', "simulation::MarsIMU")
 	schedule task('mic', "Microphones")
