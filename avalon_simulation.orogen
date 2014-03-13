@@ -199,6 +199,7 @@ deployment "AvalonSimulation" do
         task("rel_controller", "auv_rel_pos_controller::Task")
         
         task("motion_control", "avalon_control::MotionControlTask")
+        task("position_control", "avalon_control::PositionControlTask")
 
         task("controlconverter_movement","raw_control_command_converter::Movement")
 
@@ -247,6 +248,7 @@ deployment "AvalonSimulationScheduled" do
         schedule task("rel_fake_writer", "avalon_control::RelFakeWriter")
         schedule task("rel_controller", "auv_rel_pos_controller::Task")
         schedule task("motion_control", "avalon_control::MotionControlTask")
+        schedule task("position_control", "avalon_control::PositionControlTask")
         schedule task("controlconverter_movement","raw_control_command_converter::Movement")
         schedule task("controlconverter_position","raw_control_command_converter::Position")
         schedule task "pipeline_follower", "offshore_pipeline_detector::Task"
