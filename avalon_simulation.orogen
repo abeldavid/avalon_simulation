@@ -26,6 +26,7 @@ using_task_library "auv_rel_pos_controller"
 using_task_library "controldev"
 using_task_library 'simulation'
 using_task_library 'task_scheduler'
+using_task_library 'auv_control'
 
 #task_context "Task" do
 #	subclasses "simulation::Mars"
@@ -203,6 +204,24 @@ deployment "AvalonSimulation" do
         task("controlconverter_movement","raw_control_command_converter::Movement")
 
         task("controlconverter_position","raw_control_command_converter::Position")
+
+        task("waypoint_navigator", "auv_control::WaypointNavigator").
+            periodic(0.01)
+
+        task("world_to_aligned", "auv_control::WorldToAligned").
+            periodic(0.01)
+
+        task("aligned_position_controller", "auv_control::PIDController").
+            periodic(0.01)
+
+        task("aligned_velocity_controller", "auv_control::PIDController").
+            periodic(0.01)
+
+        task("aligned_to_body", "auv_control::AlignedToBody").
+            periodic(0.01)
+
+        task("acceleration_controller", "auv_control::AccelerationController").
+            periodic(0.01)
 
         task "pipeline_follower", "offshore_pipeline_detector::Task"
         task "wall_servoing", "wall_servoing::SingleSonarServoing"
