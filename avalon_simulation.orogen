@@ -224,6 +224,8 @@ deployment "AvalonSimulation" do
         task("acceleration_controller", "auv_control::AccelerationController").
             periodic(0.01)
 
+        task("command_producer", "auv_control::ConstantCommand").
+            periodic(0.2)
         task "pipeline_follower", "offshore_pipeline_detector::Task"
         task "wall_servoing", "wall_servoing::SingleSonarServoing"
         task "sonar_feature_estimator", "sonar_feature_estimator::Task"
