@@ -270,6 +270,8 @@ deployment "AvalonSimulation" do
         task("angle_estimation", "pingersearch::AngleEstimation")
         task("pinger_search", "pingersearch::PingerSearch")
 
+        task("motion_model","uw_particle_localization::MotionModel")
+
         add_default_logger.
             periodic(0.01)
 end
