@@ -26,6 +26,7 @@ using_task_library "auv_rel_pos_controller"
 using_task_library "controldev"
 using_task_library 'simulation'
 using_task_library 'task_scheduler'
+using_task_library 'auv_control'
 
 # task_context "Task" do
 # 	subclasses "simulation::Mars"
@@ -228,11 +229,32 @@ deployment "AvalonSimulation" do
         task("rel_controller", "auv_rel_pos_controller::Task")
         
         task("motion_control", "avalon_control::MotionControlTask")
+        task("position_control", "avalon_control::PositionControlTask")
 
         task("controlconverter_movement","raw_control_command_converter::Movement")
 
         task("controlconverter_position","raw_control_command_converter::Position")
 
+        task("waypoint_navigator", "auv_control::WaypointNavigator").
+            periodic(0.01)
+
+        task("world_to_aligned", "auv_control::WorldToAligned").
+            periodic(0.01)
+
+        task("aligned_position_controller", "auv_control::PIDController").
+            periodic(0.01)
+
+        task("aligned_velocity_controller", "auv_control::PIDController").
+            periodic(0.01)
+
+        task("aligned_to_body", "auv_control::AlignedToBody").
+            periodic(0.01)
+
+        task("acceleration_controller", "auv_control::AccelerationController").
+            periodic(0.01)
+
+        task("command_producer", "auv_control::ConstantCommand").
+            periodic(0.2)
         task "pipeline_follower", "offshore_pipeline_detector::Task"
         task "wall_servoing", "wall_servoing::SingleSonarServoing"
         task "sonar_feature_estimator", "sonar_feature_estimator::Task"
@@ -276,6 +298,7 @@ deployment "AvalonSimulationScheduled" do
         schedule task("rel_fake_writer", "avalon_control::RelFakeWriter")
         schedule task("rel_controller", "auv_rel_pos_controller::Task")
         schedule task("motion_control", "avalon_control::MotionControlTask")
+        schedule task("position_control", "avalon_control::PositionControlTask")
         schedule task("controlconverter_movement","raw_control_command_converter::Movement")
         schedule task("controlconverter_position","raw_control_command_converter::Position")
         schedule task "pipeline_follower", "offshore_pipeline_detector::Task"
