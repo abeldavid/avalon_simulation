@@ -44,6 +44,10 @@ Graphics:
     value: 405
     saveOnClose: true
     
+  - name: drawLineLaser
+    type: bool
+    value: true
+    
 Config:
 
   - name: loadLastSave
