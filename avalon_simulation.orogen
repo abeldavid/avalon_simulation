@@ -223,6 +223,9 @@ deployment "AvalonSimulation" do
 
         task("acceleration_controller", "auv_control::AccelerationController").
             periodic(0.01)
+        
+        task("optimal_heading_controller", "auv_control::OptimalHeadingController").
+            periodic(0.01)
 
         task("command_producer", "auv_control::ConstantCommand").
             periodic(0.2)
