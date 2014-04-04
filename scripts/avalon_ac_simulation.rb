@@ -6,8 +6,9 @@ Orocos.initialize
 widget = Vizkit.load "simulator.ui"
 
 #Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
-Orocos.run "avalon_back_base_control", "AvalonSimulation" ,:wait => 100, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
-    simulation = TaskContext.get 'avalon_simulation'
+Orocos.run "AvalonSimulation", "auv_control::AccelerationController" => "acceleration_controller", :wait => 100, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do 
+  #Orocos.log_all  
+  simulation = TaskContext.get 'avalon_simulation'
     
       white_light = TaskContext.get 'white_light'
 #     white_light.interval_mode = 1
@@ -17,13 +18,23 @@ Orocos.run "avalon_back_base_control", "AvalonSimulation" ,:wait => 100, :valgri
       white_light.randomInterval_max = 5000;
       white_light.start
       
-simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/testhalle.scn"
+simulation.initial_scene = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/testhalle.scn"
 
-    simulation.debug_sonar = false 
-    simulation.use_osg_ocean = false 
-    simulation.enable_gui = true
+    #simulation.debug_sonar = false 
+    #simulation.use_osg_ocean = false 
+    #simulation.enable_gui = true
+    #simulation.laserOpeningAngle = 0.3
+    #simulation.laserFrontAngle = 0.5
+    #simulation.laserColor = [[0.0, 1.0, 0.0]]
+    simulation.apply_conf_file("/home/fabio/avalon/bundles/avalon/config/orogen/simulation::Mars.yml")
     simulation.configure
     simulation.start
+    
+    laser = TaskContext.get 'lineLaser'
+    laser.laserColor = [[0.0, 1.0, 0.0]]
+    laser.frontAngle = 0.3
+    laser.configure
+    laser.start
 
 # Konfiguration der Aktuatoren für alle Fahrzeuge:    
 require 'actuators'
@@ -49,18 +60,18 @@ values = ActuatorsConfig.new()
 
     front_cam = TaskContext.get 'front_camera'
     front_cam.name = 'front_cam'
-    front_cam.configure
-    front_cam.start
+    #front_cam.configure
+    #front_cam.start
     
     bottom_cam = TaskContext.get 'bottom_camera'
     bottom_cam.name = 'bottom_cam'
-    bottom_cam.configure
-    bottom_cam.start
+    #bottom_cam.configure
+    #bottom_cam.start
     
-    top_cam = TaskContext.get 'top_camera'
-    top_cam.name = 'top_cam'
-    top_cam.configure
-    top_cam.start
+    #top_cam = TaskContext.get 'top_camera'
+    #top_cam.name = 'top_cam'
+    #top_cam.configure
+    #top_cam.start
 
 
     sonar = TaskContext.get 'sonar'
@@ -178,7 +189,7 @@ values = ActuatorsConfig.new()
 
         sample = writer_ac_in.new_sample
         sample.time = Time.now
-        sample.linear[0] = 1.0
+        sample.linear[0] = 0.1
         sample.linear[1] = 0
         sample.linear[2] = NaN
         sample.angular[0] = NaN
