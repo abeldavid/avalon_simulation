@@ -223,6 +223,7 @@ deployment "AvalonSimulation" do
 	  periodic 0.1
 
         task("joystick", "controldev::JoystickTask")
+        task("trajectory_follower", "avalon_control::TrajectoryFollower")
         task("fake_writer", "avalon_control::FakeWriter")
         task("rel_fake_writer", "avalon_control::RelFakeWriter")
         
