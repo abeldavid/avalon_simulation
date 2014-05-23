@@ -2,7 +2,6 @@ name 'avalon_simulation'
 version '0.1'
 
 import_types_from 'base'
-import_types_from "avalon_base"
 using_library "mars_utils", :typekit => false
 using_library "mars_interfaces", :typekit => false
 using_library 'avalon-plugin'
@@ -21,7 +20,6 @@ using_task_library "sonar_wall_hough"
 using_task_library "uw_particle_localization"
 using_task_library "auv_waypoint_navigator"
 using_task_library "asv_detector"
-using_task_library "pingersearch"
 using_task_library "auv_rel_pos_controller"
 using_task_library "controldev"
 using_task_library 'simulation'
@@ -72,61 +70,6 @@ using_task_library 'auv_control'
 #           argument('z','double','z')
 # end
 
-task_context "Microphones" do
-	subclasses "simulation::MarsPlugin"
-	
-	
-    output_port "stereo_output", "/avalon/AudioSamples"
-    output_port "ping_output", "/avalon/AudioSamples"
-    output_port "angle_to_asv_output", "/base/Angle"
-
-    property("sound_velocity","double",1500).
-        doc("Current Setting of sound_velocity")
-        
-    property("base_line","double",1.5).
-        doc("Distance between the microphones")
-    
-    property("pinger_frequency","double",12000).
-        doc("Current Setting of pinger frequency in Hz")
-        
-    property("carrier_frequency","double",2000).
-        doc("Current Setting of noise frequency in Hz")        
-        
-    property("white_noise","bool", true).
-        doc("insert white noise in pinger signal")
-        
-    property("carrier_wave","bool", false).
-        doc("insert carrierWave in pinger signal")
-        
-    property("carrier_amplitude","double", 1.5).
-        doc("changes amplitude of the white noise")    
-        
-    property("startFrame","unsigned", 1500).
-        doc("frame where ping starts") 
-   
-    property("noise_amplitude","double", 0.4).
-        doc("changes amplitude of the white noise")
-   
-    property("amplitude","double", 1.0).
-        doc("changes amplitude of the Ping") 
-     
-    property("sample_rate","double", 44100.0).
-        doc("sample rate for signal")           
-
-    property('ping_length', 'int', 10).
-	    doc('ping_length in ms')
-
-    property('node_name', '/std/string', 'avalon').
-	    doc('name of the nodeid the scene file, which should be handled as a acoustic target')
-
-    property('angle_offset',"base::Angle")
-
-end
-
-task_context "PingerSearch" do
-	output_port('angle_to_pinger', '/base/Angle').
-		doc('angle to pinger')
-end
 
 task_context "AsvNavigation" do
       operation('addWaypoint').
@@ -191,16 +134,10 @@ deployment "AvalonSimulation" do
 	    
 	task('imu', "simulation::MarsIMU").
 	    periodic(0.1)
-	task('mic', "Microphones").
-	    periodic(1)
 	task("sonar","simulation::Sonar").
 		periodic 0.066666
 	task("sonar_rear","simulation::Sonar").
 		periodic 0.066666
-#        task("state_estimator","StateEstimator").
-#            periodic 0.01
-        task("pingersearch_simulation","PingerSearch").
-          periodic 1.0
         task("asv_navigation","AsvNavigation").
           periodic 0.5
         task("avalon_actuators","simulation::AuvMotion").
@@ -271,9 +208,6 @@ deployment "AvalonSimulation" do
         task('buoy_detector', 'buoy::Detector')
         task('buoy_servoing', 'buoy::Survey')
         
-        task("angle_estimation", "pingersearch::AngleEstimation")
-        task("pinger_search", "pingersearch::PingerSearch")
-
         task("motion_model","uw_particle_localization::MotionModel")
 
         add_default_logger.
@@ -286,10 +220,8 @@ deployment "AvalonSimulationScheduled" do
 	schedule task('avalon_simulation', 'simulation::Mars')
         schedule task('trigger','simulation::MarsTrigger')
 	schedule task('imu', "simulation::MarsIMU")
-	schedule task('mic', "Microphones")
 	schedule task("sonar","simulation::Sonar")
 	schedule task("sonar_rear","simulation::Sonar")
-        schedule task("pingersearch_simulation","PingerSearch")
         schedule task("asv_navigation","AsvNavigation")
         schedule task("avalon_actuators","simulation::AuvMotion")
         schedule task("asv_actuators","simulation::Actuators")
@@ -316,8 +248,7 @@ deployment "AvalonSimulationScheduled" do
         schedule task "asv_detector", "asv_detector::Task"
         schedule task('buoy_detector', 'buoy::Detector')
         schedule task('buoy_servoing', 'buoy::Survey')
-        schedule task("angle_estimation", "pingersearch::AngleEstimation")
-        schedule task("pinger_search", "pingersearch::PingerSearch")
+
 
         #add_default_logger.
         #    periodic(0.01)
