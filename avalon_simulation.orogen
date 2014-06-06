@@ -25,6 +25,8 @@ using_task_library "controldev"
 using_task_library 'simulation'
 using_task_library 'task_scheduler'
 using_task_library 'auv_control'
+using_task_library 'line_scanner'
+using_task_library 'pipeline_inspection'
 
 # task_context "Task" do
 # 	subclasses "simulation::Mars"
@@ -179,6 +181,12 @@ deployment "AvalonSimulation" do
         task("world_to_aligned", "auv_control::WorldToAligned").
             periodic(0.01)
 
+        task("line_scanner", "line_scanner::Task").
+            periodic(0.01)
+
+        task("orientation_correction", "uw_particle_localization::OrientationCorrection").
+            periodic(0.01)
+
         task("aligned_position_controller", "auv_control::PIDController").
             periodic(0.01)
 
@@ -186,6 +194,12 @@ deployment "AvalonSimulation" do
             periodic(0.01)
 
         task("aligned_to_body", "auv_control::AlignedToBody").
+            periodic(0.01)
+        
+        task("pipe_insp", "pipeline_inspection::Inspection").
+            periodic(0.01)
+        
+        task("pipe_filter", "pipeline_inspection::ColorFilter").
             periodic(0.01)
 
         task("acceleration_controller", "auv_control::AccelerationController").

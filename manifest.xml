@@ -28,6 +28,7 @@
   <depend package="image_processing/orogen/image_preprocessing"/>
   <depend package="image_processing/orogen/offshore_pipeline_detector"/>
   <depend package="drivers/orogen/task_scheduler"/>
+  <depend package="image_processing/orogen/pipeline_inspection"/>
   <versioncontrol type="git" url="" />
   <export>
     <cpp cflags="" lflags="" />
