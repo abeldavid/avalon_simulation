@@ -19,7 +19,6 @@ using_task_library "sonar_wall_hough"
 #using_task_library "uwv_dynamic_model"
 using_task_library "uw_particle_localization"
 using_task_library "auv_waypoint_navigator"
-using_task_library "asv_detector"
 using_task_library "auv_rel_pos_controller"
 using_task_library "controldev"
 using_task_library 'simulation'
@@ -217,7 +216,6 @@ deployment "AvalonSimulation" do
         task "uw_particle_localization", "uw_particle_localization::Task"
         task("auv_waypoint_navigator", "auv_waypoint_navigator::Task").
                 periodic(0.01)
-        task "asv_detector", "asv_detector::Task"
         
         task('buoy_detector', 'buoy::Detector')
         task('buoy_servoing', 'buoy::Survey')
@@ -259,7 +257,6 @@ deployment "AvalonSimulationScheduled" do
         schedule task "sonar_wall_hough", "sonar_wall_hough::Task"
         schedule task "uw_particle_localization", "uw_particle_localization::Task"
         schedule task("auv_waypoint_navigator", "auv_waypoint_navigator::Task")
-        schedule task "asv_detector", "asv_detector::Task"
         schedule task('buoy_detector', 'buoy::Detector')
         schedule task('buoy_servoing', 'buoy::Survey')
 

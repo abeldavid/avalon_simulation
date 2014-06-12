@@ -17,9 +17,8 @@
   <depend package="avalon/orogen/rawControlCommandConverter" />
   <depend package="auv_avalon/orogen/wall_servoing" /> 
   <depend package="avalon/orogen/avalonControl" />
-  <depend package="avalon/orogen/buoy" />
+  <depend package="auv_avalon/orogen/buoy" />
   <depend package="auv_avalon/orogen/sonar_wall_hough" />
-  <depend package="avalon/orogen/asv_detector" />
   <depend package="control/orogen/auv_rel_pos_controller" /> 
   <depend package="avalon/orogen/rear_sonar_distance_estimator" /> 
   <depend package="drivers/orogen/controldev" /> -->
