@@ -9,9 +9,9 @@
   <depend package ="base/types" />
   <depend package="simulation/mars/interfaces" />
   <depend package="simulation/mars/common/utils" />
-  <depend package ="simulation/mars-plugins/avalon-plugin" />
+  <!--depend package ="simulation/mars-plugins/avalon-plugin" /-->
   <depend package ="simulation/orogen/mars_core" />
-  <depend package ="simulation/mars-plugins/marsusim" />
+  <!--depend package ="simulation/mars-plugins/marsusim" /-->
   
   <depend package="avalon/orogen/avalonControl" />
   <depend package="avalon/orogen/rawControlCommandConverter" />
@@ -20,7 +20,7 @@
   <depend package="auv_avalon/orogen/buoy" />
   <depend package="auv_avalon/orogen/sonar_wall_hough" />
   <depend package="control/orogen/auv_rel_pos_controller" /> 
-  <depend package="avalon/orogen/rear_sonar_distance_estimator" /> 
+  <!--depend package="avalon/orogen/rear_sonar_distance_estimator" /--> 
   <depend package="drivers/orogen/controldev" /> -->
   <depend package="auv_avalon/orogen/uw_particle_localization" />
   <depend package="avalon/orogen/auv_waypoint_navigator" />
