@@ -15,7 +15,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
     pinger_search = TaskContext.get 'pingersearch_simulation'
     asv_navigation = TaskContext.get 'asv_navigation'
       
-simulation.scenefile= "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/studiobad_new.scn"
+simulation.scenefile= "#{ENV['AUTOPROJ_CURRENT_ROOT']}/simulation/orogen/avalon_simulation/configuration/studiobad_new.scn"
 
     simulation.debug_sonar = false 
     simulation.use_osg_ocean = false 

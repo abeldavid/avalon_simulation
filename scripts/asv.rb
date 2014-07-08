@@ -7,7 +7,7 @@ widget = Vizkit.load "simulator.ui"
 
 Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_options => ['--undef-value-errors=no'] do
     simulation = TaskContext.get 'avalon_simulation'
-    simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
+    simulation.scenefile = "#{ENV['AUTOPROJ_CURRENT_ROOT']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
     simulation.debug_sonar = false
     simulation.use_osg_ocean = false

@@ -21,7 +21,7 @@ Orocos.run "AvalonSimulation" ,:wait => 10000, :valgrind => false, :valgrind_opt
       white_light.randomInterval_max = 5000;
       white_light.start
       
-simulation.scenefile = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
+simulation.scenefile = "#{ENV['AUTOPROJ_CURRENT_ROOT']}/simulation/orogen/avalon_simulation/configuration/avalon.scn"
 
     simulation.debug_sonar = false 
     simulation.use_osg_ocean = false 

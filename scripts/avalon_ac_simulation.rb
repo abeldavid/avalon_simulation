@@ -18,7 +18,7 @@ Orocos.run "AvalonSimulation", "auv_control::AccelerationController" => "acceler
       white_light.randomInterval_max = 5000;
       white_light.start
       
-simulation.initial_scene = "#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/testhalle.scn"
+simulation.initial_scene = "#{ENV['AUTOPROJ_CURRENT_ROOT']}/simulation/orogen/avalon_simulation/configuration/testhalle.scn"
 
     #simulation.debug_sonar = false 
     #simulation.use_osg_ocean = false 

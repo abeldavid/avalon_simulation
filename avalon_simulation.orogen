@@ -29,8 +29,6 @@ using_task_library 'pipeline_inspection'
 
 # task_context "Task" do
 # 	subclasses "simulation::Mars"
-# 	property('scenefile', '/std/string',"#{ENV['AUTOPROJ_PROJECT_BASE']}/simulation/orogen/avalon_simulation/configuration/avalon.scn").
-# 		doc('scenefile of the robot module, which should be loaded')
 # 
 #         #at the moment without gui is not support !!!!       
 # 	property('with_manipulator_gui', 'bool',true).
