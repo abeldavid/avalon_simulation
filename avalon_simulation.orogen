@@ -163,7 +163,7 @@ deployment "AvalonSimulation" do
         task("fake_writer", "avalon_control::FakeWriter")
         task("rel_fake_writer", "avalon_control::RelFakeWriter")
         
-        task("motion_model","uw_particle_localization::MotionModel")
+        task("rel_controller", "auv_rel_pos_controller::Task")
         
         task("motion_control", "avalon_control::MotionControlTask")
         task("position_control", "avalon_control::PositionControlTask")
