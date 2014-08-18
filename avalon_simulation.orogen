@@ -26,6 +26,9 @@ using_task_library 'task_scheduler'
 using_task_library 'auv_control'
 using_task_library 'line_scanner'
 using_task_library 'pipeline_inspection'
+using_task_library 'hsv_mosaicing'
+using_task_library "image_preprocessing"
+using_task_library "structure_servoing"
 
 # task_context "Task" do
 # 	subclasses "simulation::Mars"
@@ -157,6 +160,12 @@ deployment "AvalonSimulation" do
             
         task("lineLaser", "LineLaser").
 	  periodic 0.1
+
+        
+        task("mosaic","hsv_mosaicing::Task")
+        task("hsv_segm","image_preprocessing::HSVSegmentationAndBlur")
+        task("structure_servoing","structure_servoing::Task")
+
 
         task("joystick", "controldev::JoystickTask")
         task("trajectory_follower", "avalon_control::TrajectoryFollower")

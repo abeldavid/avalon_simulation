@@ -9,6 +9,7 @@
   <depend package ="base/types" />
   <depend package="simulation/mars/interfaces" />
   <depend package="simulation/mars/common/utils" />
+  <depend package ="avalon/orogen/structure_servoing"/>
   <depend package ="simulation/mars-plugins/avalon-plugin"/>
   <depend package ="simulation/orogen/mars_core" />
   <!--depend package ="simulation/mars-plugins/marsusim" /-->
