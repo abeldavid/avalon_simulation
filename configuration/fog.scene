@@ -1,0 +1,21 @@
+<SceneFile>
+  <version>0.1</version>
+    <graphicOptions>
+      <clearColor>
+        <a>1</a>
+        <r>0.0156863</r>
+        <g>0.2</g>
+        <b>0.2</b>
+      </clearColor>
+      <fogEnabled>true</fogEnabled>
+      <fogDensity>0.1</fogDensity>
+      <fogStart>0.1</fogStart>
+      <fogEnd>5</fogEnd>
+      <fogColor>
+        <a>1</a>
+        <r>0.0156863</r>
+        <g>0.2</g>
+        <b>0.2</b>
+      </fogColor>
+    </graphicOptions>
+</SceneFile>
