@@ -21,6 +21,7 @@
   <depend package="auv_avalon/orogen/buoy" />
   <depend package="auv_avalon/orogen/sonar_wall_hough" />
   <depend package="control/orogen/auv_rel_pos_controller" /> 
+  <depend package="auv_avalon/orogen/sonar_structure_servoing" />
   <!--depend package="avalon/orogen/rear_sonar_distance_estimator" /--> 
   <depend package="drivers/orogen/controldev" /> -->
   <depend package="auv_avalon/orogen/uw_particle_localization" />
