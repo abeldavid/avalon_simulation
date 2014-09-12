@@ -30,6 +30,7 @@ using_task_library 'pipeline_inspection'
 using_task_library 'hsv_mosaicing'
 using_task_library "image_preprocessing"
 using_task_library "structure_servoing"
+using_task_library "pose_estimation"
 
 # task_context "Task" do
 # 	subclasses "simulation::Mars"
@@ -162,10 +163,13 @@ deployment "AvalonSimulation" do
         task("lineLaser", "LineLaser").
 	  periodic 0.1
 
+        task("pose_estimator", "pose_estimation::UWPoseEstimator").
+            periodic(0.1)
         
         task("mosaic","hsv_mosaicing::Task")
         task("hsv_segm","image_preprocessing::HSVSegmentationAndBlur")
         task("structure_servoing","structure_servoing::Task")
+        task("structure_alignment","structure_servoing::Alignment")
 
 
         task("joystick", "controldev::JoystickTask")
@@ -215,8 +219,11 @@ deployment "AvalonSimulation" do
         task("optimal_heading_controller", "auv_control::OptimalHeadingController").
             periodic(0.01)
 
-        task("command_producer", "auv_control::ConstantCommand").
+        task("constant_command", "auv_control::ConstantCommand").
             periodic(0.2)
+        task("constant_command_vel", "auv_control::ConstantCommand").
+            periodic(0.2)
+
         task "pipeline_follower", "offshore_pipeline_detector::Task"
         task "wall_servoing", "wall_servoing::SingleSonarServoing"
         task "sonar_feature_estimator", "sonar_feature_estimator::Task"
