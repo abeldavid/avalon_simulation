@@ -14,6 +14,8 @@ using_task_library "offshore_pipeline_detector"
 using_task_library "wall_servoing"
 using_task_library "sonar_structure_servoing"
 using_task_library "sonar_feature_estimator"
+using_task_library "sonar_feature_detector"
+using_task_library "auv_helper"
 # using_task_library "ekf_slam"
 # using_task_library "eras_position_estimator"
 using_task_library "sonar_wall_hough"
@@ -223,6 +225,8 @@ deployment "AvalonSimulation" do
             periodic(0.2)
         task("constant_command_vel", "auv_control::ConstantCommand").
             periodic(0.2)
+        task("constant_command_ground_avoidance", "auv_control::ConstantCommandGroundAvoidance")
+        task("constant_command_ground_follower", "auv_control::ConstantCommandGroundFollower")
 
         task "pipeline_follower", "offshore_pipeline_detector::Task"
         task "wall_servoing", "wall_servoing::SingleSonarServoing"
@@ -235,8 +239,14 @@ deployment "AvalonSimulation" do
         
         task('buoy_detector', 'buoy::Detector')
         task('buoy_servoing', 'buoy::Survey')
+        task('buoy_on_wall', 'buoy::ServoingOnWall')
         
         task("motion_model","uw_particle_localization::MotionModel")
+
+        task('depth_orientation_fusion', 'auv_helper::depth_and_orientation_fusion')
+
+        task("sonar_feature_detector", "sonar_feature_detector::Task")
+
 
         add_default_logger.
             periodic(0.01)
