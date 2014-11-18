@@ -14,10 +14,9 @@
   <depend package ="simulation/orogen/mars_core" />
   <!--depend package ="simulation/mars-plugins/marsusim" /-->
   
-  <depend package="avalon/orogen/avalonControl" />
-  <depend package="avalon/orogen/rawControlCommandConverter" />
+  <depend package="auv_avalon/orogen/avalonControl" />
+  <depend package="auv_avalon/orogen/rawControlCommandConverter" />
   <depend package="auv_avalon/orogen/wall_servoing" /> 
-  <depend package="avalon/orogen/avalonControl" />
   <depend package="auv_avalon/orogen/buoy" />
   <depend package="auv_avalon/orogen/sonar_wall_hough" />
   <depend package="control/orogen/auv_rel_pos_controller" /> 
