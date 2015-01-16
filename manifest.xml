@@ -11,7 +11,7 @@
   <depend package="simulation/mars/common/utils" />
   <depend package ="avalon/orogen/structure_servoing"/>
   <depend package ="simulation/mars-plugins/avalon-plugin"/>
-  <depend package ="simulation/orogen/mars_core" />
+  <depend package ="simulation/orogen/mars" />
   <!--depend package ="simulation/mars-plugins/marsusim" /-->
   
   <depend package="auv_avalon/orogen/avalonControl" />

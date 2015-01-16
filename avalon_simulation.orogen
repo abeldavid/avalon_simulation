@@ -24,7 +24,7 @@ using_task_library "uw_particle_localization"
 using_task_library "auv_waypoint_navigator"
 using_task_library "auv_rel_pos_controller"
 using_task_library "controldev"
-using_task_library 'simulation'
+using_task_library 'mars'
 using_task_library 'task_scheduler'
 using_task_library 'auv_control'
 using_task_library 'line_scanner'
@@ -112,7 +112,7 @@ task_context "Modem" do
 end
 
 task_context "LineLaser" do
-	subclasses "simulation::MarsPlugin"
+	subclasses "mars::Plugin"
 	
 	property("laserActive", "bool" , true).
 	  doc("Activate the line laser")
@@ -135,31 +135,31 @@ task_context "LineLaser" do
 end
 
 deployment "AvalonSimulation" do
-	task('avalon_simulation', 'simulation::Mars').
+	task('avalon_simulation', 'mars::Task').
 	    periodic(0.1)
 	    
-	task('imu', "simulation::MarsIMU").
+	task('imu', "mars::IMU").
 	    periodic(0.1)
-	task("sonar","simulation::Sonar").
+	task("sonar","mars::Sonar").
 		periodic 0.066666
-	task("sonar_rear","simulation::Sonar").
+	task("sonar_rear","mars::Sonar").
 		periodic 0.066666
         task("asv_navigation","AsvNavigation").
           periodic 0.5
-        task("avalon_actuators","simulation::AuvMotion").
+        task("avalon_actuators","mars::AuvMotion").
           periodic 0.5
-        task("asv_actuators","simulation::Actuators").
+        task("asv_actuators","mars::Joints").
           periodic 0.5
-        task("test_vehicle_actuators","simulation::Actuators").
+        task("test_vehicle_actuators","mars::Joints").
           periodic 0.5
-        task("ground_distance","simulation::MarsAltimeter").
+        task("ground_distance","mars::Altimeter").
           periodic 0.5
 	task("white_light", "WhiteLight")
-        task("bottom_camera","simulation::MarsCamera").
+        task("bottom_camera","mars::Camera").
             periodic 0.1
-        task("front_camera","simulation::MarsCamera").
+        task("front_camera","mars::Camera").
             periodic 0.1
-        task("top_camera","simulation::MarsCamera").
+        task("top_camera","mars::Camera").
             periodic 0.1
             
         task("lineLaser", "LineLaser").
@@ -255,20 +255,20 @@ end
 deployment "AvalonSimulationScheduled" do
         createTaskScheduler 
 
-	schedule task('avalon_simulation', 'simulation::Mars')
-        schedule task('trigger','simulation::MarsTrigger')
-	schedule task('imu', "simulation::MarsIMU")
-	schedule task("sonar","simulation::Sonar")
-	schedule task("sonar_rear","simulation::Sonar")
+	schedule task('avalon_simulation', 'mars::Task')
+        schedule task('trigger','mars::Trigger')
+	schedule task('imu', "mars::IMU")
+	schedule task("sonar","mars::Sonar")
+	schedule task("sonar_rear","mars::Sonar")
         schedule task("asv_navigation","AsvNavigation")
-        schedule task("avalon_actuators","simulation::AuvMotion")
-        schedule task("asv_actuators","simulation::Actuators")
-        schedule task("test_vehicle_actuators","simulation::Actuators")
-        schedule task("ground_distance","simulation::MarsAltimeter")
+        schedule task("avalon_actuators","mars::AuvMotion")
+        schedule task("asv_actuators","mars::Joints")
+        schedule task("test_vehicle_actuators","mars::Joints")
+        schedule task("ground_distance","mars::Altimeter")
 	schedule task("white_light", "WhiteLight")
-        schedule task("bottom_camera","simulation::MarsCamera")
-        schedule task("front_camera","simulation::MarsCamera")
-        schedule task("top_camera","simulation::MarsCamera")
+        schedule task("bottom_camera","mars::Camera")
+        schedule task("front_camera","mars::Camera")
+        schedule task("top_camera","mars::Camera")
         schedule task("joystick", "controldev::JoystickTask")
         schedule task("fake_writer", "avalon_control::FakeWriter")
         schedule task("rel_fake_writer", "avalon_control::RelFakeWriter")
