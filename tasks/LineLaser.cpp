@@ -6,7 +6,7 @@
 #include <mars/interfaces/graphics/GraphicsManagerInterface.h>
 #include <mars/interfaces/sim/MotorManagerInterface.h>
 #include "Simulation.h"
-#include <simulation/MarsPlugin.hpp>
+//#include <mars/Plugin.hpp>
 
 using namespace avalon_simulation;
 
